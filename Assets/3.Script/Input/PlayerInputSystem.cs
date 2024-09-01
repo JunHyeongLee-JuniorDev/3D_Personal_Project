@@ -12,13 +12,10 @@ public class PlayerinputSystem : MonoBehaviour
     public bool jump;
     public bool sprint;
 
-    public event Action<Vector2> moveEvent;
-
     public void OnMove(InputAction.CallbackContext context)
 
     {
         move = context.ReadValue<Vector2>();
-        moveEvent.Invoke(move);
     }
     public void OnLook(InputAction.CallbackContext context)
     {
@@ -28,6 +25,15 @@ public class PlayerinputSystem : MonoBehaviour
     public void OnFire(InputAction.CallbackContext context)
     {
 
+    }
+
+    public void OnSprint(InputAction.CallbackContext context)
+    {
+        if(context.ReadValue<float>() > 0f)
+        sprint = true;
+
+        else
+            sprint = false;
     }
 
 
