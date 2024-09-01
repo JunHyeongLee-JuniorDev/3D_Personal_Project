@@ -15,11 +15,11 @@ public class PlayerinputSystem : MonoBehaviour
     public void OnMove(InputAction.CallbackContext context)
 
     {
-        move = context.ReadValue<Vector2>();
+        move = context.ReadValue<Vector2>().normalized;
     }
     public void OnLook(InputAction.CallbackContext context)
     {
-        Vector2 _lookInput = context.ReadValue<Vector2>();
+        look = context.ReadValue<Vector2>();
     }
 
     public void OnFire(InputAction.CallbackContext context)
@@ -36,5 +36,15 @@ public class PlayerinputSystem : MonoBehaviour
             sprint = false;
     }
 
+    private void OnApplicationFocus(bool focus)
+    {
+        CursorLock();
+    }
+
+    private void CursorLock()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
 
 }

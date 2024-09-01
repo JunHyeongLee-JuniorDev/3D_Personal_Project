@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 
-public class PlayerMovePos : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
     [Header("Default Move Speed")]
     [SerializeField]
-    private float m_walkSpeed = 5f;
+    private float m_walkSpeed = 50f;
     [SerializeField]
-    private float m_sprintSpeed = 10f;
+    private float m_sprintSpeed = 100f;
 
     [Header("속도 변화 수치")]
     private float m_speedChangeRate = 10f;
@@ -18,33 +17,21 @@ public class PlayerMovePos : MonoBehaviour
     [Range(0.0f, 0.3f)]
     private float m_rotationSmoothTime = 0.12f;
 
-    [Header("시네머신 카메라")]
-    public GameObject cinemachineCamTarget;
-
     [field : Header("캐릭터 애니메이션 데이터")]
     [field : SerializeField]
     public PlayerAnimationData m_aniData { get; private set; }
 
     //Unity Components
     private CharacterController m_Controller;
-    private Rigidbody m_rigidbody;
     private PlayerinputSystem m_input;
     private Animator m_animator;
     private GameObject m_mainCam;
-
-    //Cinemachine
-    private float m_cinemachineTargetYaw;
-    private float m_cinemachineTargetPitch;
 
     //Player
     private float m_speed;
     private float m_animationBlend;
     private float m_targetRotation = 0f;
     private float m_rotationVelocity; // 할당 되지 않은 지역변수 오류를 없애기 위해서
-    private readonly float m_threshold = 0.01f;
-
-    //For Debug
-    private bool m_hasAnimator;
 
     private void Awake()
     {
@@ -52,17 +39,17 @@ public class PlayerMovePos : MonoBehaviour
         {
             m_mainCam = GameObject.FindGameObjectWithTag("MainCamera");
         }
+        
     }
 
     private void Start()
     {
+
         m_Controller = GetComponent<CharacterController>();
         m_input = GetComponent<PlayerinputSystem>();
-        m_rigidbody = GetComponent<Rigidbody>();
+        m_animator = GetComponent<Animator>();
         m_aniData = new PlayerAnimationData();
         m_aniData.Initialize();
-
-        m_hasAnimator = TryGetComponent<Animator>(out m_animator);
     }
 
     private void Update()
@@ -84,8 +71,7 @@ public class PlayerMovePos : MonoBehaviour
          * 이는 두 점사이의 거리를 구하거나 속력을 구할 때 사용할 수 있다.
          */
 
-        float _currentHorizontalSpeed = new Vector3(m_Controller.velocity.x,
-                                                    0f, m_Controller.velocity.z).magnitude;
+        float _currentHorizontalSpeed = new Vector3(m_Controller.velocity.x, 0f, m_Controller.velocity.z).magnitude;
 
         float _speedOffset = 0.1f;
 
@@ -94,12 +80,13 @@ public class PlayerMovePos : MonoBehaviour
             _currentHorizontalSpeed > _targetSpeed + _speedOffset)
         {
             m_speed = Mathf.Lerp(_currentHorizontalSpeed,
-                                 _targetSpeed * m_input.move.magnitude,
+                                 _targetSpeed,
                                  Time.deltaTime * m_speedChangeRate);
 
             // 소수점 3째 자리까지만 계산하기
             // 불필요한 연산 줄이기가 가능
             m_speed = Mathf.Round(m_speed * 1000f) * 0.001f;
+
         }
         
         else
@@ -132,34 +119,10 @@ public class PlayerMovePos : MonoBehaviour
 
         Vector3 _targetDirection = Quaternion.Euler(0f, m_targetRotation, 0f) * Vector3.forward;
 
-        Debug.Log("현재 이동속도 :" + m_speed);
         m_Controller.Move(_targetDirection.normalized * (m_speed * Time.deltaTime));
 
-        if (m_hasAnimator)
-        {
+        
             Debug.Log("애니메이션 로직 추가 필요");
-        }
-    }
-
-    private float clampAngle(float _lfAngle, float _lfMin, float _lfMax)
-    {
-        if (_lfAngle < -360f) _lfAngle += 360f;
-        if (_lfAngle > 360f) _lfAngle -= 360f;
-        return Mathf.Clamp(_lfAngle, _lfMin, _lfMax);
-    }
-
-
-    private void cameraRotation()
-    {
-        //마우스가 움직였다면
-        if (m_input.look.sqrMagnitude >= m_threshold)
-        {
-            //mouse input을 Time.deltaTime으로 곱하지마라
-            // 근데 왜???
-
-            m_cinemachineTargetYaw = m_input.look.y * 0.1f;
-        }
-
     }
 }
 

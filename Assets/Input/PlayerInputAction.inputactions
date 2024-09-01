@@ -1,5 +1,5 @@
 {
-    "name": "GameController",
+    "name": "PlayerInputAction",
     "maps": [
         {
             "name": "Player",
@@ -92,9 +92,9 @@
                 {
                     "name": "",
                     "id": "d1006434-0ce4-4acd-8d46-cd01f57a3df9",
-                    "path": "<Mouse>/position",
+                    "path": "<Pointer>/delta",
                     "interactions": "",
-                    "processors": "",
+                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=0.05,y=0.05)",
                     "groups": "Keyboard&Mouse",
                     "action": "Look",
                     "isComposite": false,
