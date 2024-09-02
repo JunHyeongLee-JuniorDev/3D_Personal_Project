@@ -13,7 +13,6 @@ public class PlayerinputSystem : MonoBehaviour
     public bool sprint;
 
     public void OnMove(InputAction.CallbackContext context)
-
     {
         move = context.ReadValue<Vector2>().normalized;
     }
@@ -29,8 +28,8 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnSprint(InputAction.CallbackContext context)
     {
-        if(context.ReadValue<float>() > 0f)
-        sprint = true;
+        if (context.ReadValue<float>() > 0f)
+            sprint = true;
 
         else
             sprint = false;
