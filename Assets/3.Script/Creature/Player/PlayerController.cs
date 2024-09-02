@@ -14,7 +14,7 @@ public class PlayerController : MonoBehaviour
 
     //Unity Components
     private CharacterController m_Controller;
-    private PlayerStateMachine m_StateMachine;
+    public PlayerStateMachine m_StateMachine { get; private set; }
     public PlayerinputSystem m_input { get; private set; }
     public Animator m_animator { get; private set; }
     private GameObject m_mainCam;
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour
     {
         m_Controller = GetComponent<CharacterController>();
         m_input = GetComponent<PlayerinputSystem>();
+        m_input.player = this;
         m_animator = GetComponent<Animator>();
         m_aniData = new PlayerAnimationData();
         m_aniData.Initialize();
@@ -96,7 +97,6 @@ public class PlayerController : MonoBehaviour
 
         if (!m_input.move.Equals(Vector3.zero))
         {
-
             m_targetRotation = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg +
                                             m_mainCam.transform.eulerAngles.y;
 
@@ -114,8 +114,5 @@ public class PlayerController : MonoBehaviour
         Vector3 _targetDirection = Quaternion.Euler(0f, m_targetRotation, 0f) * Vector3.forward;
 
         m_Controller.Move(_targetDirection.normalized * (m_speed * Time.deltaTime));
-
-        
-            Debug.Log("애니메이션 로직 추가 필요");
     }
 }
