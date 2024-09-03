@@ -5,6 +5,8 @@ using UnityEngine;
 public abstract class StateMachine
 {
     protected IState currentState;
+    public IState CurrentState => currentState;
+
     protected float crossFadeDuration = 0.1f;
     
     public void ChangeState(IState newState)

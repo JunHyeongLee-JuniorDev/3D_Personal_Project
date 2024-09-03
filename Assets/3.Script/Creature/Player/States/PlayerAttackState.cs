@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerAttackState : PlayerBaseState
 {
+    int attackIndex = 0;
+
     public PlayerAttackState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
 
@@ -11,20 +13,30 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void Enter()
     {
+        m_targetSpeed = 0f;
+        if (attackIndex > 2)
+        {
+            attackIndex = 0;
+        }
+
+        switch (attackIndex)
+        {
+            case 0:
+        StartAnimation(stateMachine.player.m_aniData._DTaniClip[EPlayerState.ATTACK]);
+                break;
+        }
+        attackIndex += 1;
         base.Enter();
-        StartAnimation(stateMachine.player.m_aniData.m_animIDAttack);
     }
 
     public override void Exit()
     {
+        Debug.Log("Attack State Exit");
         base.Exit();
-        stateMachine.player.m_input.isFired = false;
     }
 
-    private IEnumerator CountAttackAni_co()
+    public override void Move()
     {
-        yield return new WaitForSeconds(stateMachine.player.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
 
-        Exit();
     }
 }

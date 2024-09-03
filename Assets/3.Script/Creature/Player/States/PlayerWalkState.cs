@@ -11,11 +11,17 @@ public class PlayerWalkState : PlayerBaseState
 
     public override void Enter()
     {
-        stateMachine.player.m_targetSpeed = stateMachine.player.m_PhysicsData.GroundedData.
+        m_targetSpeed = stateMachine.player.m_PhysicsData.GroundedData.
                                             BaseSpeed;
         aniFadeDuration = 0.1f;
 
+        StartAnimation(stateMachine.player.m_aniData._DTaniClip[EPlayerState.WALK]);
+
         base.Enter();
-        StartAnimation(stateMachine.player.m_aniData.m_animIDWalk);
+    }
+
+    public override void Update()
+    {
+        base.Update(); 
     }
 }

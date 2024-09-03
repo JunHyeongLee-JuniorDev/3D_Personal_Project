@@ -10,16 +10,23 @@ public class PlayerinputSystem : MonoBehaviour
     public Vector2 move;
     public Vector2 look;
     public bool jump;
-    public bool sprint;
-    public bool isFired;
+    public bool sprint = false;
+    public bool fire;
     public PlayerController player;
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        if (isFired) return;
         move = context.ReadValue<Vector2>().normalized;
 
-        ChangePlayerMoveState();
+        if (context.started)
+        {
+            ChangePlayerMoveState();
+        }
+
+        else if (context.canceled)
+        {
+            ChangePlayerMoveState();
+        }
     }
     public void OnLook(InputAction.CallbackContext context)
     {
@@ -28,52 +35,28 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.ReadValue<float>() > 0f)
+        if (context.started)
         {
-            isFired = true;
+            fire = true;
+            ChangePlayerMoveState();
         }
-        player.m_StateMachine.ChangeState(player.m_StateMachine.attackState);
-        StartCoroutine(CountAttackAni_co());
     }
+
 
     public void OnSprint(InputAction.CallbackContext context)
     {
-        if(isFired) return;
-
-        if (context.ReadValue<float>() > 0f)
+        if (context.started)
+        {
             sprint = true;
-        
-        else
+            ChangePlayerMoveState();
+        }
+
+        else if (context.canceled)
+        {
             sprint = false;
-
-        ChangePlayerMoveState();
-    }
-
-    private void ChangePlayerMoveState()
-    {
-        if (move.Equals(Vector2.zero))
-        {
-            player.m_StateMachine.ChangeState(player.m_StateMachine.idleState);
+            ChangePlayerMoveState();
         }
 
-        else
-        {
-            if (sprint)
-            {
-                player.m_StateMachine.ChangeState(player.m_StateMachine.runState);
-            }
-
-            else
-            {
-                player.m_StateMachine.ChangeState(player.m_StateMachine.walkState);
-            }
-        }
-    }
-    private IEnumerator CountAttackAni_co()
-    {
-        Debug.Log(player.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        yield return new WaitForSeconds(player.m_animator.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        ChangePlayerMoveState();
     }
 
     private void OnApplicationFocus(bool focus)
@@ -87,4 +70,46 @@ public class PlayerinputSystem : MonoBehaviour
         Cursor.visible = false;
     }
 
+    private void ChangePlayerMoveState()
+    {
+        TurnOffAniBools();
+
+        if (!fire)
+        {
+            if (move.Equals(Vector2.zero))
+            {
+                player.m_StateMachine.ChangeState(player.m_StateMachine.idleState);
+            }
+
+            else
+            {
+                if (sprint)
+                {
+                    player.m_StateMachine.ChangeState(player.m_StateMachine.runState);
+                }
+
+                else
+                {
+                    player.m_StateMachine.ChangeState(player.m_StateMachine.walkState);
+                }
+            }
+        }
+
+        else
+        {
+            player.m_StateMachine.ChangeState(player.m_StateMachine.attackState);
+        }
+
+    }
+
+    private void TurnOffAniBools()
+    {
+        AnimatorStateInfo animatorStateInfo = player.m_animator.GetCurrentAnimatorStateInfo(0);
+
+        if (fire && animatorStateInfo.normalizedTime >= 1f)
+        {
+            fire = false;
+            player.m_StateMachine.ChangeState(player.m_StateMachine.idleState);
+        }
+    }
 }

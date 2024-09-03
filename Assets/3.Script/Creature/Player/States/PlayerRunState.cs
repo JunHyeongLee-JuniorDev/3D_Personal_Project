@@ -11,11 +11,11 @@ public class PlayerRunState : PlayerBaseState
 
     public override void Enter()
     {
-        stateMachine.player.m_targetSpeed
+        m_targetSpeed
              = stateMachine.player.m_PhysicsData.GroundedData.sprintSpeed;
         aniFadeDuration = 0.1f;
 
         base.Enter();
-        StartAnimation(stateMachine.player.m_aniData.m_animIDSprint);
+        StartAnimation(stateMachine.player.m_aniData._DTaniClip[EPlayerState.SPRINT]);
     }
 }

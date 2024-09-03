@@ -11,10 +11,12 @@ public class PlayerIdleState : PlayerBaseState
 
     public override void Enter()
     {
-        stateMachine.player.m_targetSpeed = 0f;
+        m_targetSpeed = 0f;
         aniFadeDuration = 0.25f;
+
+        StartAnimation(stateMachine.player.m_aniData._DTaniClip[EPlayerState.IDLE]);
+
         base.Enter();
-        StartAnimation(stateMachine.player.m_aniData.m_animIDIdle);
     }
 
     public override void Exit()
