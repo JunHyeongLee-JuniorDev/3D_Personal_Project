@@ -2682,10 +2682,6 @@ PrefabInstance:
       value: -40.809
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
-      propertyPath: m_ReceiveGI
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
@@ -2792,10 +2788,6 @@ PrefabInstance:
       value: -47.951
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
-      propertyPath: m_ReceiveGI
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
@@ -2900,10 +2892,6 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -45.003
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
-      propertyPath: m_ReceiveGI
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_StaticShadowCaster
@@ -4064,10 +4052,6 @@ PrefabInstance:
       value: -45.563
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
-      propertyPath: m_ReceiveGI
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
@@ -4986,10 +4970,6 @@ PrefabInstance:
       value: 43.406
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
-      propertyPath: m_ReceiveGI
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
@@ -5094,10 +5074,6 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: -39.199
-      objectReference: {fileID: 0}
-    - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
-      propertyPath: m_ReceiveGI
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: 3ec16a63a2530c449a5ac80f893eb136, type: 3}
       propertyPath: m_StaticShadowCaster

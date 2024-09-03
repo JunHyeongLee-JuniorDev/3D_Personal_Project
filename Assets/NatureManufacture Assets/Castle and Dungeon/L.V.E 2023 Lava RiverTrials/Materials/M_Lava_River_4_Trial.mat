@@ -9,8 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Lava_River_4_Trial
   m_Shader: {fileID: 4800000, guid: a078bba5a980e3447a3b8f0ef47227d2, type: 3}
-  m_ValidKeywords:
-  - _UVVDIRECTION1UDIRECTION0_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
@@ -313,7 +312,7 @@ Material:
     - _HotLavaAlbedoColorMultiply: 1
     - _HotLavaAngle: 51.8
     - _HotLavaAngleFalloff: 1
-    - _HotLavaEmissionMaskIntensivity: 3.2
+    - _HotLavaEmissionMaskIntensivity: 3
     - _HotLavaEmissionMaskPower: 2.72
     - _HotLavaEmissionMaskTreshold: 6.74
     - _HotLavaFlowUVRefreshSpeed: 0.2

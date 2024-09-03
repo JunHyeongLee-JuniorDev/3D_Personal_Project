@@ -41,8 +41,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_rock_atlas_02
   m_Shader: {fileID: 4800000, guid: d226ffe19e7968b42a093d463d9b41c5, type: 3}
-  m_ValidKeywords:
-  - LEAKS_UV0_UV2_1_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   - _MASKMAP
@@ -57,7 +56,6 @@ Material:
   - _NORMALMAP_TANGENT_SPACE2
   - _NORMALMAP_TANGENT_SPACE3
   - _REQUIRE_UV2
-  - _SHAPE_UV0_UV2_ON
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -470,14 +468,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord3:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -539,8 +529,8 @@ Material:
     - _Base2TriplanarThreshold: 5
     - _BaseAORemapMax: 1
     - _BaseAORemapMin: 0
-    - _BaseEmissionMaskIntensivity: 9
-    - _BaseEmissionMaskIntensivity_1: 7
+    - _BaseEmissionMaskIntensivity: 4
+    - _BaseEmissionMaskIntensivity_1: 5.265
     - _BaseEmissionMaskTreshold: 3.2
     - _BaseEmissionMaskTreshold_1: 3.2
     - _BaseMetallic: 1
@@ -585,7 +575,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _CurvatureBlend: 0.093
-    - _Cutoff: 0
+    - _Cutoff: 0.5
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 0
     - _DetailAlbedoScale0: 1
@@ -754,7 +744,6 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
-    - _PlanarUV1: 0
     - _QueueControl: 1
     - _QueueOffset: 0
     - _REFLECTIONS_IOR: 1.52
@@ -776,7 +765,6 @@ Material:
     - _ShapeHeightMapMin: 0
     - _ShapeHeightMapOffset: 1
     - _ShapeNormalStrenght: 1
-    - _ShapeNormalStrenght1: 1
     - _ShapeNormalStrenght_1: 0.3
     - _Shape_AO_Curvature_Reduction: 0
     - _Shape_Normal_Blend_Hardness: 1
@@ -879,7 +867,6 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - __dirty: 1
     m_Colors:
     - Color_9038becb6e614b229ea1aa0f2e0ea888: {r: 0.5754717, g: 0.5754717, b: 0.5754717, a: 1}
     - Vector4_606b2bd599b74c8eb765aa838d8005ef: {r: 5, g: 5, b: 0, a: 0}

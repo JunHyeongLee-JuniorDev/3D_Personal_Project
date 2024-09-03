@@ -9,10 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_lava_wall_09_V1_Trial
   m_Shader: {fileID: 4800000, guid: 3ef0cb5a2319771478ac44698ebb6ef9, type: 3}
-  m_ValidKeywords:
-  - LEAKS_UV0_UV2_1_ON
-  - _USECOVERHEIGHTT_ON
-  - _USEDYNAMICCOVERTSTATICMASKF_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   m_LightmapFlags: 2
@@ -187,10 +184,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _texcoord:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord3:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}

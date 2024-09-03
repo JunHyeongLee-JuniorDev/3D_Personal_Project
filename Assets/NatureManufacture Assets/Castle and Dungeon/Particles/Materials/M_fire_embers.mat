@@ -10,12 +10,10 @@ Material:
   m_Name: M_fire_embers
   m_Shader: {fileID: 4800000, guid: 0b96041736f3d3e4a91382b1dac91c96, type: 3}
   m_ValidKeywords:
-  - _Use_Texture_as_Alpha
-  - _Wind_from_Center_T_Age_F
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
   - _DOUBLESIDED_ON
   - _ENABLE_FOG_ON_TRANSPARENT
-  - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
@@ -138,10 +136,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _UnlitColorMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -339,7 +333,7 @@ Material:
     - _UVEmissive: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
-    - _Use_Texture_as_Alpha: 1
+    - _Use_Texture_as_Alpha: 0
     - _WINDCOLORMIX: 0
     - _WindColorThreshold: 1
     - _Wind_from_Center_T_Age_F: 1
@@ -351,7 +345,6 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
-    - __dirty: 1
     m_Colors:
     - Color_4b37df9bf8754a7fa651c36c44d4e2eb: {r: 256, g: 6.696452, b: 0, a: 0}
     - _BaseColor: {r: 0, g: 0, b: 0, a: 1}

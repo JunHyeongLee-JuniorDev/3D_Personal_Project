@@ -9,8 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Lava_River_3_Trial
   m_Shader: {fileID: 4800000, guid: 951e551eb5a54334ab498637e84fe777, type: 3}
-  m_ValidKeywords:
-  - _UVVDIRECTION1UDIRECTION0_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
@@ -175,10 +174,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _texcoord3:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _texcoord4:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -293,7 +288,7 @@ Material:
     - _HotLavaAlbedoColorMultiply: 1
     - _HotLavaAngle: 90
     - _HotLavaAngleFalloff: 0.6
-    - _HotLavaEmissionMaskIntensivity: 1.81
+    - _HotLavaEmissionMaskIntensivity: 1.75
     - _HotLavaEmissionMaskPower: 2.72
     - _HotLavaEmissionMaskTreshold: 18.4
     - _HotLavaFlowUVRefreshSpeed: 0.1
@@ -316,7 +311,7 @@ Material:
     - _MediumLavaAlbedoColorMultiply: 1
     - _MediumLavaAngle: 22.2
     - _MediumLavaAngleFalloff: 5
-    - _MediumLavaEmissionMaskIntesivity: 1.6
+    - _MediumLavaEmissionMaskIntesivity: 1.55
     - _MediumLavaEmissionMaskPower: 0
     - _MediumLavaEmissionMaskTreshold: 9.3
     - _MediumLavaFlowUVRefreshSpeed: 0.1

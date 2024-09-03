@@ -11,12 +11,10 @@ Material:
   m_Shader: {fileID: 4800000, guid: 0b96041736f3d3e4a91382b1dac91c96, type: 3}
   m_ValidKeywords:
   - USE_WIND_ON
-  - _Use_Texture_as_Alpha
-  - _Wind_from_Center_T_Age_F
+  - _SURFACE_TYPE_TRANSPARENT
   m_InvalidKeywords:
   - _DOUBLESIDED_ON
   - _ENABLE_FOG_ON_TRANSPARENT
-  - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
@@ -160,10 +158,6 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _WindNM_ea70f7a4eca3453d97b3d9df1317f609_Texture2DA3874DB9_2972925737:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -391,7 +385,6 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 0
     - _ZWriteControl: 0
-    - __dirty: 1
     m_Colors:
     - Color_4b37df9bf8754a7fa651c36c44d4e2eb: {r: 341.78006, g: 341.78006, b: 341.78006, a: 0}
     - _BaseColor: {r: 0, g: 0, b: 0, a: 1}

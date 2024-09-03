@@ -39,16 +39,13 @@ Material:
   m_Name: M_Obsidian
   m_Shader: {fileID: 4800000, guid: 42eee09cc8d1a004d93cb11ba6087a0f, type: 3}
   m_ValidKeywords: []
-  m_InvalidKeywords:
-  - _METALLICGLOSSMAP
-  - _METALLICSPECGLOSSMAP
-  - _NORMALMAP
-  - _OCCLUSIONMAP
+  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
+  m_CustomRenderQueue: 2000
+  stringTagMap:
+    RenderType: Opaque
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
@@ -178,19 +175,15 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Thickness:
-        m_Texture: {fileID: 2800000, guid: 170cb83844f31764f84578e99bbb24fb, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _ThicknessMap:
         m_Texture: {fileID: 2800000, guid: 170cb83844f31764f84578e99bbb24fb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _TransmittanceColorMap:
-        m_Texture: {fileID: 0}
+    - _Thickness_R:
+        m_Texture: {fileID: 2800000, guid: 170cb83844f31764f84578e99bbb24fb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _texcoord:
+    - _TransmittanceColorMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -226,11 +219,14 @@ Material:
     - _Anisotropy: 0
     - _BaseAORemapMax: 1
     - _BaseAORemapMin: 0
+    - _BaseMetallic: 1
+    - _BaseNormalScale: 1
     - _BaseSmoothnessRemapMax: 1
     - _BaseSmoothnessRemapMin: 0
     - _Blend: 0
     - _BlendMode: 0
     - _BumpScale: 0.7
+    - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _CoatMask: 1
@@ -262,9 +258,9 @@ Material:
     - _EnableGeometricSpecularAA: 0
     - _EnergyConservingSpecularColor: 1
     - _EnvironmentReflections: 1
-    - _GlossMapScale: 1
+    - _GlossMapScale: 0
     - _Glossiness: 0
-    - _GlossyReflections: 1
+    - _GlossyReflections: 0
     - _HeightAmplitude: 0
     - _HeightCenter: 0
     - _HeightMapParametrization: 1
@@ -280,10 +276,9 @@ Material:
     - _IridescenceThickness: 1
     - _LinkDetailsWithBase: 1
     - _MaterialID: 5
-    - _Metallic: 1
+    - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0.7886677
-    - _Mode: 0
     - _NormalMapSpace: 0
     - _NormalScale: 0.7
     - _OcclusionStrength: 1
@@ -294,6 +289,7 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.005
+    - _QueueControl: 0
     - _QueueOffset: 0
     - _RayTracing: 0
     - _ReceiveShadows: 1
@@ -324,7 +320,7 @@ Material:
     - _TexWorldScale: 1
     - _TexWorldScaleEmissive: 1
     - _Thickness: 0.31
-    - _ThicknessRemapMax: 1.29
+    - _ThicknessRemapMax: 1.2
     - _ThicknessRemapMin: -1.48
     - _TransmissionEnable: 1
     - _TransparentBackfaceEnable: 0
@@ -337,22 +333,22 @@ Material:
     - _UVBase: 0
     - _UVDetail: 0
     - _UVEmissive: 0
-    - _UVSec: 0
     - _UseEmissiveIntensity: 0
     - _UseShadowThreshold: 0
     - _WorkflowMode: 1
+    - _ZTest: 4
     - _ZTestDepthEqualForOpaque: 3
     - _ZTestGBuffer: 4
     - _ZTestTransparent: 4
     - _ZWrite: 1
-    - __dirty: 1
+    - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 0.124510504, g: 0.1509434, b: 0.080455676, a: 1}
     - _BaseColorMap_MipInfo: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseTilingOffset: {r: 1, g: 1, b: 0, a: 0}
     - _Color: {r: 0.124510475, g: 0.15094337, b: 0.08045565, a: 1}
     - _DiffusionProfileAsset: {r: 4.4330863e-34, g: -0.00000016928209, b: 2.29788e+21, a: 1.08205265e-33}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
-    - _Emission: {r: 0.007941929, g: 0.009433985, b: 0.005206492, a: 1}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmissiveColor: {r: 0, g: 0, b: 0, a: 100}
     - _EmissiveColorLDR: {r: 0, g: 0, b: 0.4901961, a: 1}

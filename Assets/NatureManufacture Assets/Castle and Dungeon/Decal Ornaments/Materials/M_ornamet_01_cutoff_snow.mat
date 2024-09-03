@@ -41,11 +41,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_ornamet_01_cutoff_snow
   m_Shader: {fileID: 4800000, guid: d226ffe19e7968b42a093d463d9b41c5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _USEDYNAMICCOVERTSTATICMASKF_ON
-  m_InvalidKeywords:
   - _ALPHATEST_ON
-  - _COVERUSEPLANARUV_ON
+  m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   - _MASKMAP
   - _MASKMAP0
@@ -59,9 +59,7 @@ Material:
   - _NORMALMAP_TANGENT_SPACE2
   - _NORMALMAP_TANGENT_SPACE3
   - _REQUIRE_UV2
-  - _SHAPE_UV0_UV2_ON
   - _TESSELLATION_PHONG
-  - _UV0_UV2_ON
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -75,6 +73,7 @@ Material:
   - TransparentBackface
   - RayTracingPrepass
   - MOTIONVECTORS
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -474,14 +473,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord3:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -529,7 +520,7 @@ Material:
     - _AlphaCutoffShadow: 0.5
     - _AlphaDstBlend: 0
     - _AlphaSrcBlend: 1
-    - _AlphaToMask: 0
+    - _AlphaToMask: 1
     - _AlphaToMaskInspectorValue: 0
     - _Alpha_Clip_Threshold: 0.3
     - _Anisotropy: 0
@@ -559,6 +550,7 @@ Material:
     - _BaseUsePlanarUV: 0
     - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _BumpScale: 1
     - _COAT_IOR: 1.4
     - _COAT_ROUGHNESS: 0
@@ -596,7 +588,7 @@ Material:
     - _CullMode: 2
     - _CullModeForward: 2
     - _CurvatureBlend: 0.1
-    - _Cutoff: 0.4
+    - _Cutoff: 0.5
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 0
     - _DetailAlbedoScale0: 1
@@ -766,7 +758,6 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
-    - _PlanarUV1: 0
     - _QueueControl: 1
     - _QueueOffset: 0
     - _REFLECTIONS_IOR: 1.52
@@ -788,7 +779,6 @@ Material:
     - _ShapeHeightMapMin: 0
     - _ShapeHeightMapOffset: 1.2
     - _ShapeNormalStrenght: 1
-    - _ShapeNormalStrenght1: 1
     - _ShapeNormalStrenght_1: 1
     - _ShapeTessMapMax: 1
     - _ShapeTessMapMin: 0
@@ -902,7 +892,6 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - __dirty: 1
     m_Colors:
     - Color_9038becb6e614b229ea1aa0f2e0ea888: {r: 1, g: 0.9813726, b: 0, a: 1}
     - Vector4_606b2bd599b74c8eb765aa838d8005ef: {r: 4, g: 4, b: 0, a: 0}

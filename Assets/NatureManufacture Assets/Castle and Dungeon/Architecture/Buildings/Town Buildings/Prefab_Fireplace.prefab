@@ -14513,6 +14513,7 @@ GameObject:
   m_Component:
   - component: {fileID: 689075810703031041}
   - component: {fileID: 689075810703031040}
+  - component: {fileID: 1278329795227981921}
   m_Layer: 0
   m_Name: Fireplace_light_interior
   m_TagString: Untagged
@@ -14546,15 +14547,15 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.24999413, b: 0, a: 1}
-  m_Intensity: 2
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 16
   m_Range: 15
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
   m_Shadows:
     m_Type: 2
-    m_Resolution: 0
+    m_Resolution: 128
     m_CustomResolution: -1
     m_Strength: 1
     m_Bias: 0.05
@@ -14581,7 +14582,7 @@ Light:
   m_Cookie: {fileID: 0}
   m_DrawHalo: 0
   m_Flare: {fileID: 0}
-  m_RenderMode: 2
+  m_RenderMode: 0
   m_CullingMask:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -14589,7 +14590,7 @@ Light:
   m_Lightmapping: 1
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
-  m_BounceIntensity: 2
+  m_BounceIntensity: 100
   m_ColorTemperature: 1700
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 9.25e-43, y: 8.3737384e+33, z: 9.2e-43, w: 2.5699751e+31}
@@ -14597,6 +14598,26 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!114 &1278329795227981921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 689075810703031054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: -1
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1011481076921549387
 GameObject:
   m_ObjectHideFlags: 0
@@ -14870,6 +14891,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1991636365049138517}
   - component: {fileID: 502778429173182759}
+  - component: {fileID: 5918832722530249006}
   m_Layer: 0
   m_Name: Fireplace_light_interior_front_baked
   m_TagString: Untagged
@@ -14903,8 +14925,8 @@ Light:
   serializedVersion: 10
   m_Type: 2
   m_Shape: 0
-  m_Color: {r: 1, g: 0.4959692, b: 0.22745097, a: 1}
-  m_Intensity: 6
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Intensity: 100
   m_Range: 8
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -14946,7 +14968,7 @@ Light:
   m_Lightmapping: 2
   m_LightShadowCasterMode: 2
   m_AreaSize: {x: 0.5, y: 0.5}
-  m_BounceIntensity: 6
+  m_BounceIntensity: 100
   m_ColorTemperature: 1700
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 9.25e-43, y: 8.3737384e+33, z: 9.2e-43, w: 2.5699751e+31}
@@ -14954,6 +14976,26 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 0
   m_ShadowRadius: 1.48
   m_ShadowAngle: 0
+--- !u!114 &5918832722530249006
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2309580850467418257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &3813155470455949584
 GameObject:
   m_ObjectHideFlags: 0

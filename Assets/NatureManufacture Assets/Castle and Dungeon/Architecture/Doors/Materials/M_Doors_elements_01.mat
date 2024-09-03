@@ -41,16 +41,11 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Doors_elements_01
   m_Shader: {fileID: 4800000, guid: d226ffe19e7968b42a093d463d9b41c5, type: 3}
-  m_ValidKeywords:
-  - LEAKS_UV0_UV2_1_ON
-  - _USECOVERHEIGHTT_ON
-  - _USEDYNAMICCOVERTSTATICMASKF_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
   - _DOUBLESIDED_ON
   - _NORMALMAP_TANGENT_SPACE
-  - _SHAPE_UV0_UV2_ON
-  - _UV0_UV2_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 1
@@ -463,14 +458,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _texcoord:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _texcoord3:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -581,7 +568,7 @@ Material:
     - _CullMode: 0
     - _CullModeForward: 0
     - _CurvatureBlend: 0.327
-    - _Cutoff: 0
+    - _Cutoff: 0.5
     - _DepthOffsetEnable: 0
     - _DetailAlbedoScale: 0
     - _DetailAlbedoScale0: 1
@@ -750,7 +737,6 @@ Material:
     - _PPDPrimitiveLength: 1
     - _PPDPrimitiveWidth: 1
     - _Parallax: 0.02
-    - _PlanarUV1: 0
     - _QueueControl: 1
     - _QueueOffset: 0
     - _REFLECTIONS_IOR: 1.52
@@ -772,7 +758,6 @@ Material:
     - _ShapeHeightMapMin: 0
     - _ShapeHeightMapOffset: -21.1
     - _ShapeNormalStrenght: 1
-    - _ShapeNormalStrenght1: 1
     - _ShapeNormalStrenght_1: 0.3
     - _ShapeTessMapMax: 0
     - _ShapeTessMapMin: 0
@@ -886,7 +871,6 @@ Material:
     - _ZTestTransparent: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
-    - __dirty: 1
     m_Colors:
     - Color_9038becb6e614b229ea1aa0f2e0ea888: {r: 0.4012993, g: 0.40363804, b: 0.509434, a: 1}
     - Vector4_606b2bd599b74c8eb765aa838d8005ef: {r: 3, g: 3, b: 0, a: 0}

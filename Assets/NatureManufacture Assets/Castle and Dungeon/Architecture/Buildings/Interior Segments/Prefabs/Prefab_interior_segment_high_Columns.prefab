@@ -393,10 +393,6 @@ PrefabInstance:
       value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -1180999108768367397, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
-      propertyPath: m_ScaleInLightmap
-      value: 2.8
-      objectReference: {fileID: 0}
-    - target: {fileID: -1180999108768367397, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
@@ -419,10 +415,6 @@ PrefabInstance:
     - target: {fileID: 6308164186901184352, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 8761563364006741726, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
-      propertyPath: m_ScaleInLightmap
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8761563364006741726, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
       propertyPath: m_StaticShadowCaster
@@ -2226,10 +2218,6 @@ PrefabInstance:
       value: 2147483647
       objectReference: {fileID: 0}
     - target: {fileID: -1180999108768367397, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
-      propertyPath: m_ScaleInLightmap
-      value: 2.8
-      objectReference: {fileID: 0}
-    - target: {fileID: -1180999108768367397, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
       propertyPath: m_StaticShadowCaster
       value: 1
       objectReference: {fileID: 0}
@@ -2252,10 +2240,6 @@ PrefabInstance:
     - target: {fileID: 6308164186901184352, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 2147483647
-      objectReference: {fileID: 0}
-    - target: {fileID: 8761563364006741726, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
-      propertyPath: m_ScaleInLightmap
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8761563364006741726, guid: 2da95bfa0b8135b4f8f3510e2d09071e, type: 3}
       propertyPath: m_StaticShadowCaster
