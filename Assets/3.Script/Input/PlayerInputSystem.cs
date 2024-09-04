@@ -9,24 +9,11 @@ public class PlayerinputSystem : MonoBehaviour
     [Header("플레이어 input values")]
     public Vector2 move;
     public Vector2 look;
-    public bool jump;
-    public bool sprint = false;
-    public bool fire;
     public PlayerController player;
 
     public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>().normalized;
-
-        if (context.started)
-        {
-            ChangePlayerMoveState();
-        }
-
-        else if (context.canceled)
-        {
-            ChangePlayerMoveState();
-        }
     }
     public void OnLook(InputAction.CallbackContext context)
     {
@@ -37,9 +24,14 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            fire = true;
-            ChangePlayerMoveState();
+            player.isBattle = true;
         }
+    }
+
+    public void OnJump(InputAction.CallbackContext context)
+    {
+        if(context.started && !player.isBattle)
+        player.isJump = true;
     }
 
 
@@ -47,16 +39,13 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            sprint = true;
-            ChangePlayerMoveState();
+            player.isSprint = true;
         }
 
         else if (context.canceled)
         {
-            sprint = false;
-            ChangePlayerMoveState();
+            player.isSprint = false;
         }
-
     }
 
     private void OnApplicationFocus(bool focus)
@@ -68,48 +57,5 @@ public class PlayerinputSystem : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
-    }
-
-    private void ChangePlayerMoveState()
-    {
-        TurnOffAniBools();
-
-        if (!fire)
-        {
-            if (move.Equals(Vector2.zero))
-            {
-                player.m_StateMachine.ChangeState(player.m_StateMachine.idleState);
-            }
-
-            else
-            {
-                if (sprint)
-                {
-                    player.m_StateMachine.ChangeState(player.m_StateMachine.runState);
-                }
-
-                else
-                {
-                    player.m_StateMachine.ChangeState(player.m_StateMachine.walkState);
-                }
-            }
-        }
-
-        else
-        {
-            player.m_StateMachine.ChangeState(player.m_StateMachine.attackState);
-        }
-
-    }
-
-    private void TurnOffAniBools()
-    {
-        AnimatorStateInfo animatorStateInfo = player.m_animator.GetCurrentAnimatorStateInfo(0);
-
-        if (fire && animatorStateInfo.normalizedTime >= 1f)
-        {
-            fire = false;
-            player.m_StateMachine.ChangeState(player.m_StateMachine.idleState);
-        }
     }
 }

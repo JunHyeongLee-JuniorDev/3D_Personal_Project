@@ -24,7 +24,7 @@ public class ExtendedFlycam : MonoBehaviour
 
     public float cameraSensitivity = 90;
     public float climbSpeed = 4;
-    public float normalMoveSpeed = 10;
+    public float MoveSpeed = 10;
     public float slowMoveFactor = 0.25f;
     public float fastMoveFactor = 3;
 
@@ -50,18 +50,18 @@ public class ExtendedFlycam : MonoBehaviour
 
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            transform.position += transform.forward * (normalMoveSpeed * fastMoveFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
-            transform.position += transform.right * (normalMoveSpeed * fastMoveFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+            transform.position += transform.forward * (MoveSpeed * fastMoveFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
+            transform.position += transform.right * (MoveSpeed * fastMoveFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
         }
         else if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl))
         {
-            transform.position += transform.forward * (normalMoveSpeed * slowMoveFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
-            transform.position += transform.right * (normalMoveSpeed * slowMoveFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
+            transform.position += transform.forward * (MoveSpeed * slowMoveFactor) * Input.GetAxis("Vertical") * Time.deltaTime;
+            transform.position += transform.right * (MoveSpeed * slowMoveFactor) * Input.GetAxis("Horizontal") * Time.deltaTime;
         }
         else
         {
-            transform.position += transform.forward * normalMoveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
-            transform.position += transform.right * normalMoveSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
+            transform.position += transform.forward * MoveSpeed * Input.GetAxis("Vertical") * Time.deltaTime;
+            transform.position += transform.right * MoveSpeed * Input.GetAxis("Horizontal") * Time.deltaTime;
         }
 
 
