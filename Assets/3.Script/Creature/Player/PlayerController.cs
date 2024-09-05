@@ -27,6 +27,7 @@ public class PlayerController : MonoBehaviour
     public bool isSprint;
     public bool isBattle;
     public bool isGrouded;
+    public bool isFall;
     public bool isJump;
 
     //Player
@@ -69,9 +70,8 @@ public class PlayerController : MonoBehaviour
         
 
         //AnyTransition
-        m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => isGrouded && !isJump));
-        //m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle));
-        m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => isJump || !isGrouded));
+        m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() =>   !isBattle && isGrouded));
+        m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => !isGrouded && !isBattle));
         m_StateMachine.SetState(_locoState);
     }
 
@@ -182,7 +182,9 @@ public class PlayerController : MonoBehaviour
             else
             {
                 //떨어지는 애니메이션 재생
-                m_animator.CrossFade(m_aniData._DTaniClipID[EPlayerState.FALL], 0.25f);
+                m_animator.SetBool(m_aniData._DTaniTriggerOrBoolID[EPlayerAniTriggerOrBool.ISFALL], true);
+                Debug.Log("떨어진당~");
+                isFall = true;
             }
 
             isJump = false;
@@ -200,7 +202,7 @@ public class PlayerController : MonoBehaviour
                                         transform.position.z);
 
         isGrouded = Physics.CheckSphere(spherePos, m_PhysicsData.AirData.groundedRadius, m_PhysicsData.AirData.groundLayers, QueryTriggerInteraction.Ignore);
-        m_animator.SetBool(m_aniData._DTaniTriggerID[EPlayerState.ISGROUND], isGrouded);
+        m_animator.SetBool(m_aniData._DTaniTriggerOrBoolID[EPlayerAniTriggerOrBool.ISGROUND], isGrouded);
     }
 
     private void OnDrawGizmos()

@@ -27,6 +27,8 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void Exit()
     {
+        Debug.Log("플레이는 되니? jump State 야?");
+        player.m_animator.Play(player.m_aniData._DTaniClipID[EPlayerState.LAND]);
         base.Exit();
     }
 }
