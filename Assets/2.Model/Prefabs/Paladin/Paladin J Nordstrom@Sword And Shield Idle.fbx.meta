@@ -1,14 +1,9 @@
 fileFormatVersion: 2
-guid: c000bf4277722f6428e1c6923f1f607b
+guid: 3e95ea52e9a3ff64b9c69022274d4a34
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Paladin_MAT
-    second: {fileID: 2100000, guid: 029a17c4f2c9c2e46bd7d7bf9dfac8a2, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -82,22 +77,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips:
-  - 07b1bff88c0c65c4db3d09e07bb335f3
-  - a93a19426af2971438abc6061bc8b005
-  - 7ad8a2a093d7e84448ac0c7750eab384
-  - 06463e3d13f4258489376b979fd790a3
-  - 3e95ea52e9a3ff64b9c69022274d4a34
-  - 88f791e08c51d1649becd6cf1ba7b7e9
-  - fe597531c909fb949a00e87e61b75a2c
-  - 8b4474569a838ad45ae4de75475b491b
-  - 2a0b34daf94616040ac138a82cad7cc5
-  - f889cb3e9600ac04f884a277cf3927bd
-  - ee5ff824bba63e14b8d3aa195ce1790c
-  - 6f4cf093f573ad04eaf33eaf02ce8b84
-  - 4db93f17c4119d840bb8a82e6634fd9d
-  - 58e7e2f115c378d4184f33c4767af8eb
-  - 0e99efbfb46c2044bac0dddacd86fffe
+  referencedClips: []
   importAnimation: 1
   humanDescription:
     serializedVersion: 3
@@ -905,11 +885,12 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 1
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: c000bf4277722f6428e1c6923f1f607b,
+    type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
-  avatarSetup: 1
+  avatarSetup: 2
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
   importBlendShapeDeformPercent: 1
   remapMaterialsIfMaterialImportModeIsNone: 0
