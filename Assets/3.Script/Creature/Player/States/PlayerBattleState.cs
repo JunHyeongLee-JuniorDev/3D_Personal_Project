@@ -12,9 +12,8 @@ public class PlayerBattleState : PlayerBaseState
 
     public override void Enter()
     {
-        player.isBattle = true;
         inputAction.started += OnFire;
-        animator.Play(DTClipID[EPlayerState.ATTACK],0);
+        animator.Play(DTAniClipID[EPlayerState.ATTACK],0);
         base.Enter();
     }
 
@@ -32,6 +31,6 @@ public class PlayerBattleState : PlayerBaseState
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        animator.SetTrigger(player.m_aniData.attackTriggerID);
+        //None
     }
 }

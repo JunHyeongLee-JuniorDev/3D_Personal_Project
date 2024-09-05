@@ -18,7 +18,13 @@ public class PlayerStateMachine : StateMachine
 public enum EPlayerState
 {
     LOCO,
-    ATTACK
+    LOCOSPEED,
+    ATTACK,
+    JUMP,
+    RUNJUMP,
+    FALL,
+    LAND,
+    ISGROUND
 };
 
 /// <summary>
@@ -29,7 +35,7 @@ public class PlayerAnimationData
 {
     //Animation Hash
     public Dictionary<EPlayerState, int> _DTaniClipID { get; private set; }
-    public int attackTriggerID = Animator.StringToHash("Attack");
+    public Dictionary<EPlayerState, int> _DTaniTriggerID { get; private set; }
 
     /// <summary>
     /// Initialize 애니메이션 데이터를 Hash값으로 바꿈
@@ -43,8 +49,18 @@ public class PlayerAnimationData
          */
 
         _DTaniClipID =new Dictionary<EPlayerState, int>();
+        _DTaniTriggerID = new Dictionary<EPlayerState, int>();
 
-        _DTaniClipID.Add(EPlayerState.LOCO, Animator.StringToHash("Speed"));
+        //Clip ID
+        _DTaniClipID.Add(EPlayerState.LOCO, Animator.StringToHash("Loco"));
+        _DTaniClipID.Add(EPlayerState.LOCOSPEED, Animator.StringToHash("Speed"));
         _DTaniClipID.Add(EPlayerState.ATTACK, Animator.StringToHash("Attack"));
+        _DTaniClipID.Add(EPlayerState.JUMP, Animator.StringToHash("InAir.Jump"));
+        _DTaniClipID.Add(EPlayerState.RUNJUMP, Animator.StringToHash("InAir.RunningJump"));
+        _DTaniClipID.Add(EPlayerState.FALL, Animator.StringToHash("Falling"));
+        _DTaniClipID.Add(EPlayerState.LAND, Animator.StringToHash("InAir.Falling To Landing"));
+
+        //Trigger Name
+        _DTaniTriggerID.Add(EPlayerState.ISGROUND, Animator.StringToHash("IsGround"));
     }
 }

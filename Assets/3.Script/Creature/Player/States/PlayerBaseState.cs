@@ -14,7 +14,7 @@ public class PlayerBaseState : IState
     protected readonly PlayerAirData airData;
     protected PlayerController player;
     protected Animator animator;
-    protected Dictionary<EPlayerState, int> DTClipID;
+    protected Dictionary<EPlayerState, int> DTAniClipID;
     protected InputActionAsset inputActions;
     protected InputAction inputAction;
     protected float aniFadeDuration = 0.1f;
@@ -27,7 +27,7 @@ public class PlayerBaseState : IState
         groundData = player.m_PhysicsData.GroundedData;
         airData = player.m_PhysicsData.AirData;
         animator = player.m_animator;
-        DTClipID = player.m_aniData._DTaniClipID;
+        DTAniClipID = player.m_aniData._DTaniClipID;
         inputActions = player.m_playerInput.actions;
     }
 
@@ -49,7 +49,7 @@ public class PlayerBaseState : IState
 
     public virtual void Update()
     {
-
+        
     }
 
     public virtual void OnHurt()

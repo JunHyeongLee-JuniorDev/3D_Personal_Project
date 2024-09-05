@@ -9,10 +9,8 @@ public class PlayerLocoState : PlayerBaseState
     public override void Enter()
     {
         player.m_targetSpeed = 0f;
-        aniFadeDuration = 0.25f;
-
-        animator.SetFloat(DTClipID[EPlayerState.LOCO], 0f);
-
+        animator.CrossFade(DTAniClipID[EPlayerState.LOCO], 0.3f);
+        animator.SetFloat(DTAniClipID[EPlayerState.LOCOSPEED], 0f);
         base.Enter();
     }
 
@@ -38,10 +36,9 @@ public class PlayerLocoState : PlayerBaseState
             }
         }
 
-
         player.Move();
-        //player.JumpAndGravity();
-        player.m_animator.SetFloat(DTClipID[EPlayerState.LOCO], player.m_animationBlend);
+        player.JumpAndGravity();
+        player.m_animator.SetFloat(DTAniClipID[EPlayerState.LOCOSPEED], player.m_animationBlend);
     }
 
     public override void Exit()

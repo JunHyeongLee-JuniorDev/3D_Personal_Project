@@ -15,7 +15,7 @@ public abstract class StateMachine
     protected HashSet<ITransition> anyTransitions = new HashSet<ITransition>(); 
 
     /// <summary>
-    /// 각 노드 별로 상태 
+    /// 각 노드 별로 각 상태 저장 HashSet으로 Transition 조건 저장
     /// </summary>
     protected class StateNode
     {
@@ -66,13 +66,8 @@ public abstract class StateMachine
         nextState?.Enter();
 
         current = nodes[state.GetType()];
-        Debug.Log("현재 State :" + current.state);
-
+        Debug.Log(current.state);
         var _state = state as PlayerBaseState;
-        Debug.Log("전투 중 : " + _state.stateMachine.player.isBattle);
-        Debug.Log("땅 중 : " + _state.stateMachine.player.isGrouded);
-        Debug.Log("점프 중 : " + _state.stateMachine.player.isJump);
-        Debug.Log("스프린트 중 : " + _state.stateMachine.player.isSprint);
     }
 
     public ITransition GetTransition()
@@ -85,7 +80,6 @@ public abstract class StateMachine
             if (transition.Condition.Evaluate())
                 return transition;
 
-        Debug.Log("맞는 transition이 없습니다");
         return null;
     }
 

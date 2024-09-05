@@ -13,7 +13,7 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnMove(InputAction.CallbackContext context)
     {
-        move = context.ReadValue<Vector2>().normalized;
+        move = context.ReadValue<Vector2>();
     }
     public void OnLook(InputAction.CallbackContext context)
     {
@@ -30,7 +30,7 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.started && !player.isBattle)
+        if(context.started)
         player.isJump = true;
     }
 
