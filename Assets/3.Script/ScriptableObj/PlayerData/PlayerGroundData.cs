@@ -25,4 +25,10 @@ public class PlayerGroundData
     [field: SerializeField]
     [field: Range(0f, 100f)]
     public float sprintSpeed { get; private set; } = 10f;
+
+    [field: Header("Battle Walk Data")]
+    [field: SerializeField]
+    [field: Range(0f, 100f)]
+
+    public float battleWalkSpeed { get; private set; } = 3f;
 }

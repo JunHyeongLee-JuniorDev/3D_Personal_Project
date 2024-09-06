@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,30 +8,26 @@ public class PlayerBattleState : PlayerBaseState
 {
     public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
-        inputAction = inputActions["Fire"];
+
     }
 
     public override void Enter()
     {
-        inputAction.started += OnFire;
-        animator.Play(DTAniClipID[EPlayerState.ATTACK],0);
-        base.Enter();
+        player.m_Controller.Move(Vector3.zero);
+        animator.CrossFade(DTAniClipID[EPlayerState.BATTLE], 0.2f);
     }
 
     public override void Update()
     {
         base.Update();
+        animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEX], player.m_input.move.x);
+        animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEY], player.m_input.move.y);
+        JumpAndGravity();
     }
 
     public override void Exit()
     {
         base.Exit();
-        inputAction.started -= OnFire;
         player.isBattle = false;
-    }
-
-    public void OnFire(InputAction.CallbackContext context)
-    {
-        //None
     }
 }

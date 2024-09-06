@@ -744,16 +744,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac9b257ded680724b8f8d97dd3e35be3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <m_PhysicsData>k__BackingField: {fileID: 11400000, guid: 887e4080d60e95b4582d38d51dcf13df,
-    type: 2}
+  <m_PhysicsData>k__BackingField: {fileID: 0}
+  playerDataPath: ScriptableObj/PlayerData
   m_Controller: {fileID: 0}
   isSprint: 0
   isBattle: 0
+  isAttack: 0
   isGrouded: 0
+  isFall: 0
   isJump: 0
+  m_speed: 0
   m_targetSpeed: 0
   m_animationBlend: 0
+  m_targetRotation: 0
+  m_rotationVelocity: 0
   m_verticalVelocity: 0
+  m_jumpTimeOutDelta: 0
+  m_fallTimeOutDelta: 0
 --- !u!143 &806422963
 CharacterController:
   m_ObjectHideFlags: 0
@@ -917,6 +924,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f4ff84f6-ccc4-4f46-8536-c22d8080a8bb
     m_ActionName: Player/Jump[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 806422965}
+        m_TargetAssemblyTypeName: PlayerinputSystem, Assembly-CSharp
+        m_MethodName: OnBattle
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 351a75c9-aa2d-46c9-aa6e-771ba145e727
+    m_ActionName: Player/Targetting[/Keyboard/q]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player

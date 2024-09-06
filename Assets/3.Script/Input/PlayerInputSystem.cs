@@ -22,9 +22,9 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.started && !player.isAttack)
         {
-            player.isBattle = true;
+            player.isAttack = true;
         }
     }
 
@@ -47,6 +47,16 @@ public class PlayerinputSystem : MonoBehaviour
             player.isSprint = false;
         }
     }
+
+    public void OnBattle(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            player.isBattle = !player.isBattle;
+        }
+
+    }
+
 
     private void OnApplicationFocus(bool focus)
     {
