@@ -5,6 +5,7 @@ using UnityEditor.ShaderGraph;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEditor.Rendering.LookDev;
 
 public class PlayerController : MonoBehaviour
 {
@@ -16,6 +17,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private string playerDataPath = "ScriptableObj/PlayerData";
     public PlayerAnimationDataBase m_aniData { get; private set; }
+
+    //For Debug
+    private DebugUI debugUI;
 
     //Unity Components
     [field: HideInInspector]
@@ -65,6 +69,7 @@ public class PlayerController : MonoBehaviour
         {
             m_PhysicsData = Resources.Load<PlayerSO>(playerDataPath);
         }
+
     }
 
     private void Start()
@@ -74,7 +79,6 @@ public class PlayerController : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_playerInput = GetComponent<PlayerInput>();
         m_input.player = this; // input에서 player의 상태 bool값 변경
-
         m_StateMachine = new PlayerStateMachine(this);
 
         m_aniData = new PlayerAnimationDataBase();
@@ -95,10 +99,14 @@ public class PlayerController : MonoBehaviour
         m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle));
         m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));
         m_StateMachine.SetState(_locoState);
+
+
+        debugUI = GetComponent<DebugUI>();
     }
 
     private void Update()
     {
+        DebugShowRate();
         m_StateMachine.Update();
     }
 
@@ -114,6 +122,14 @@ public class PlayerController : MonoBehaviour
                                         transform.position.z);
 
         isGrouded = Physics.CheckSphere(spherePos, m_PhysicsData.AirData.groundedRadius, m_PhysicsData.AirData.groundLayers, QueryTriggerInteraction.Ignore);
+    }
+
+    private void DebugShowRate()
+    {
+        debugUI.SpeedText.text= ((int)m_speed).ToString();
+        debugUI.targetSpeedText.text= ((int)m_targetSpeed).ToString();
+        debugUI.targetRotatText.text= ((int)m_targetRotation).ToString();
+        debugUI.verticalVelText.text= ((int)m_verticalVelocity).ToString();
     }
 
     private void OnDrawGizmos()

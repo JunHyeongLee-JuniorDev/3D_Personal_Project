@@ -62,8 +62,6 @@ public class PlayerBaseState : IState
 
         Vector2 _input = player.m_input.move;
 
-        float _currentHorizontalSpeed = new Vector3(player.m_Controller.velocity.x, 0f, player.m_Controller.velocity.z).magnitude;
-
         float _speedOffset = 0.1f;
 
         //목표 속도까지 조정
