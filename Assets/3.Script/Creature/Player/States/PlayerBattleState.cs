@@ -79,7 +79,6 @@ public class PlayerBattleState : PlayerBaseState
         if (battleAniX > _input.x + _speedOffset ||
             battleAniX < _input.x - _speedOffset)
         {
-            Debug.Log("input x : " + _input.x);
             battleAniX = Mathf.Lerp(battleAniX, _input.x, 7.0f * Time.deltaTime);
         }
 
@@ -92,7 +91,6 @@ public class PlayerBattleState : PlayerBaseState
         if (battleAniY > _input.y + _speedOffset ||
             battleAniY < _input.y - _speedOffset)
         {
-            Debug.Log("input y : " + _input.y);
             battleAniY = Mathf.Lerp(battleAniY, _input.y, 10.0f * Time.deltaTime);
         }
 

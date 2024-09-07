@@ -52,9 +52,8 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            player.isBattle = !player.isBattle;
+            
         }
-
     }
 
     public void OnRightClick(InputAction.CallbackContext context)
