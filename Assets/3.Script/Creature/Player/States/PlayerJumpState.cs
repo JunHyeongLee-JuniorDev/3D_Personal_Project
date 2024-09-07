@@ -22,7 +22,8 @@ public class PlayerJumpState : PlayerBaseState
     {
         base.Update();
         Move();
-        JumpAndGravity();
+        Jump();
+        Gravity();
     }
 
     public override void Exit()

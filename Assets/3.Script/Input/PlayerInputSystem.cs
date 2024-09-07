@@ -57,6 +57,15 @@ public class PlayerinputSystem : MonoBehaviour
 
     }
 
+    public void OnRightClick(InputAction.CallbackContext context)
+    {
+        if(context.started)
+            player.isRightClicked = true;
+
+        else if (context.canceled)
+        player.isRightClicked = false;
+    }
+
 
     private void OnApplicationFocus(bool focus)
     {

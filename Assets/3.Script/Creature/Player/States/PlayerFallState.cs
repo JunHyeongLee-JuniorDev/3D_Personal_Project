@@ -31,7 +31,7 @@ public class PlayerFallState : PlayerBaseState
 
 
         Move();
-        JumpAndGravity();
+        Gravity();
     }
 
     public override void Exit()

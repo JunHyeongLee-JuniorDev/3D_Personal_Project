@@ -28,11 +28,29 @@ public class PlayerBattleState : PlayerBaseState
         animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEX], battleAniX);
         animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEY], battleAniY);
         Move();
-        JumpAndGravity();
+        Gravity();
     }
 
     public override void Move()
     {
+        if (player.m_input.move.Equals(Vector2.zero))
+        {
+            player.m_targetSpeed = 0f;
+        }
+
+        else
+        {
+            if (player.isSprint)
+            {
+                player.m_targetSpeed = groundData.sprintSpeed;
+            }
+
+            else
+            {
+                player.m_targetSpeed = groundData.BaseSpeed;
+            }
+        }
+
         /*
          * Vector3.magnitude
          * 벡터의 길이(float)를 반환한다. 
@@ -60,21 +78,47 @@ public class PlayerBattleState : PlayerBaseState
 
         if (battleAniX > _input.x + _speedOffset ||
             battleAniX < _input.x - _speedOffset)
-            battleAniX = Mathf.Lerp(battleAniX, _input.x, player.m_speed * Time.deltaTime);
+        {
+            Debug.Log("input x : " + _input.x);
+            battleAniX = Mathf.Lerp(battleAniX, _input.x, 7.0f * Time.deltaTime);
+        }
 
         else
+        {
             battleAniX = _input.x;
+        }
+
 
         if (battleAniY > _input.y + _speedOffset ||
             battleAniY < _input.y - _speedOffset)
-            battleAniY = Mathf.Lerp(battleAniY, _input.y, player.m_speed * Time.deltaTime);
+        {
+            Debug.Log("input y : " + _input.y);
+            battleAniY = Mathf.Lerp(battleAniY, _input.y, 10.0f * Time.deltaTime);
+        }
 
         else
-            battleAniY = _input.y;
+        {
 
-        //Vector3 movement3D = player.transform.forward * _input.x + player.transform.right * _input.y;
-        //
-        //player.m_Controller.Move((movement3D + new Vector3(0.0f, player.m_verticalVelocity, 0.0f)) * Time.deltaTime);
+            battleAniY = _input.y;
+        }
+
+        Vector3 movement3D = player.transform.forward * _input.y + player.transform.right * _input.x;
+        
+        player.m_Controller.Move((movement3D * player.m_speed + new Vector3(0.0f, player.m_verticalVelocity, 0.0f)) * Time.deltaTime);
+    }
+
+    protected override void Gravity()
+    {
+        if (player.isGrouded) { player.m_verticalVelocity = -2f; return; }
+
+        else
+        {
+            player.isFall = true;
+            player.isBattle = false;
+            player.isJump = false;
+        }
+
+        base.Gravity();
     }
 
     public override void Exit()

@@ -110,7 +110,7 @@ public class PlayerBaseState : IState
                             new Vector3(0.0f, player.m_verticalVelocity, 0.0f) * Time.deltaTime);
     }
 
-    public virtual void JumpAndGravity()
+    public virtual void Jump()
     {
         if (player.isGrouded)
         {
@@ -141,7 +141,11 @@ public class PlayerBaseState : IState
             player.isBattle = false;
             player.isJump = false;
         }
+    }
 
+
+    protected virtual void Gravity()
+    {
         if (player.m_verticalVelocity < player.m_terminalVelocity)
         {
             player.m_verticalVelocity += airData.Gravity * Time.deltaTime;

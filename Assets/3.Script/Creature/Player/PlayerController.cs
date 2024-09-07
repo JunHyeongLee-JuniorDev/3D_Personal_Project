@@ -37,8 +37,11 @@ public class PlayerController : MonoBehaviour
     public bool isGrouded;
     public bool isFall;
     public bool isJump;
+    public bool isRightClicked;
 
     //Player
+
+    //Hide
     [HideInInspector]
     public float m_speed;
     [HideInInspector]
@@ -57,6 +60,15 @@ public class PlayerController : MonoBehaviour
     public float m_jumpTimeOutDelta;
     [HideInInspector]
     public float m_fallTimeOutDelta;
+    [HideInInspector]
+    [Range(0.0f,1.0f)]
+    public float m_blockWeight;
+
+    //SerializeField
+    [Range(0.0f, 25.0f)]
+    public float m_blockAniBlend = 5.0f;
+    //Player
+
 
     private void Awake()
     {

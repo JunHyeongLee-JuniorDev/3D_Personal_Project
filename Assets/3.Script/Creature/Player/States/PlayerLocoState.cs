@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -37,9 +38,11 @@ public class PlayerLocoState : PlayerBaseState
         }
 
         Move();
-        JumpAndGravity();
+        Jump();
+        Gravity();
+        UpperBodyAni();
 
-        if(player.isGrouded)
+        if (player.isGrouded)
         player.m_animator.SetFloat(DTAniClipID[EPlayerState.LOCOSPEED], player.m_animationBlend);
     }
 
@@ -52,5 +55,20 @@ public class PlayerLocoState : PlayerBaseState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+    }
+
+    private void UpperBodyAni()
+    {
+        if (player.isRightClicked)
+        {
+            player.m_blockWeight = Mathf.Lerp(player.m_blockWeight, 1f, player.m_blockAniBlend * Time.deltaTime);
+            animator.SetLayerWeight(1, player.m_blockWeight);
+        }
+
+        else
+        {
+            player.m_blockWeight = Mathf.Lerp(player.m_blockWeight, 0f, player.m_blockAniBlend * Time.deltaTime);
+            animator.SetLayerWeight(1, player.m_blockWeight);
+        }
     }
 }

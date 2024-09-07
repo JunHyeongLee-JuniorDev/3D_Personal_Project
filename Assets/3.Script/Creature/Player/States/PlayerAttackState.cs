@@ -62,8 +62,7 @@ public class PlayerAttackState : PlayerBaseState
     public void OnFire(InputAction.CallbackContext context)
     {
         if (attackCounter >= maxComboDeley)
-        {
-            Debug.Log("공격한다!");
+        { 
             animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);
             attackCounter = 0.0f;
         }

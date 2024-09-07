@@ -13,7 +13,8 @@ public enum EPlayerState
     JUMP,
     RUNJUMP,
     FALL,
-    BATTLE
+    BATTLE,
+    BLOCK
 };
 
 /// <summary>
@@ -26,7 +27,6 @@ public enum EPlayerAniParam
     BATTLEX,
     BATTLEY
 };
-
 
 /// <summary>
 /// PlayerAnimationDataBase class
@@ -64,6 +64,7 @@ public class PlayerAnimationDataBase
         _DTaniClipID.Add(EPlayerState.JUMP, Animator.StringToHash("Base Layer.InAir.Jump"));
         _DTaniClipID.Add(EPlayerState.RUNJUMP, Animator.StringToHash("Base Layer.InAir.RunningJump"));
         _DTaniClipID.Add(EPlayerState.BATTLE, Animator.StringToHash("Base Layer.Battle"));
+        _DTaniClipID.Add(EPlayerState.BLOCK, Animator.StringToHash("Upper.Sword And Shield Block"));
 
         //Ani Parameter
         _DTaniBoolID.Add(EPlayerAniParam.ISGROUND, Animator.StringToHash("IsGround"));
