@@ -15,7 +15,7 @@ public class PlayerBaseState : IState
     protected readonly PlayerAirData airData;
     protected PlayerController player;
     protected Animator animator;
-    protected Dictionary<EPlayerState, int> DTAniClipID;
+    protected Dictionary<EPlayerAni, int> DTAniClipID;
     protected Dictionary<EPlayerAniParam, int> DTAniParamID;
     protected InputActionAsset inputActions;
 

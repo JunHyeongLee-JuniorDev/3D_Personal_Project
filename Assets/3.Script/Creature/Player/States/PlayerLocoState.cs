@@ -13,7 +13,7 @@ public class PlayerLocoState : PlayerBaseState
     public override void Enter()
     {
         base.Enter();
-        animator.CrossFade(DTAniClipID[EPlayerState.LOCO], 0.25f);
+        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.25f);
     }
 
     public override void Update()
@@ -43,7 +43,7 @@ public class PlayerLocoState : PlayerBaseState
         UpperBodyAni();
 
         if (player.isGrouded)
-        player.m_animator.SetFloat(DTAniClipID[EPlayerState.LOCOSPEED], player.m_animationBlend);
+        player.m_animator.SetFloat(DTAniClipID[EPlayerAni.LOCOSPEED], player.m_animationBlend);
     }
 
     public override void Exit()

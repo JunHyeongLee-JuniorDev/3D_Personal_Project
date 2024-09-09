@@ -6,12 +6,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerinputSystem : MonoBehaviour
 {
-    [Header("플레이어 input values")]
-    public Vector2 move;
-    public Vector2 look;
+    [field : Header("플레이어 input values")]
+    [field: SerializeField]
+    public Vector2 move { get; private set; }
+    [field: SerializeField]
+    public Vector2 look { get; private set; }
     public PlayerController player;
 
-    public void OnMove(InputAction.CallbackContext context)
+public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
     }
@@ -52,7 +54,7 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            
+            player.isBattle = true;
         }
     }
 

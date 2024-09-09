@@ -31,4 +31,7 @@ public class PlayerGroundData
     [field: Range(0f, 100f)]
 
     public float battleWalkSpeed { get; private set; } = 3f;
+
+    [field: Header("Targetting Smooth Time")]
+    public float lookTargetSmoothTime { get; private set; } = 0.12f;
 }

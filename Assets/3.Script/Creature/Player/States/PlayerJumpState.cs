@@ -12,10 +12,10 @@ public class PlayerJumpState : PlayerBaseState
         base.Enter();
 
         if (player.isSprint)
-            player.m_animator.CrossFade(player.m_aniData._DTaniClipID[EPlayerState.RUNJUMP], 0.1f);
+            player.m_animator.CrossFade(player.m_aniData._DTaniClipID[EPlayerAni.RUNJUMP], 0.1f);
 
         else
-            player.m_animator.CrossFade(player.m_aniData._DTaniClipID[EPlayerState.JUMP], 0.1f);
+            player.m_animator.CrossFade(player.m_aniData._DTaniClipID[EPlayerAni.JUMP], 0.1f);
     }
 
     public override void Update()

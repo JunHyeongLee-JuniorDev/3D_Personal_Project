@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     public PlayerinputSystem m_input { get; private set; }
     public PlayerInput m_playerInput { get; private set; }
     public Animator m_animator { get; private set; }
-    public GameObject m_mainCam { get; private set; }
+    public Camera m_mainCam { get; private set; }
 
     //State Bool
     public bool isSprint;
@@ -69,12 +69,31 @@ public class PlayerController : MonoBehaviour
     public float m_blockAniBlend = 5.0f;
     //Player
 
+    //Prefabs
+    [field: Header("ÇÁ¸®ÆÕ")]
+    [field: SerializeField]
+    public GameObject lockOnCanvas { get; private set; }
+    [field: SerializeField]
+    public float lockOnCanvasScale { get; private set; } = 1.0f;
+
+    //Enemy Targetting System
+    //***************************************************************************
+    [field : SerializeField]
+    public float radiusOfView { get; private set; }
+    [field: SerializeField]
+    public LayerMask enemyLayer { get; private set; }
+    [field: SerializeField]
+    public LayerMask wallAndGroundLayer { get; private set; }
+
+    [Tooltip("Default Value = 0.5f, 0.5f, 0.0f")]
+    public readonly Vector3 middleOfScreen = new Vector3(0.5f, 0.5f, 0.0f);
+    //***************************************************************************
 
     private void Awake()
     {
         if (m_mainCam == null)
         {
-            m_mainCam = GameObject.FindGameObjectWithTag("MainCamera");
+            m_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
 
         if (m_PhysicsData == null)

@@ -5,7 +5,7 @@ using UnityEngine.Windows;
 
 public class ThirdPersonCam : MonoBehaviour
 {
-    [Header("시네머신 카메라")]
+    [Header("시네머신 카메라 목표")]
     public GameObject m_cinemachineCamTarget;
 
     [Tooltip("카메라 상 제한")]
@@ -17,21 +17,11 @@ public class ThirdPersonCam : MonoBehaviour
     [Tooltip("뭔지 모르겠다 나중에 한 번 알아보도록 하자")]
     public float m_cameraAngleOverride = 0f;
 
-    private GameObject m_mainCam;
     private PlayerinputSystem m_input;
 
-    //Cinemachine
     private float m_cinemachineTargetYaw;
     private float m_cinemachineTargetPitch;
     private readonly float m_threshold = 0.01f;
-
-    private void Awake()
-    {
-        if (m_mainCam == null)
-        {
-            m_mainCam = GameObject.FindGameObjectWithTag("MainCamera");
-        }
-    }
 
     private void Start()
     {
