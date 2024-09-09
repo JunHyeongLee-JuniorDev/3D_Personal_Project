@@ -1563,7 +1563,7 @@ MonoBehaviour:
   m_blockWeight: 0
   m_blockAniBlend: 10
   <lockOnCanvas>k__BackingField: {fileID: 1152947979}
-  <lockOnCanvasScale>k__BackingField: 1
+  <lockOnCanvasScale>k__BackingField: 0.1
   <radiusOfView>k__BackingField: 15
   <enemyLayer>k__BackingField:
     serializedVersion: 2

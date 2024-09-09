@@ -117,7 +117,7 @@ public class PlayerBattleState : PlayerBaseState
 
         player.m_Controller.Move((movement3D * player.m_speed + new Vector3(0.0f, player.m_verticalVelocity, 0.0f)) * Time.deltaTime);
     }
-    private void LookAtTarget()
+    private void LookAtTarget()//Áü½ÂÀÇ ¶Ë»õ³¢!!!
     {
         player.lockOnCanvas.transform.position = targetEnemy.transform.position;
         player.lockOnCanvas.transform.localScale = Vector3.one * (player.m_mainCam.transform.position - targetEnemy.transform.position).magnitude * player.lockOnCanvasScale;
@@ -163,8 +163,8 @@ public class PlayerBattleState : PlayerBaseState
                       (!isRight && (_enemyViewPos.x > 0.5f))) continue;
                 }
 
-                _direction = dirBetAB(player.m_mainCam.transform.position, _enemyPos).normalized;
-                _distanceCamAndEnemy = Vector3.Distance(player.m_mainCam.transform.position, _enemyPos);
+                _direction = dirBetAB(player.transform.position, _enemyPos).normalized;
+                _distanceCamAndEnemy = Vector3.Distance(player.transform.position, _enemyPos);
 
                 if (Physics.Raycast(player.m_mainCam.transform.position, _direction, out RaycastHit hitInfo,
                                 _distanceCamAndEnemy, player.wallAndGroundLayer))
