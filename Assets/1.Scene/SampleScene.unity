@@ -1506,10 +1506,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c000bf4277722f6428e1c6923f1f607b,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 806422964}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c000bf4277722f6428e1c6923f1f607b,
-        type: 3}
-      insertIndex: -1
       addedObject: {fileID: 806422963}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c000bf4277722f6428e1c6923f1f607b,
         type: 3}
@@ -1523,6 +1519,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1051636563}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: c000bf4277722f6428e1c6923f1f607b,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1051636565}
   m_SourcePrefab: {fileID: 100100000, guid: c000bf4277722f6428e1c6923f1f607b, type: 3}
 --- !u!1 &806422961 stripped
 GameObject:
@@ -1599,22 +1599,6 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.9, z: 0}
---- !u!114 &806422964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 806422961}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 37f97f1ffecb4a5428b883d7a0285704, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_cinemachineCamTarget: {fileID: 1153582411}
-  m_topClamp: 70
-  m_bottomClamp: -30
-  m_cameraAngleOverride: 0
 --- !u!114 &806422965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2009,7 +1993,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 879983323}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.14037497, y: -0.25971854, z: 0.100582115, w: 0.95011806}
+  m_LocalRotation: {x: -0.14037499, y: -0.25971857, z: 0.10058212, w: 0.9501181}
   m_LocalPosition: {x: -0.28567415, y: -9.018817, z: -2.067676}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2834,6 +2818,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 806422962}
+--- !u!114 &1051636565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806422961}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 37f97f1ffecb4a5428b883d7a0285704, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_cinemachineCamTarget: {fileID: 1153582411}
 --- !u!1001 &1061339631
 PrefabInstance:
   m_ObjectHideFlags: 0

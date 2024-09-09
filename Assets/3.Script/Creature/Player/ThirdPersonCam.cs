@@ -6,16 +6,14 @@ using UnityEngine.Windows;
 public class ThirdPersonCam : MonoBehaviour
 {
     [Header("시네머신 카메라 목표")]
+    [SerializeField]
     public GameObject m_cinemachineCamTarget;
 
     [Tooltip("카메라 상 제한")]
-    public float m_topClamp = 70.0f;
+    private float m_topClamp = 70.0f;
 
     [Tooltip("카메라 하 제한")]
-    public float m_bottomClamp = -30.0f;
-
-    [Tooltip("뭔지 모르겠다 나중에 한 번 알아보도록 하자")]
-    public float m_cameraAngleOverride = 0f;
+    private float m_bottomClamp = -30.0f;
 
     private PlayerinputSystem m_input;
 

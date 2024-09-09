@@ -1,7 +1,4 @@
-using Cinemachine;
-using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+using System.Net.NetworkInformation;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -9,25 +6,28 @@ public class PlayerBattleState : PlayerBaseState
 {
     private float battleAniX;
     private float battleAniY;
-    private Collider targetEnemy;
     private Collider nearlistEnemy;
-    public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) {}
+    private ThirdPersonCam thirdPersonCam;
+    public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
+    { thirdPersonCam = player.thirdPersonCam; }
 
     public override void Enter()
     {
-        targetEnemy = null;
         nearlistEnemy = null;
         battleAniX = 0.0f;
         battleAniY = 0.0f;
         player.m_Controller.Move(Vector3.zero);
+        inputActions["Look"].started += OnLook;
         player.cinemachineAnimator.Play("TargetCamera");
         animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
         AssignTarget(true, true);
+        player.thirdPersonCam.enabled = false;
     }
 
     public override void Update()
     {
-        if (targetEnemy == null) player.isBattle = false;
+        if(player.m_targetEnemy == null)
+            AssignTarget(true, true);
 
         if (Input.GetKeyDown(KeyCode.T))
             player.isBattle = false;
@@ -37,10 +37,29 @@ public class PlayerBattleState : PlayerBaseState
         animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEY], battleAniY);
         Move();
         Gravity();
-        findAnotherTarget();
+        LimitDist();
 
-        Debug.DrawRay(player.m_mainCam.transform.position, player.m_mainCam.transform.position - targetEnemy.transform.position, Color.red);
+        Debug.DrawRay(player.m_mainCam.transform.position, player.m_mainCam.transform.position - player.m_targetEnemy.transform.position, Color.red);
     }
+
+    public override void PhysicsUpdate()
+    {
+        Vector3 orignPos = new Vector3(thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles.x, 0.0f, thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles.z);
+
+        if (thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles.y > 0.1f)
+            thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles = Vector3.Lerp(thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles,
+                                                                                            orignPos,
+                                                                                            0.3f);
+
+        else if (thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles.y < -0.1f)
+            thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles = Vector3.Lerp(thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles,
+                                                                                            orignPos,
+                                                                                            0.3f);
+
+        else
+            thirdPersonCam.m_cinemachineCamTarget.transform.localEulerAngles = orignPos;
+    }
+
     public override void Move()
     {
         if (player.m_input.move.Equals(Vector2.zero))
@@ -117,15 +136,15 @@ public class PlayerBattleState : PlayerBaseState
     }
     private void LookAtTarget()//Áü½ÂÀÇ ¶Ë»õ³¢!!!
     {
-        player.lockOnCanvas.transform.position = targetEnemy.transform.position;
-        player.lockOnTarget.position = targetEnemy.transform.position;
+        player.lockOnCanvas.transform.position = player.m_targetEnemy.transform.position;
+        player.lockOnTarget.position = player.m_targetEnemy.transform.position;
         player.lockOnCanvas.transform.localScale = Vector3.one * 
-        (player.m_mainCam.transform.position - targetEnemy.transform.position).magnitude * 
+        (player.m_mainCam.transform.position - player.m_targetEnemy.transform.position).magnitude * 
         player.lockOnCanvasScale;
 
-        Quaternion targetAngle = Quaternion.LookRotation(targetEnemy.transform.position - player.transform.position);
+        Quaternion targetAngle = Quaternion.LookRotation(player.m_targetEnemy.transform.position - player.transform.position);
 
-        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, Time.deltaTime * groundData.lookTargetSmoothTime);
+        player.transform.rotation = targetAngle;
     }
     protected override void Gravity()
     {
@@ -143,7 +162,8 @@ public class PlayerBattleState : PlayerBaseState
     private void AssignTarget(bool isInit, bool isRight)
     {
         Collider[] enemys = Physics.OverlapSphere(player.transform.position, player.radiusOfView, player.enemyLayer, QueryTriggerInteraction.Ignore);
-        if (enemys == null) return;
+        if (enemys == null ||
+            isInit && player.m_targetEnemy != null) return;
 
         float nearlistEnemyDist = -1.0f;
         Vector3 _direction;
@@ -159,7 +179,7 @@ public class PlayerBattleState : PlayerBaseState
             {
                 if (!isInit)
                 {
-                    if(enemy.Equals(targetEnemy) || 
+                    if(enemy.Equals(player.m_targetEnemy) || 
                       (isRight && (_enemyViewPos.x < 0.5f)) ||
                       (!isRight && (_enemyViewPos.x > 0.5f))) continue;
                 }
@@ -182,7 +202,10 @@ public class PlayerBattleState : PlayerBaseState
                 }
             }
 
-            if (nearlistEnemy != null) targetEnemy = nearlistEnemy;
+            if (nearlistEnemy != null) player.m_targetEnemy = nearlistEnemy;
+
+            else
+                player.isBattle = false;
         }
 
 
@@ -208,10 +231,28 @@ public class PlayerBattleState : PlayerBaseState
 
         else return false;
     }
+
+    private void LimitDist()
+    {
+        if (Vector3.Distance(player.transform.position, player.m_targetEnemy.transform.position) > 10.0f)
+            player.isBattle = false;
+    }
+
     public override void Exit()
     {
         base.Exit();
-        player.isBattle = false;
-        player.cinemachineAnimator.Play("FollowCamera");
+
+        if (!player.isBattle)
+        {
+            player.cinemachineAnimator.Play("FollowCamera");
+            player.thirdPersonCam.enabled = true;
+        }
+
+        inputActions["Look"].started -= OnLook;
+    }
+
+    private void OnLook(InputAction.CallbackContext context)
+    {
+        findAnotherTarget();
     }
 }

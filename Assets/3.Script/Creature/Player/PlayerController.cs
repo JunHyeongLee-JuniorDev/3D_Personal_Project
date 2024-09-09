@@ -30,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public PlayerInput m_playerInput { get; private set; }
     public Animator m_animator { get; private set; }
     public Camera m_mainCam { get; private set; }
+    public ThirdPersonCam thirdPersonCam { get; private set; }
     public Animator cinemachineAnimator;
 
     //State Bool
@@ -90,6 +91,8 @@ public class PlayerController : MonoBehaviour
     public LayerMask wallAndGroundLayer { get; private set; }
     //***************************************************************************
 
+    //In Scene
+    public Collider m_targetEnemy;
     private void Awake()
     {
         if (m_mainCam == null)
@@ -113,6 +116,7 @@ public class PlayerController : MonoBehaviour
         m_input = GetComponent<PlayerinputSystem>();
         m_animator = GetComponent<Animator>();
         m_playerInput = GetComponent<PlayerInput>();
+        thirdPersonCam = GetComponent<ThirdPersonCam>();
         m_input.player = this; // input에서 player의 상태 bool값 변경
         m_StateMachine = new PlayerStateMachine(this);
 
@@ -131,12 +135,12 @@ public class PlayerController : MonoBehaviour
         m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack));
         m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => !isGrouded && !isBattle && !isFall));
         m_StateMachine.AddAnyTransition(_fallState, new FuncPredicate(() => !isGrouded && isFall));
-        m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle));
+        m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack));
         m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));
         m_StateMachine.SetState(_locoState);
 
 
-        debugUI = GetComponentInChildren<DebugUI>();
+        debugUI = GetComponentInChildren<DebugUI>(); // For Debugging
     }
 
     private void Update()
@@ -174,5 +178,12 @@ public class PlayerController : MonoBehaviour
         Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y + m_PhysicsData.AirData.groundedOffset, transform.position.z),
                 m_PhysicsData.AirData.groundedRadius);
+    }
+
+    private float ClampAngle(float _lfAngle, float _lfMin, float _lfMax)
+    {
+        if (_lfAngle < -360f) _lfAngle += 360f;
+        if (_lfAngle > 360f) _lfAngle -= 360f;
+        return Mathf.Clamp(_lfAngle, _lfMin, _lfMax);
     }
 }
