@@ -6,6 +6,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEditor.Rendering.LookDev;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -29,6 +30,7 @@ public class PlayerController : MonoBehaviour
     public PlayerInput m_playerInput { get; private set; }
     public Animator m_animator { get; private set; }
     public Camera m_mainCam { get; private set; }
+    public Animator cinemachineAnimator;
 
     //State Bool
     public bool isSprint;
@@ -61,7 +63,7 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     public float m_fallTimeOutDelta;
     [HideInInspector]
-    [Range(0.0f,1.0f)]
+    [Range(0.0f, 1.0f)]
     public float m_blockWeight;
 
     //SerializeField
@@ -75,6 +77,8 @@ public class PlayerController : MonoBehaviour
     public GameObject lockOnCanvas { get; private set; }
     [field: SerializeField]
     public float lockOnCanvasScale { get; private set; } = 1.0f;
+    [field: SerializeField]
+    public Transform lockOnTarget { get; private set; }
 
     //Enemy Targetting System
     //***************************************************************************
@@ -84,9 +88,6 @@ public class PlayerController : MonoBehaviour
     public LayerMask enemyLayer { get; private set; }
     [field: SerializeField]
     public LayerMask wallAndGroundLayer { get; private set; }
-
-    [Tooltip("Default Value = 0.5f, 0.5f, 0.0f")]
-    public readonly Vector3 middleOfScreen = new Vector3(0.5f, 0.5f, 0.0f);
     //***************************************************************************
 
     private void Awake()
@@ -94,13 +95,16 @@ public class PlayerController : MonoBehaviour
         if (m_mainCam == null)
         {
             m_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            cinemachineAnimator = m_mainCam.gameObject.GetComponentInChildren<Animator>();
+
+            if (cinemachineAnimator == null)
+                Debug.Log("시네머신 할당 X");
         }
 
         if (m_PhysicsData == null)
         {
             m_PhysicsData = Resources.Load<PlayerSO>(playerDataPath);
         }
-
     }
 
     private void Start()
@@ -132,7 +136,7 @@ public class PlayerController : MonoBehaviour
         m_StateMachine.SetState(_locoState);
 
 
-        debugUI = GetComponent<DebugUI>();
+        debugUI = GetComponentInChildren<DebugUI>();
     }
 
     private void Update()
