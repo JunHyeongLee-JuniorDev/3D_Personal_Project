@@ -14,7 +14,8 @@ public enum EPlayerAni
     RUNJUMP,
     FALL,
     BATTLE,
-    BLOCK
+    BLOCK,
+    ROLL
 };
 
 /// <summary>
@@ -63,8 +64,9 @@ public class PlayerAnimationDataBase
         _DTaniClipID.Add(EPlayerAni.MELEEATTACK2, Animator.StringToHash("Base Layer.Attack.Sword And Shield Slash2"));
         _DTaniClipID.Add(EPlayerAni.JUMP, Animator.StringToHash("Base Layer.InAir.Jump"));
         _DTaniClipID.Add(EPlayerAni.RUNJUMP, Animator.StringToHash("Base Layer.InAir.RunningJump"));
-        _DTaniClipID.Add(EPlayerAni.BATTLE, Animator.StringToHash("Base Layer.Battle"));
+        _DTaniClipID.Add(EPlayerAni.BATTLE, Animator.StringToHash("Base Layer.Battle.Battle"));
         _DTaniClipID.Add(EPlayerAni.BLOCK, Animator.StringToHash("Upper.Sword And Shield Block"));
+        _DTaniClipID.Add(EPlayerAni.ROLL, Animator.StringToHash("Base Layer.Battle.Stand To Roll"));
 
         //Ani Parameter
         _DTaniBoolID.Add(EPlayerAniParam.ISGROUND, Animator.StringToHash("IsGround"));

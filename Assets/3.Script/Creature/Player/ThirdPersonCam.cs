@@ -21,13 +21,18 @@ public class ThirdPersonCam : MonoBehaviour
     private float m_cinemachineTargetPitch;
     private readonly float m_threshold = 0.01f;
 
+    private void OnEnable()
+    {
+        m_cinemachineTargetPitch = m_cinemachineCamTarget.transform.rotation.eulerAngles.x;
+        m_cinemachineTargetYaw = m_cinemachineCamTarget.transform.rotation.eulerAngles.y;
+    }
+
     private void Start()
     {
         m_input = GetComponent<PlayerinputSystem>();
 
         m_cinemachineTargetYaw = m_cinemachineCamTarget.transform.rotation.eulerAngles.y;
     }
-
 
 
     private void LateUpdate()
@@ -40,11 +45,6 @@ public class ThirdPersonCam : MonoBehaviour
         //마우스가 움직였다면
         if (m_input.look.sqrMagnitude >= m_threshold)
         {
-            // mouse input을 Time.deltaTime으로 곱하지마라
-            // 근데 왜???
-            // 아마 값이 너무 작아서 그런게 아닐까?
-            // 씨벌 모르겠다
-
             m_cinemachineTargetYaw += m_input.look.x;
             m_cinemachineTargetPitch += m_input.look.y;
         }

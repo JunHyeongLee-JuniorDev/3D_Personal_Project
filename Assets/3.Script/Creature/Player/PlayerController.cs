@@ -76,10 +76,11 @@ public class PlayerController : MonoBehaviour
     [field: Header("ÇÁ¸®ÆÕ")]
     [field: SerializeField]
     public GameObject lockOnCanvas { get; private set; }
-    [field: SerializeField]
-    public float lockOnCanvasScale { get; private set; } = 1.0f;
+    public float lockOnCanvasScale { get; private set; } = 0.1f;
     [field: SerializeField]
     public Transform lockOnTarget { get; private set; }
+    [field: SerializeField]
+    public Transform lockOnTargetRoll { get; private set; }
 
     //Enemy Targetting System
     //***************************************************************************
@@ -173,11 +174,15 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (m_PhysicsData == null) return;
-        
+        Gizmos.color = Color.green;
+
         Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y + m_PhysicsData.AirData.groundedOffset, transform.position.z),
                 m_PhysicsData.AirData.groundedRadius);
+
+        Gizmos.color = Color.yellow;
+
+        Gizmos.DrawWireSphere(transform.position, radiusOfView);
     }
 
     private float ClampAngle(float _lfAngle, float _lfMin, float _lfMax)

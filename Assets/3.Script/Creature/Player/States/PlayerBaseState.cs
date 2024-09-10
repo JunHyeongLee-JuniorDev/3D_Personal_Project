@@ -139,6 +139,7 @@ public class PlayerBaseState : IState
         {
             player.isFall = true;
             player.isBattle = false;
+            player.m_targetEnemy = null;
             player.isJump = false;
         }
     }

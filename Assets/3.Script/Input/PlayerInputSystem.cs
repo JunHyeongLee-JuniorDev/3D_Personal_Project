@@ -32,7 +32,7 @@ public void OnMove(InputAction.CallbackContext context)
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.started)
+        if(context.started && !player.isBattle)
         player.isJump = true;
     }
 

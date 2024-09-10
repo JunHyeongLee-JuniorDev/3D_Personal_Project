@@ -48,6 +48,17 @@ public class PlayerAttackState : PlayerBaseState
         inputActions["Sprint"].Enable();
     }
 
+    private void ShowTargettingUI()
+    {
+        if (player.m_targetEnemy != null)
+        {
+            player.lockOnCanvas.transform.position = player.m_targetEnemy.transform.position; // 캔버스의 위치를 타겟 위치로 바꿉니다.
+            player.lockOnCanvas.transform.localScale = Vector3.one *
+                                                  (player.m_targetEnemy.transform.position - player.m_mainCam.transform.position).magnitude *
+                                                   player.lockOnCanvasScale; // 거리에 비례하여 타겟팅 UI의 크기를 키웁니다.
+        }
+    }
+
     private bool isAttackAni(int givenHash)
     {
         for(int i = 0; i < player.m_aniData._comboClip.Length; i++)
