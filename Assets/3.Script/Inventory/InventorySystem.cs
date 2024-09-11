@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -19,6 +20,7 @@ public class InventorySystem
     public InventorySystem(int size)
     {
         inventorySlots = new List<InventorySlot>(size);
+        OnInventorySlotChanged += AddSlot;
 
         for (int i = 0; i < size; i++)
         {
@@ -27,39 +29,62 @@ public class InventorySystem
     }
 
     /// <summary>
-    /// 만약 인벤토리의 사이즈를 벗어나면 false를 반환하며 담기지 않음
+    /// 만약 인벤토리에 아이템을 넣지 못하면 false를 반환하며 담기지 않음
     /// </summary>
     /// <returns></returns>
     public bool AddToInventory(InventoryItemData itemToAdd, int amountToAdd)
     {
         if (IsContainsItem(itemToAdd, out List<InventorySlot> invSlot))
-        {// 같은 아이템이 인벤토리에 있는지 확인 true
-            //invSlot.AddToStack(amountToAdd);
-            //OnInventorySlotChanged?.Invoke(invSlot);
-            return true;
+        {// 같은 아이템이 인벤토리에 있는지 확인
+
+            foreach (InventorySlot slot in invSlot)
+            {
+                if (slot.IsroomLeftInStack(amountToAdd))
+                {// 슬롯의 스택이 추가할 양의 이하라면 아이템을 추가
+                    slot.AddToStack(amountToAdd);
+                    OnInventorySlotChanged?.Invoke(slot);
+                    return true;
+                }
+                // 아니라면 계속 남은 자리를 찾음
+            }
         }
 
-        else if (HasFreeSlot(out InventorySlot freeSlot))
-        {// 남은 슬롯이 있는지 true
+        if (HasFreeSlot(out InventorySlot freeSlot))
+        {// 남은 슬롯이 있는지
             freeSlot = new InventorySlot(itemToAdd, amountToAdd);
             freeSlot.UpdateInventorySlot(itemToAdd, amountToAdd);
             OnInventorySlotChanged?.Invoke(freeSlot);
             return true;
         }
 
-        return false; // 넣을 수 없다면 false
+        return false;
     }
 
     public bool IsContainsItem(InventoryItemData itemToAdd, out List<InventorySlot> invSlot)
     {
-        invSlot = inventorySlots;
-        return false;
+        invSlot = inventorySlots.Where(slot => slot.ItemData == itemToAdd).ToList();
+
+        //같은 아이템의 슬롯이 한 개 이상이라면 true 아니면 false
+        return invSlot.Count > 0;
     }
 
     public bool HasFreeSlot(out InventorySlot freeSlot)
     {
-        freeSlot = null;
-        return false;
+        /* using System.Linq
+         * FirstOrDefault()메소드란
+         * 2개의 overload
+         * 초기화 되지 않았다면 null 반환
+         * 메개변수 X = 컬렉션의 첫 번째 요소를 반환 컬렉션이 비었다면 해당 요소 type의 default(빈 값) 값을 반환
+         * 매개변수 Func로 만든 predicate로 입력 조건이 true인 첫 요소를 반환 없다면 빈 값 반환
+         * 클래스는 null을 반환, int 는 0을 반환...
+         */
+        freeSlot = inventorySlots.FirstOrDefault(slot => slot.ItemData == null);
+        return freeSlot != null;
+    }
+
+    private void AddSlot(InventorySlot slot)
+    {
+
     }
 
 }
