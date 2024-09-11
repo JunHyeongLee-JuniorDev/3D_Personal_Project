@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System;
 using System.Collections;
+using Unity.VisualScripting;
 
 public class PlayerBattleState : PlayerBaseState
 {
@@ -14,12 +15,11 @@ public class PlayerBattleState : PlayerBaseState
 
     private bool isTargetting = false;
     private bool isRolling = false;
-    private float targettingCounter = 0.0f;
-    private float maxTargettingCount = 0.5f;
-    private float rollCounter = 0.0f;
-    private float maxrollcount = 2.0f;
 
-    public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) {}
+    public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
+    {
+        player.lockOnCanvas.SetActive(false);
+    }
 
     public override void Enter()
     {
@@ -27,16 +27,20 @@ public class PlayerBattleState : PlayerBaseState
         nearlistEnemy = null;
         battleAniX = 0.0f;
         battleAniY = 0.0f;
-        targettingCounter = 0.0f;
         player.m_Controller.Move(Vector3.zero);
         player.lockOnCanvas.SetActive(true);
         inputActions["Look"].started += OnLook;
         inputActions["Jump"].started += OnRoll;
+        inputActions["Sprint"].Disable();
         player.thirdPersonCam.enabled = false;
-        player.cinemachineAnimator.Play("TargetCamera1");
         animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
         AssignTarget(true, true);
+
+        if(player.m_targetEnemy != null)
+            player.cinemachineAnimator.Play("RollCamera");
+
         isTargetting = false;
+        isRolling = false;
     }
 
     public override void Update()
@@ -59,23 +63,23 @@ public class PlayerBattleState : PlayerBaseState
         animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEY], battleAniY);
 
         Move();
+        LookAtTarget();
         Gravity();
-        TargettingCount();
-        if (isRolling) RollTimer();
+        startTargetting();
+        ResetRoll();
     }
 
-    public override void PhysicsUpdate()
+    public override void LateUpdate()
     {
-        base.PhysicsUpdate();
+        base.LateUpdate();
 
-        Vector3 orignPos = dirToTarget.normalized;
+        Vector3 orignPos = dirToTarget;
         orignPos.y = 0.0f;
-
-            player.thirdPersonCam.m_cinemachineCamTarget.transform.forward = Vector3.Lerp(player.thirdPersonCam.m_cinemachineCamTarget.transform.forward,
-                                                                                                  orignPos, 0.05f);
         PlaceTheCam(orignPos);
     }
-
+    /// <summary>
+    /// 플레이어는 타겟을 바라보기에 단순하게 8방향으로만 움직이는 로직, 애니메이션 블렌드 값 갱신
+    /// </summary>
     public override void Move()
     {
         if(isRolling) return;
@@ -148,11 +152,12 @@ public class PlayerBattleState : PlayerBaseState
         }
 
         Vector3 movement3D = player.transform.forward * _input.y + player.transform.right * _input.x;
-        LookAtTarget();
 
         player.m_Controller.Move((movement3D * player.m_speed + new Vector3(0.0f, player.m_verticalVelocity, 0.0f)) * Time.deltaTime);
     }
-
+    /// <summary>
+    /// 타겟팅 UI, 카메라 타겟팅을 타겟에 베치하고 플레이어는 Lerp를 사용하여 타겟을 바라봅니다.
+    /// </summary>
     private void LookAtTarget()
     {
         player.lockOnCanvas.transform.position = player.m_targetEnemy.transform.position; // 캔버스의 위치를 타겟 위치로 바꿉니다.
@@ -161,10 +166,14 @@ public class PlayerBattleState : PlayerBaseState
                                                   (dirToTarget).magnitude * 
                                                    player.lockOnCanvasScale; // 거리에 비례하여 타겟팅 UI의 크기를 키웁니다.
 
-        Vector3 targetPos = new Vector3(player.m_targetEnemy.transform.position.x, player.transform.position.y, player.m_targetEnemy.transform.position.z);
         //타겟의 y Position이 플레이어의 y포지션과 다르기에 맞춰줍니다.
-        Quaternion targetAngle = Quaternion.LookRotation(targetPos - player.transform.position);
 
+        Vector3 targetVec = dirToTarget;
+        targetVec.y = 0.0f;
+
+        Quaternion targetAngle = Quaternion.LookRotation(targetVec);
+
+        if(!isRolling)
         player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 0.05f);
     }
     protected override void Gravity()
@@ -248,8 +257,6 @@ public class PlayerBattleState : PlayerBaseState
         }
     }
 
-
-
     /// <summary>
     /// 일정 마우스의 x delta 값이 1.0 이상이면 타겟 변경(InputAction에서 호출)
     /// </summary>
@@ -284,10 +291,13 @@ public class PlayerBattleState : PlayerBaseState
          && viewPos.y >= 0 && viewPos.y <= 1
          && viewPos.z > 0)
             return true;
-
+        
         else return false;
     }
-
+    /// <summary>
+    /// player.radiusOfView 변수에 설정된 감지 범위 밖에 있으면 타게팅 취소
+    /// </summary>
+    /// <returns></returns>
     private bool isItSoFar()
     {
         if (Vector3.Distance(player.transform.position, player.m_targetEnemy.transform.position) > player.radiusOfView) // 객체 감지 범위 밖이라면 취소
@@ -295,7 +305,10 @@ public class PlayerBattleState : PlayerBaseState
 
         else return false;
     }
-
+    /// <summary>
+    /// 타겟 방향으로 raycast를 Update에서 발사하여 장애물 검출
+    /// </summary>
+    /// <returns>장애물이면 true, 아니면 false</returns>
     private bool isBehindTheBuild()
     {
         Debug.DrawRay(player.m_mainCam.transform.position, dirToTarget, Color.red);
@@ -306,11 +319,10 @@ public class PlayerBattleState : PlayerBaseState
             return true;
         }
 
-        else return false;
+        return false;
     }
-
     /// <summary>
-    /// 모든 타겟팅 취소 조건(미구현 조건 : 적 객체 사망시, 적이 벽 뒤에 있다면)
+    /// 모든 타겟팅 취소 조건(미구현 조건 : 적 객체 사망시)
     /// </summary>
     private void CancelConditions()
     {
@@ -320,44 +332,50 @@ public class PlayerBattleState : PlayerBaseState
             player.isBattle = false;
     }
 
+    /// <summary>
+    /// 마지막 입력 방향으로 구르기 시전 카메라도 roll 전용 카메라로 잠시 변경
+    /// </summary>
     private void PerformRoll()
     {
-        player.cinemachineAnimator.Play("RollCamera");
+        // atan2를 사용하면 방향 점 a에서 점 b에 대한 방향 벡터를 구할 수 있다(점 a 기준의) 따라서 이를 라디안에서 각도로 바꾸고 
+        // 플레이어 캐릭터 혹은 카메라의 각도 기준의 방향 벡터로 구르기 시전
+        // Atan, Atan2는 tan의 역함수로 밑변 대변을 알고 있다면 각 <L을 알 수 있다.
 
-        player.transform.forward = player.transform.forward + new Vector3(player.transform.forward.x * player.m_input.move.x,
-                                                                          player.transform.forward.y, 
-                                                                          player.transform.forward.z * player.m_input.move.y);
+        float rollRotation = Mathf.Atan2(player.m_input.move.x, player.m_input.move.y) * Mathf.Rad2Deg + 
+                                         player.m_mainCam.transform.eulerAngles.y;
 
-        animator.Play(DTAniClipID[EPlayerAni.ROLL]);
+        player.transform.rotation = Quaternion.Euler(0.0f, rollRotation, 0.0f);
+        animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.2f);
     }
-    private void RollTimer()
+    /// <summary>
+    /// roll 애니메이션 시간
+    /// </summary>
+    private void ResetRoll()
     {
-        rollCounter += Time.deltaTime;
-
-        if (rollCounter > maxrollcount)
+        if (isRolling && player.rollBtnTimer.isEnd)
         {
-            player.cinemachineAnimator.Play("TargetCamera1");
             isRolling = false;
-            rollCounter = 0.0f;
+            inputActions["Fire"].Enable();
             animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
         }
     }
-
+    /// <summary>
+    /// 윌드 좌표에 있는 타게팅 카메라 root를 LateUpdate에서 forward를 타겟 방향으로 설정
+    /// </summary>
+    /// <param name="originDir"> 캠에서 타겟 방향의 방향 벡터 </param>
     private void PlaceTheCam(Vector3 originDir)
     {
-        player.lockOnTargetRoll.transform.position = player.transform.position + defualtCamPos;
-        player.lockOnTargetRoll.transform.forward = originDir;
-
-        player.thirdPersonCam.m_cinemachineCamTarget.transform.forward = Vector3.Lerp(player.thirdPersonCam.m_cinemachineCamTarget.transform.forward,
-                                                                                                      originDir, 0.05f);
+        player.lockOnTargetRoll.transform.forward = Vector3.Lerp(player.lockOnTargetRoll.transform.forward,originDir.normalized, 0.05f);
     }
-
+    /// <summary>
+    /// 다른 스테이트에서 필요한 기능들 활성화, target 다시 null 화
+    /// </summary>
     public override void Exit()
     {
         base.Exit();
-
         if (!player.isBattle)
         {
+            inputActions["Sprint"].Enable();
             Debug.Log("지금 나가는 중");
             player.cinemachineAnimator.Play("FollowCamera");
             player.thirdPersonCam.enabled = true;
@@ -365,39 +383,40 @@ public class PlayerBattleState : PlayerBaseState
             player.m_targetEnemy = null;
         }
 
-        rollCounter = 0.0f;
         inputActions["Look"].started -= OnLook;
         inputActions["Jump"].started -= OnRoll;
     }
-
+    /// <summary>
+    /// 타겟팅 callback 메소드(마우스 "좌, 우"로 발동)
+    /// </summary>
     private void OnLook(InputAction.CallbackContext context)
     {
         if (!isTargetting && Mathf.Abs(context.ReadValue<Vector2>().x) > 1.0f)
         {
             FindAnotherTarget(context.ReadValue<Vector2>().x);
             isTargetting = true;
+            player.targetBtnTimer.StartTimer();
         }
     }
-
+    /// <summary>
+    /// 스페이스바 = 구르기, 구르기 타이머도 같이 가동
+    /// </summary>
     private void OnRoll(InputAction.CallbackContext context)
     {
         if (!isRolling)
         {
             isRolling = true;
+            inputActions["Fire"].Disable();
+            player.rollBtnTimer.StartTimer();
             PerformRoll();
         }
     }
-
-    private void TargettingCount()
+    /// <summary>
+    /// 타게팅 쿨타임이 끝났다면 타게팅이 다시 가능
+    /// </summary>
+    private void startTargetting()
     {
-        if (isTargetting)
-        {
-            targettingCounter += Time.deltaTime;
-            if (targettingCounter > maxTargettingCount)
-            {
-                targettingCounter = 0.0f;
+        if (isTargetting && player.targetBtnTimer.isEnd)
                 isTargetting = false;
-            }
-        }
     }
 }

@@ -42,8 +42,13 @@ public class PlayerController : MonoBehaviour
     public bool isJump;
     public bool isRightClicked;
 
-    //Player
+    //Timer
+    public Timer targetBtnTimer { get; private set; }
+    public Timer rollBtnTimer { get; private set; }
 
+    public Timer meleeBtnTimer { get; private set; }
+
+    //Player
     //Hide
     [HideInInspector]
     public float m_speed;
@@ -120,6 +125,9 @@ public class PlayerController : MonoBehaviour
         thirdPersonCam = GetComponent<ThirdPersonCam>();
         m_input.player = this; // input에서 player의 상태 bool값 변경
         m_StateMachine = new PlayerStateMachine(this);
+        targetBtnTimer = new Timer(0.0f, 0.5f, this);
+        rollBtnTimer = new Timer(0.0f, 1.0f, this);
+        meleeBtnTimer = new Timer(0.0f, 0.5f, this);
 
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
@@ -156,6 +164,11 @@ public class PlayerController : MonoBehaviour
         m_StateMachine.PhysicsUpdate();
     }
 
+    private void LateUpdate()
+    {
+        m_StateMachine.LateUpdate();
+    }
+
     private void GroundedCheck()
     {
         Vector3 spherePos = new Vector3(transform.position.x, transform.position.y + m_PhysicsData.AirData.groundedOffset,
@@ -172,6 +185,11 @@ public class PlayerController : MonoBehaviour
         debugUI.verticalVelText.text= ((int)m_verticalVelocity).ToString();
     }
 
+    public void TurnOffAttack()
+    {
+        isAttack = false;
+    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
@@ -183,12 +201,5 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawWireSphere(transform.position, radiusOfView);
-    }
-
-    private float ClampAngle(float _lfAngle, float _lfMin, float _lfMax)
-    {
-        if (_lfAngle < -360f) _lfAngle += 360f;
-        if (_lfAngle > 360f) _lfAngle -= 360f;
-        return Mathf.Clamp(_lfAngle, _lfMin, _lfMax);
     }
 }

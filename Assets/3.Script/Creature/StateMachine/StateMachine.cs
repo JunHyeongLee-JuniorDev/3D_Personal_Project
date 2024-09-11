@@ -49,6 +49,11 @@ public abstract class StateMachine
         current.state?.PhysicsUpdate();
     }
 
+    public void LateUpdate()
+    {
+        current.state?.LateUpdate();
+    }
+
     public void SetState(IState state)
     {
         current = nodes[state.GetType()];
@@ -114,6 +119,7 @@ public interface IState
     public void Enter();
     public void Exit();
     public void Update();
+    public void LateUpdate();
     public void PhysicsUpdate();
     public void OnHurt();
 }

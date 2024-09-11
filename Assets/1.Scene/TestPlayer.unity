@@ -179,7 +179,7 @@ Transform:
   m_GameObject: {fileID: 14239606}
   serializedVersion: 2
   m_LocalRotation: {x: -0.13745861, y: 0.31549782, z: 0.046245363, w: 0.9377781}
-  m_LocalPosition: {x: -2.1012917, y: -8.058796, z: 4.2652555}
+  m_LocalPosition: {x: -1.9711878, y: -8.777246, z: 4.4367285}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -201,7 +201,7 @@ MonoBehaviour:
   m_RotationMode: 0
   m_UpdateMethod: 2
   m_Targets:
-  - target: {fileID: 1153582412}
+  - target: {fileID: 1051636559}
     weight: 1
     radius: 0
   - target: {fileID: 3020794}
@@ -2113,7 +2113,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 825000698}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.02747313, y: 0.3187351, z: -0.009242824, w: 0.9474005}
+  m_LocalRotation: {x: 0.027473137, y: 0.3187351, z: -0.009242822, w: 0.9474005}
   m_LocalPosition: {x: -0.28567415, y: -9.018817, z: -2.067676}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2876,6 +2876,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1028778536}
+  - component: {fileID: 1028778537}
   m_Layer: 0
   m_Name: RollCamRoot
   m_TagString: Untagged
@@ -2892,12 +2893,26 @@ Transform:
   m_GameObject: {fileID: 1028778535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.682927, y: -4.8112955, z: -1.6015086}
+  m_LocalPosition: {x: -4.36, y: 3.52, z: -1.6015086}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1028778537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1028778535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c3334f06f15ad0c42ac54d60f8233ff4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defualtCamPos: {x: 0, y: 1.5, z: 0}
+  player: {fileID: 1051636559}
 --- !u!4 &1051636559 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: c000bf4277722f6428e1c6923f1f607b,
@@ -3716,7 +3731,7 @@ Transform:
   m_GameObject: {fileID: 1429431791}
   serializedVersion: 2
   m_LocalRotation: {x: -0.13745861, y: 0.31549782, z: 0.046245363, w: 0.9377781}
-  m_LocalPosition: {x: -3.465681, y: -16.764479, z: 2.2496395}
+  m_LocalPosition: {x: -3.8570209, y: -8.783653, z: -0.45479012}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

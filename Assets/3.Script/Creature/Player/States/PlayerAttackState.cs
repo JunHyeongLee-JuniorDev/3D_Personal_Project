@@ -10,14 +10,14 @@ public class PlayerAttackState : PlayerBaseState
 
     }
     private int attackIndex;
-    private float attackCounter;
-    private readonly float maxComboDeley = 0.5f;
+    private bool isAttacking;
 
     public override void Enter()
     {
         base.Enter();
         attackIndex = 0;
-        attackCounter = 0.0f;
+        isAttacking = false;
+        player.meleeBtnTimer.StartTimer();
 
         animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
@@ -27,16 +27,40 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void Update()
     {
-        AnimatorStateInfo animatorStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-
-        if (isAttackAni(animatorStateInfo.fullPathHash) &&
-            animatorStateInfo.normalizedTime >= 1f)
+        if (player.meleeBtnTimer.isEnd && isAttacking)
         {
-            player.isAttack = false;
-            return;
+            isAttacking = false;
         }
+    }
 
-        attackCounter += Time.deltaTime;
+    public override void PhysicsUpdate()
+    {
+        base.PhysicsUpdate();
+        if (player.m_targetEnemy != null)
+            LookEnemy();
+    }
+
+    private void LookEnemy()
+    {
+        Vector3 targetDir = (player.m_targetEnemy.transform.position - player.transform.position);
+        targetDir.y = 0.0f;
+
+
+        player.transform.forward = Vector3.Lerp(player.transform.forward, targetDir, 0.1f);
+    }
+
+    public override void LateUpdate()
+    {
+        base.LateUpdate();
+        if (player.m_targetEnemy == null) return;
+ 
+        Vector3 targetDir = (player.m_targetEnemy.transform.position - player.m_mainCam.transform.position);
+        targetDir.y = 0.0f;
+        PlaceTheCam(targetDir);
+    }
+    private void PlaceTheCam(Vector3 originDir)
+    {
+        player.lockOnTargetRoll.transform.forward = Vector3.Lerp(player.lockOnTargetRoll.transform.forward, originDir.normalized, 0.05f);
     }
 
     public override void Exit()
@@ -59,23 +83,12 @@ public class PlayerAttackState : PlayerBaseState
         }
     }
 
-    private bool isAttackAni(int givenHash)
-    {
-        for(int i = 0; i < player.m_aniData._comboClip.Length; i++)
-        if (givenHash.Equals(player.m_aniData._comboClip[i]))
-            {
-                return true;
-            }
-
-        return false;
-    }
-
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (attackCounter >= maxComboDeley)
-        { 
+        if (!isAttacking && player.meleeBtnTimer.isEnd)
+        {
+            player.meleeBtnTimer.StartTimer();
             animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);
-            attackCounter = 0.0f;
         }
 
         if (attackIndex >= player.m_aniData._comboClip.Length)

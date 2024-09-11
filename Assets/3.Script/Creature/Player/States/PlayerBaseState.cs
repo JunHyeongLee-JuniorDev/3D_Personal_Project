@@ -52,6 +52,11 @@ public class PlayerBaseState : IState
         SetAniBool();
     }
 
+    public virtual void LateUpdate()
+    {
+
+    }
+
     public virtual void Move()
     {
         /*
@@ -88,12 +93,12 @@ public class PlayerBaseState : IState
 
         if (!_input.Equals(Vector3.zero))
         {
+            // Atan, Atan2는 tan의 역함수로 밑변 대변을 알고 있다면 각 <L을 알 수 있다.
             player.m_targetRotation = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg +
                                             player.m_mainCam.transform.eulerAngles.y;
 
             /*
              * SmoothDampAngle은 시작 float 에서 target float까지 지정된 smoothTime 만큼 변한 값을 반환
-             * 여기서 저 ref m_rotationVelocity은 필요없음
              */
             float _rotation = Mathf.SmoothDampAngle(player.transform.eulerAngles.y, player.m_targetRotation, ref player.m_rotationVelocity,
                                      groundData.rotationSmoothTime);
