@@ -4,20 +4,32 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public abstract class InventoryDisplay : MonoBehaviour
+public class DynamicInventoryDisplay : MonoBehaviour
 {
-    protected InventorySystem inventorySystem;
-    protected Dictionary<InventorySlot_UI, InventorySlot> slotDictionary;
+    private InventorySystem inventorySystem;
+    private Dictionary<InventorySlot_UI, InventorySlot> slotDictionary;
+
+    [SerializeField] private InventorySlot_UI slotPrefab;
 
     public InventorySystem InventorySystem => inventorySystem;
     public Dictionary<InventorySlot_UI, InventorySlot> SlotDictionary => slotDictionary;
 
-    protected virtual void Start()
+    private void Start()
     {
         
     }
 
-    public abstract void AssignSlot(InventorySystem invToDisplay);
+    public void AssignSlot(InventorySystem invToDisplay)
+    {
+        slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
+
+        for (int i = 0; i < invToDisplay.InventorySize; i++)
+        {
+            var slot_UI = Instantiate(slotPrefab, transform);
+            slotDictionary.Add(slot_UI, invToDisplay.InventorySlots[i]);
+            slot_UI.Init(invToDisplay.InventorySlots[i]);
+        }
+    }
 
     /// <summary>
     /// backend에 있는 실제 Slot의 값을 UI Slot에 갱신
@@ -38,13 +50,14 @@ public abstract class InventoryDisplay : MonoBehaviour
     {
         if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
 
-        //item을 어떻게 할 것 인가...
-        //
+        //item 설명을 띄워줌
     }
 
     public void SlotLeftClicked(InventorySlot_UI clickedUISlot)
     {
+        if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
 
+        //아이템 상호작용 UI를 띄워줌
     }
 
 }

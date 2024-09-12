@@ -6,7 +6,7 @@ using System;
 /// 실제 플레이어가 갖고 있는 인벤토리
 /// </summary>
 [Serializable]
-public class InventoryHolder : MonoBehaviour
+public class InventoryManager : MonoBehaviour // IInitManager
 {
     [SerializeField]
     private int inventorySize;// 인벤토리 리스트의 크기를 정함
@@ -17,10 +17,8 @@ public class InventoryHolder : MonoBehaviour
     public InventorySystem InventorySystem => inventorySystem;
 
     public static UnityAction<InventorySystem> OnDynamicInventoryDisplayRequest;// 인벤토리가 UI와 상호작용이 있을 때
-
-    private void Awake()
+    public void Awake()
     {
         inventorySystem = new InventorySystem(inventorySize);
     }
-
 }

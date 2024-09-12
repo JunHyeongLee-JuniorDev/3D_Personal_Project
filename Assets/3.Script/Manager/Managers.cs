@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.SceneManagement;
 
 public class Managers : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class Managers : MonoBehaviour
     public SoundManager Sound { get; private set; }
     public SceneManagerEX Scene { get; private set; }
     public SpawnManager SpawnManager { get; private set; }
+
+    public InventoryManager Inventory { get; private set; }
 
     private void Awake()
     {
@@ -29,6 +32,9 @@ public class Managers : MonoBehaviour
                 InitManager<SoundManager>(Sound);
                 InitManager<SceneManagerEX>(Scene);
                 InitManager<SpawnManager>(SpawnManager);
+                //InitManager<InventoryManager>(Inventory);
+                // 게임 씬으로 들어갈 때 맞는 데이터를 들고 온다.
+                //SceneManager.activeSceneChanged += DynamicInitManager;
             }
         }
 
@@ -62,9 +68,13 @@ public class Managers : MonoBehaviour
         }
     }
 
+    private void DynamicInitManager(Scene current, Scene next)
+    {
+
+    }
 }
 
 public interface IInitManager
 {
-    void Init();
+    public void Init();
 }

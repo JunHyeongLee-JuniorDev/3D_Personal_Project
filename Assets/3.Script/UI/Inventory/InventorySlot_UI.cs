@@ -20,7 +20,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     //우클릭 시 발생할 이벤트
 
     public InventorySlot AssignedInventorySlot => assignedInventorySlot;
-    public InventoryDisplay parentDisplay {  get; private set; }
+    public DynamicInventoryDisplay parentDisplay {  get; private set; }
     //부모에 display하는 컴포넌트 참조
     private void Awake()
     {
@@ -30,7 +30,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
         button?.onClick.AddListener(OnUISlotLeftClick);
         OnrightClick_Act.AddListener(OnUISlotRightClick);
 
-        parentDisplay = GetComponentInParent<InventoryDisplay>();
+        parentDisplay = GetComponentInParent<DynamicInventoryDisplay>();
     }
 
     public void Init(InventorySlot slot)
@@ -54,10 +54,10 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
             ClearSlot();
     }
 
-    public void UpdateUISlot()
-    {
-        if(assignedInventorySlot != null) UpdateUISlot(assignedInventorySlot);
-    }
+    //public void UpdateUISlot() 필요를 못 느끼겠음...
+    //{
+    //    if(assignedInventorySlot != null) UpdateUISlot(assignedInventorySlot);
+    //}
 
     /// <summary>
     /// 실제 slot backend 데이터를 clear하면서 sprite, text 초기화
@@ -77,22 +77,27 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     public void OnUISlotLeftClick()
     {
         //Access display class
-        parentDisplay?.SlotRightClicked(this);
-        TurnOnSideDisplay();
-    }
-    public void TurnOnSideDisplay()
-    {
-
+        parentDisplay?.SlotLeftClicked(this);
     }
 
     public void OnUISlotRightClick()
     {
         //Access display class
         parentDisplay?.SlotRightClicked(this);
+        TurnOnSideDisplay();
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 우클릭 구현
+        if(eventData.button.Equals(PointerEventData.InputButton.Right))
+        OnUISlotRightClick();
+    }
+
+    private void TurnOnSideDisplay()
+    {
+        // 우클릭 시 띄울 UI 표시 메서드
+
 
     }
 }

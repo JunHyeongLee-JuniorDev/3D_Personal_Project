@@ -24,7 +24,7 @@ public class ItemPickUp : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return; // 플레이어가 아니라면 return
 
-        var inventory = other.GetComponent<InventoryHolder>();
+        var inventory = other.GetComponent<InventoryManager>();
         if(inventory == null) return;
 
         if (inventory.InventorySystem.AddToInventory(itemData, 1))// 아이템이 들어갈 자리가 있다면
