@@ -16,8 +16,6 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private InventorySlot assignedInventorySlot;
 
     private Button button;
-    private UnityEvent OnrightClick_Act;
-    //우클릭 시 발생할 이벤트
 
     public InventorySlot AssignedInventorySlot => assignedInventorySlot;
     public DynamicInventoryDisplay parentDisplay {  get; private set; }
@@ -25,10 +23,8 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     private void Awake()
     {
         ClearSlot();
-
         button = GetComponent<Button>();
         button?.onClick.AddListener(OnUISlotLeftClick);
-        OnrightClick_Act.AddListener(OnUISlotRightClick);
 
         parentDisplay = GetComponentInParent<DynamicInventoryDisplay>();
     }
@@ -77,12 +73,14 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     public void OnUISlotLeftClick()
     {
         //Access display class
+        Debug.Log($"{gameObject} 좌클릭 눌림");
         parentDisplay?.SlotLeftClicked(this);
     }
 
     public void OnUISlotRightClick()
     {
         //Access display class
+        Debug.Log($"{gameObject} 우클릭 눌림");
         parentDisplay?.SlotRightClicked(this);
         TurnOnSideDisplay();
     }
@@ -97,8 +95,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     private void TurnOnSideDisplay()
     {
         // 우클릭 시 띄울 UI 표시 메서드
-
-
+        Debug.Log("우클릭 UI를 띄워야한다.");
     }
 }
 

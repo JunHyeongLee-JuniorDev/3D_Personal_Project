@@ -8,17 +8,44 @@ using System;
 [Serializable]
 public class InventoryManager : MonoBehaviour // IInitManager
 {
-    [SerializeField]
-    private int inventorySize;// 인벤토리 리스트의 크기를 정함
+    public static InventoryManager instance = null; // For debug
 
     [SerializeField]
-    protected InventorySystem inventorySystem; // 인벤토리
+    private int gearInvSize;// 인벤토리 리스트의 크기를 정함
+    [SerializeField]
+    private int consumeInvSize;// 인벤토리 리스트의 크기를 정함
+    [SerializeField]
+    private int missionInvSize;// 인벤토리 리스트의 크기를 정함
 
-    public InventorySystem InventorySystem => inventorySystem;
+
+    [SerializeField]
+    private InventorySystem invSys_Gear; // 기어 인벤
+    [SerializeField]
+    private InventorySystem invSys_Consume; // 소비 인벤
+    [SerializeField]
+    private InventorySystem invSys_mission; // 미션 인벤
+
+    public InventorySystem InvSys_Gear => invSys_Gear;
+    public InventorySystem InvSys_Consume => invSys_Consume;
+    public InventorySystem InvSys_mission => invSys_mission;
+
+    public int wallet;
 
     public static UnityAction<InventorySystem> OnDynamicInventoryDisplayRequest;// 인벤토리가 UI와 상호작용이 있을 때
     public void Awake()
     {
-        inventorySystem = new InventorySystem(inventorySize);
+        if (instance == null)
+        {
+            instance = this;
+            DontDestroyOnLoad(gameObject);
+            invSys_Gear = new InventorySystem(gearInvSize);
+            invSys_Consume = new InventorySystem(consumeInvSize);
+            invSys_mission = new InventorySystem(missionInvSize);
+        }
+
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 }

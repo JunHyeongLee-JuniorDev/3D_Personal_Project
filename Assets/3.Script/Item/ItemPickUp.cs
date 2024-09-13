@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 /// <summary>
@@ -24,12 +25,32 @@ public class ItemPickUp : MonoBehaviour
     {
         if (!other.CompareTag("Player")) return; // 플레이어가 아니라면 return
 
-        var inventory = other.GetComponent<InventoryManager>();
-        if(inventory == null) return;
-
-        if (inventory.InventorySystem.AddToInventory(itemData, 1))// 아이템이 들어갈 자리가 있다면
+        switch (itemData.ItemType)
         {
-            Destroy(gameObject); // 들어갔다면 Destroy
+            case EItemType.GEAR:
+                if (InventoryManager.instance.InvSys_Gear.AddToInventory(itemData, 1))// 아이템이 들어갈 자리가 있다면
+                {
+                    Destroy(gameObject); // 들어갔다면 Destroy
+                }
+                break;
+
+            case EItemType.CONSUME:
+                if (InventoryManager.instance.InvSys_Consume.AddToInventory(itemData, 1))// 아이템이 들어갈 자리가 있다면
+                {
+                    Destroy(gameObject); // 들어갔다면 Destroy
+                }
+                break;
+
+            case EItemType.MISSION:
+                if (InventoryManager.instance.InvSys_mission.AddToInventory(itemData, 1))// 아이템이 들어갈 자리가 있다면
+                {
+                    Destroy(gameObject); // 들어갔다면 Destroy
+                }
+                break;
+
+            default:
+                Debug.LogError("아이템 type이 정해지지 않음");
+                break;
         }
     }
 }

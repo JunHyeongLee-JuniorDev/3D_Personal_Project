@@ -4,32 +4,19 @@ using UnityEngine;
 
 public enum EItemType
 {
-    EQUIPMENT,
-    MONEYPOUCH,
-    WHEAPONOVER,
-    POTIONOVER,
-    POTION,
-    KEY
+    GEAR,
+    CONSUME,
+    MISSION
 };
 
 public enum EEquipmentType
 {
-    WHEAPON,
-    HELMET,
-    GLOVE,
-    CHEST,
-    PANTS,
-    SHOES,
-    SHIELD
-};
-
-public enum EWeaponType
-{
     AXE,
     SWORD,
     MAGICSTICK,
-    BOW
-}
+    BOW,
+    SHIELD
+};
 /// <summary>
 /// scriptable obj æ∆¿Ã≈€(ID, Name, Sprite, Max Stack)
 /// </summary>
@@ -37,35 +24,31 @@ public enum EWeaponType
 public class InventoryItemData : ScriptableObject
 {
     [SerializeField]
-    private int id;
-    public int ID => id;
-
-    [SerializeField]
-    private string displayName;
+    protected string displayName;
     public string DisplayName => displayName;
 
     [TextArea(4,4)]
     [SerializeField]
-    private string description;
+    protected string description;
     public string Description => description;
 
     [SerializeField]
-    private Sprite icon;
+    protected Sprite icon;
     public Sprite Icon => icon;
 
     [SerializeField]
-    private int maxStackSize;
+    protected int maxStackSize;
     public int MaxStackSize => maxStackSize;
 
     [SerializeField]
-    private EItemType itemType;
+    protected EItemType itemType;
     public EItemType ItemType => itemType;
 
     [SerializeField]
-    private bool isCanSale;
+    protected bool isCanSale;
     public bool IsCanSale => isCanSale;
 
     [SerializeField]
-    private bool isCanDrop;
+    protected bool isCanDrop;
     public bool IsCanDrop => isCanDrop;
 }
