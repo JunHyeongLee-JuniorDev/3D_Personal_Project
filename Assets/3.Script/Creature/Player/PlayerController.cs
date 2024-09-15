@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
         debugUI.verticalVelText.text= ((int)m_verticalVelocity).ToString();
     }
 
-    public void TurnOffPlayerAttackState()
+    public void OffPlayerAttackAni()
     {
         isAttack = false;
     }
