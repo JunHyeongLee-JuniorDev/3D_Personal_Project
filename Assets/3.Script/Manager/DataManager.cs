@@ -5,7 +5,7 @@ using System.IO;
 public class DataManager : MonoBehaviour//, IInitManager
 {
     public static DataManager instance = null;
-    public static SaveData currentSaveData = new SaveData();
+    public SaveData currentSaveData = new SaveData();
 
     public const string saveDirectory = "/SaveData/";
     public const string fileName = "SaveGame.sav";
@@ -24,7 +24,7 @@ public class DataManager : MonoBehaviour//, IInitManager
         }
     }
 
-    public bool Save()
+    public bool SaveGame()
     {
         string _dir = Application.persistentDataPath + saveDirectory;
 
@@ -39,8 +39,31 @@ public class DataManager : MonoBehaviour//, IInitManager
 
         File.WriteAllText(path: _dir + fileName, contents: _json);
 
-        GUIUtility.systemCopyBuffer = _dir + fileName;
+        GUIUtility.systemCopyBuffer = _dir;
+        Debug.Log($"Save 경로 : {_dir}");
+        // 직접 경로를 체크하기 위해서
 
+        //씬 로드 같은 경우 등등 save에 이상이 갈 사항이 있다면 체크하여 false를 반환하자.
+        
         return true;
+    }
+
+    public void LoadGame()
+    {
+        string fullPath = Application.persistentDataPath + saveDirectory + fileName;
+        SaveData loadedData = new SaveData();
+
+        if (File.Exists(fullPath))
+        {
+            string json = File.ReadAllText(fullPath);
+            loadedData = JsonUtility.FromJson<SaveData>(json);
+        }
+
+        else
+        {
+            Debug.LogError(message: "Save Data does not exist!");
+        }
+
+        currentSaveData = loadedData;
     }
 }

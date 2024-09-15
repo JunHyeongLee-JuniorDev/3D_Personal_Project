@@ -10,34 +10,18 @@ public class PlayerAttackState : PlayerBaseState
 
     }
     private int attackIndex;
-    private bool isAttacking;
 
     public override void Enter()
     {
         base.Enter();
         attackIndex = 0;
-        isAttacking = false;
         player.meleeBtnTimer.StartTimer();
-
         animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
         inputActions["Move"].Disable();
         inputActions["Sprint"].Disable();
-    }
 
-    public override void Update()
-    {
-        if (player.meleeBtnTimer.isEnd && isAttacking)
-        {
-            isAttacking = false;
-        }
-    }
-
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
-        if (player.m_targetEnemy != null)
-            LookEnemy();
+        inputActions["Battle"].Disable();
     }
 
     private void LookEnemy()
@@ -53,14 +37,15 @@ public class PlayerAttackState : PlayerBaseState
     {
         base.LateUpdate();
         if (player.m_targetEnemy == null) return;
- 
+        LookEnemy();
         Vector3 targetDir = (player.m_targetEnemy.transform.position - player.m_mainCam.transform.position);
         targetDir.y = 0.0f;
         PlaceTheCam(targetDir);
+        ShowTargettingUI();
     }
     private void PlaceTheCam(Vector3 originDir)
     {
-        player.lockOnTargetRoll.transform.forward = Vector3.Lerp(player.lockOnTargetRoll.transform.forward, originDir.normalized, 0.05f);
+        player.lockOnTargetRoot.transform.forward = Vector3.Lerp(player.lockOnTargetRoot.transform.forward, originDir.normalized, 0.05f);
     }
 
     public override void Exit()
@@ -70,6 +55,7 @@ public class PlayerAttackState : PlayerBaseState
         inputActions["Fire"].started -= OnFire;
         inputActions["Move"].Enable();
         inputActions["Sprint"].Enable();
+        inputActions["Battle"].Enable();
     }
 
     private void ShowTargettingUI()
@@ -85,7 +71,7 @@ public class PlayerAttackState : PlayerBaseState
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (!isAttacking && player.meleeBtnTimer.isEnd)
+        if (player.meleeBtnTimer.isEnd)
         {
             player.meleeBtnTimer.StartTimer();
             animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);

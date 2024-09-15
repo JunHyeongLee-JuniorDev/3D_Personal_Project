@@ -54,7 +54,7 @@ public void OnMove(InputAction.CallbackContext context)
     {
         if (context.started)
         {
-            player.isBattle = true;
+            player.isBattle = !player.isBattle;
         }
     }
 

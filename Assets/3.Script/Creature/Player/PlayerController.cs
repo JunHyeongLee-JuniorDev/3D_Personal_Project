@@ -81,11 +81,11 @@ public class PlayerController : MonoBehaviour
     [field: Header("ÇÁ¸®ÆÕ")]
     [field: SerializeField]
     public GameObject lockOnCanvas { get; private set; }
-    public float lockOnCanvasScale { get; private set; } = 0.1f;
+    public float lockOnCanvasScale { get; private set; } = 0.5f;
     [field: SerializeField]
     public Transform lockOnTarget { get; private set; }
     [field: SerializeField]
-    public Transform lockOnTargetRoll { get; private set; }
+    public Transform lockOnTargetRoot { get; private set; }
 
     //Enemy Targetting System
     //***************************************************************************
@@ -177,7 +177,7 @@ public class PlayerController : MonoBehaviour
         isGrouded = Physics.CheckSphere(spherePos, m_PhysicsData.AirData.groundedRadius, m_PhysicsData.AirData.groundLayers, QueryTriggerInteraction.Ignore);
     }
 
-    private void DebugShowRate()
+    private void DebugShowRate() // For Debugging
     {
         debugUI.SpeedText.text= ((int)m_speed).ToString();
         debugUI.targetSpeedText.text= ((int)m_targetSpeed).ToString();
@@ -185,7 +185,7 @@ public class PlayerController : MonoBehaviour
         debugUI.verticalVelText.text= ((int)m_verticalVelocity).ToString();
     }
 
-    public void TurnOffAttack()
+    public void TurnOffPlayerAttackState()
     {
         isAttack = false;
     }

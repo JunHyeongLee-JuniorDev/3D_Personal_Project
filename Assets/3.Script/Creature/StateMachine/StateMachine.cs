@@ -72,7 +72,6 @@ public abstract class StateMachine
 
         current = nodes[state.GetType()];
         Debug.Log(current.state);
-        var _state = state as PlayerBaseState;
     }
 
     public ITransition GetTransition()

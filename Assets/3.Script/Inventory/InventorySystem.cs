@@ -16,6 +16,7 @@ public class InventorySystem
     public List<InventorySlot> InventorySlots => inventorySlots;
 
     public int InventorySize => InventorySlots.Count;
+    public int Wallet;
 
     public UnityAction<InventorySlot> OnInventorySlotChanged;// 인벤토리 슬롯이 변화 되었다면
 

@@ -13,8 +13,7 @@ public class PlayerBattleState : PlayerBaseState
     private Vector3 dirToTarget;
     private Vector3 defualtCamPos = new Vector3(0.0f,1.5f,0.0f);
 
-    private bool isTargetting = false;
-    private bool isRolling = false;
+    private bool isRolling;
 
     public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
     {
@@ -24,35 +23,29 @@ public class PlayerBattleState : PlayerBaseState
     public override void Enter()
     {
         dirToTarget = Vector2.zero;
+
         nearlistEnemy = null;
+
         battleAniX = 0.0f;
         battleAniY = 0.0f;
+
         player.m_Controller.Move(Vector3.zero);
         player.lockOnCanvas.SetActive(true);
         inputActions["Look"].started += OnLook;
         inputActions["Jump"].started += OnRoll;
         inputActions["Sprint"].Disable();
         player.thirdPersonCam.enabled = false;
+
         animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
         AssignTarget(true, true);
 
         if(player.m_targetEnemy != null)
-            player.cinemachineAnimator.Play("RollCamera");
-
-        isTargetting = false;
-        isRolling = false;
+            player.cinemachineAnimator.Play("TargetCamera");
     }
 
     public override void Update()
     {
         base.Update();
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            player.isBattle = false;
-            player.m_targetEnemy.GetComponent<Renderer>().material.color = Color.yellow;
-            return;
-        }
-
         CancelConditions();
 
         if (player.m_targetEnemy == null) return;
@@ -65,7 +58,6 @@ public class PlayerBattleState : PlayerBaseState
         Move();
         LookAtTarget();
         Gravity();
-        startTargetting();
         ResetRoll();
     }
 
@@ -91,15 +83,7 @@ public class PlayerBattleState : PlayerBaseState
 
         else
         {
-            if (player.isSprint)
-            {
-                player.m_targetSpeed = groundData.sprintSpeed;
-            }
-
-            else
-            {
-                player.m_targetSpeed = groundData.BaseSpeed;
-            }
+            player.m_targetSpeed = groundData.BaseSpeed;
         }
 
         /*
@@ -315,10 +299,9 @@ public class PlayerBattleState : PlayerBaseState
         if (Physics.Raycast(player.m_mainCam.transform.position, dirToTarget.normalized,
                            Vector3.Distance(player.m_mainCam.transform.position, player.m_targetEnemy.transform.position),
                            player.wallAndGroundLayer))
-        {
             return true;
-        }
 
+        else
         return false;
     }
     /// <summary>
@@ -356,7 +339,7 @@ public class PlayerBattleState : PlayerBaseState
         {
             isRolling = false;
             inputActions["Fire"].Enable();
-            animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+            animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);
         }
     }
     /// <summary>
@@ -365,7 +348,8 @@ public class PlayerBattleState : PlayerBaseState
     /// <param name="originDir"> 캠에서 타겟 방향의 방향 벡터 </param>
     private void PlaceTheCam(Vector3 originDir)
     {
-        player.lockOnTargetRoll.transform.forward = Vector3.Lerp(player.lockOnTargetRoll.transform.forward,originDir.normalized, 0.05f);
+        player.lockOnTargetRoot.transform.forward = Vector3.Lerp(player.lockOnTargetRoot.transform.forward,originDir.normalized, 0.05f);
+        player.thirdPersonCam.m_cinemachineCamTarget.transform.forward = originDir.normalized;
     }
     /// <summary>
     /// 다른 스테이트에서 필요한 기능들 활성화, target 다시 null 화
@@ -378,23 +362,23 @@ public class PlayerBattleState : PlayerBaseState
             inputActions["Sprint"].Enable();
             Debug.Log("지금 나가는 중");
             player.cinemachineAnimator.Play("FollowCamera");
-            player.thirdPersonCam.enabled = true;
             player.lockOnCanvas.SetActive(false);
             player.m_targetEnemy = null;
+            player.thirdPersonCam.enabled = true;
         }
 
         inputActions["Look"].started -= OnLook;
         inputActions["Jump"].started -= OnRoll;
+        isRolling = false;
     }
     /// <summary>
     /// 타겟팅 callback 메소드(마우스 "좌, 우"로 발동)
     /// </summary>
     private void OnLook(InputAction.CallbackContext context)
     {
-        if (!isTargetting && Mathf.Abs(context.ReadValue<Vector2>().x) > 1.0f)
+        if (player.targetBtnTimer.isEnd && Mathf.Abs(context.ReadValue<Vector2>().x) > 1.0f)
         {
             FindAnotherTarget(context.ReadValue<Vector2>().x);
-            isTargetting = true;
             player.targetBtnTimer.StartTimer();
         }
     }
@@ -403,20 +387,12 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     private void OnRoll(InputAction.CallbackContext context)
     {
-        if (!isRolling)
+        if (player.rollBtnTimer.isEnd)
         {
             isRolling = true;
             inputActions["Fire"].Disable();
             player.rollBtnTimer.StartTimer();
             PerformRoll();
         }
-    }
-    /// <summary>
-    /// 타게팅 쿨타임이 끝났다면 타게팅이 다시 가능
-    /// </summary>
-    private void startTargetting()
-    {
-        if (isTargetting && player.targetBtnTimer.isEnd)
-                isTargetting = false;
     }
 }
