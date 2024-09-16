@@ -17,6 +17,7 @@ MonoBehaviour:
     <speedChangeRate>k__BackingField: 10
     <BaseSpeed>k__BackingField: 5
     <sprintSpeed>k__BackingField: 10
+    <battleWalkSpeed>k__BackingField: 3
   <AirData>k__BackingField:
     <groundedOffset>k__BackingField: 0
     <groundedRadius>k__BackingField: 0.2
@@ -25,6 +26,6 @@ MonoBehaviour:
       m_Bits: 128
     JumpTimeout: 0.5
     FallTimeout: 0.8
-    JumpHeight: 2
+    JumpHeight: 1
     Gravity: -9.8
     GravityOffset: 0.1

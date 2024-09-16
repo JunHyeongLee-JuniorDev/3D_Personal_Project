@@ -19,9 +19,6 @@ public class PlayerController : MonoBehaviour
     private string playerDataPath = "ScriptableObj/PlayerData";
     public PlayerAnimationDataBase m_aniData { get; private set; }
 
-    //For Debug
-    private DebugUI debugUI;
-
     //Unity Components
     [field: HideInInspector]
     public CharacterController m_Controller;
@@ -147,14 +144,10 @@ public class PlayerController : MonoBehaviour
         m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack));
         m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));
         m_StateMachine.SetState(_locoState);
-
-
-        debugUI = GetComponentInChildren<DebugUI>(); // For Debugging
     }
 
     private void Update()
     {
-        DebugShowRate();
         m_StateMachine.Update();
     }
 
@@ -175,14 +168,6 @@ public class PlayerController : MonoBehaviour
                                         transform.position.z);
 
         isGrouded = Physics.CheckSphere(spherePos, m_PhysicsData.AirData.groundedRadius, m_PhysicsData.AirData.groundLayers, QueryTriggerInteraction.Ignore);
-    }
-
-    private void DebugShowRate() // For Debugging
-    {
-        debugUI.SpeedText.text= ((int)m_speed).ToString();
-        debugUI.targetSpeedText.text= ((int)m_targetSpeed).ToString();
-        debugUI.targetRotatText.text= ((int)m_targetRotation).ToString();
-        debugUI.verticalVelText.text= ((int)m_verticalVelocity).ToString();
     }
 
     public void OffPlayerAttackAni()

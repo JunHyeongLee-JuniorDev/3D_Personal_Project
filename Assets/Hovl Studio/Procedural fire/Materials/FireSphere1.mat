@@ -24,6 +24,10 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _Emission_Flipbook:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 31679c4b857f0d140bd9566b86eb8674, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -54,19 +58,41 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - USE_TRANSPARENCY_INTERSECTION: 0
+    - USE_WIND: 0
+    - _AlphaClip: 0
+    - _AlphaToMask: 0
+    - _Alpha_Multiplier: 1
     - _Amplitude: 1
+    - _Bend_Strength: 2
+    - _Blend: 2
+    - _CastShadows: 0
+    - _Cull: 2
     - _Depthpower: 1
+    - _DstBlend: 1
     - _Emission: 2
+    - _Emission_Intensity: 1
     - _Frequency: 10
+    - _Gust_Strength: 0
+    - _Intersection_Offset: 0.5
     - _Opacity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _Shiver_Strength: 0
+    - _SrcBlend: 5
     - _StartFrequency: 2
+    - _Surface: 1
+    - _Use_Texture_as_Alpha: 0
     - _Useblack: 0
     - _Usedepth: 0
+    - _Wind_from_Center_T_Age_F: 0
+    - _ZTest: 4
+    - _ZWrite: 0
+    - _ZWriteControl: 0
     - __dirty: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Emission_Color: {r: 32, g: 32, b: 32, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &1316427298245699737
 MonoBehaviour:

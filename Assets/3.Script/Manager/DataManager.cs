@@ -6,6 +6,7 @@ public class DataManager : MonoBehaviour//, IInitManager
 {
     public static DataManager instance = null;
     public SaveData currentSaveData = new SaveData();
+    // 세팅 세이브 데이터 만들기
 
     public const string saveDirectory = "/SaveData/";
     public const string fileName = "SaveGame.sav";

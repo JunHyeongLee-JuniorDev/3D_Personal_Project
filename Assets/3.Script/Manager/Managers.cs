@@ -20,22 +20,18 @@ public class Managers : MonoBehaviour
     {
         if (Instance == null)
         {
-            Instance = FindObjectOfType<Managers>();
-
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(gameObject);
-
-                InitManager<GameManager>(Game);
-                InitManager<DataManager>(Data);
-                InitManager<SoundManager>(Sound);
-                InitManager<SceneManagerEX>(Scene);
-                InitManager<SpawnManager>(SpawnManager);
+                //InitManager<DataManager>(Data);
+                //InitManager<SoundManager>(Sound);
+                //InitManager<SpawnManager>(SpawnManager);
                 //InitManager<InventoryManager>(Inventory);
                 // 게임 씬으로 들어갈 때 맞는 데이터를 들고 온다.
                 //SceneManager.activeSceneChanged += DynamicInitManager;
-            }
+
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+
+            Scene = InitManager<SceneManagerEX>(Scene);
+            Game  = InitManager<GameManager>(Game);
         }
 
         else
@@ -44,7 +40,7 @@ public class Managers : MonoBehaviour
         }
     }
 
-    private void InitManager<T>(T _manager) where T : MonoBehaviour
+    private T InitManager<T>(T _manager) where T : MonoBehaviour, IInitManager
     {
         if (_manager == null)
         {
@@ -52,20 +48,15 @@ public class Managers : MonoBehaviour
 
             if (_manager == null)
             {
-                try
-                {
                     _manager = new GameObject(typeof(T).Name).AddComponent<T>();
                     _manager.transform.parent = transform;
+                    _manager.Init();
 
-                    Debug.Log(_manager.name + " : 생성 완료");
-                }
-
-                catch (Exception e)
-                {
-                    Debug.LogException(e);
-                }
+                    Debug.Log(_manager.name + " : 생성 완료");   
             }
         }
+
+        return _manager;
     }
 
     private void DynamicInitManager(Scene current, Scene next)
