@@ -1,9 +1,10 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class SaveData
+public class GameSaveData
 {
     public PlayerData savePlayerData;
 
@@ -12,6 +13,18 @@ public class SaveData
     public InventorySaveData consumeInvData;
     public InventorySaveData equipmentInvData;
     public InventorySaveData missionInvData;
+}
+
+[Serializable]
+public class SettingSaveData
+{
+    public int resolutionIndex; // 해상도
+    public int urpAssetsIndex; // urp 에셋 바꾸기
+    public bool isFullScreen; // 전체 화면
+
+    public float SFXVolume; // 효과음
+    public float masterVolume; // 전체 볼륨
+    public float musicVolume; // 음악 볼륨
 }
 
 [Serializable]
@@ -26,17 +39,18 @@ public class PlayerData
     public float maxHealth;
 
     //Stat
+    public int level;// 레벨
     public int life;// 생명력
     public int strength;// 힘(소드)
     public int stamina;// 스테미나(도끼, 활)
     public int intelligence;// 지능(마법)
+    public int wallet;//지갑~
 }
 
 [Serializable]
 public class InventorySaveData
 {
     public List<InventorySlot> slots;
-    public int wallet;
 }
 
 /// <summary>

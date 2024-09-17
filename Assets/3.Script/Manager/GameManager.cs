@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 
 public class GameManager : MonoBehaviour, IInitManager
 {
-    public Stack UIGroups;
+    public Stack<GameObject> UIGroups = new Stack<GameObject>();
 
     private InputActionAsset inputActions;
 
@@ -20,8 +21,7 @@ public class GameManager : MonoBehaviour, IInitManager
 
     public void OnClickExit_UIGroup(InputAction.CallbackContext context)
     {
-        UIGroups?.Pop();
+        if(UIGroups.Count > 0)
+        UIGroups.Pop().SetActive(false);
     }
-
-
 }

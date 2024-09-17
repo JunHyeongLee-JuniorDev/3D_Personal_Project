@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
 using UnityEngine.SceneManagement;
 
 public class Managers : MonoBehaviour
@@ -20,18 +17,18 @@ public class Managers : MonoBehaviour
     {
         if (Instance == null)
         {
-                //InitManager<DataManager>(Data);
-                //InitManager<SoundManager>(Sound);
-                //InitManager<SpawnManager>(SpawnManager);
-                //InitManager<InventoryManager>(Inventory);
-                // 게임 씬으로 들어갈 때 맞는 데이터를 들고 온다.
-                //SceneManager.activeSceneChanged += DynamicInitManager;
+            //InitManager<SoundManager>(Sound);
+            //InitManager<SpawnManager>(SpawnManager);
+            //InitManager<InventoryManager>(Inventory);
+            // 게임 씬으로 들어갈 때 맞는 데이터를 들고 온다.
+            //SceneManager.activeSceneChanged += DynamicInitManager;
 
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
+            Data = InitManager<DataManager>(Data);
             Scene = InitManager<SceneManagerEX>(Scene);
-            Game  = InitManager<GameManager>(Game);
+            Game = InitManager<GameManager>(Game);
         }
 
         else

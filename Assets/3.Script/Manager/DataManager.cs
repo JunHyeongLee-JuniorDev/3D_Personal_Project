@@ -1,44 +1,77 @@
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.Audio;
 
-public class DataManager : MonoBehaviour//, IInitManager
+public class DataManager : MonoBehaviour, IInitManager
 {
-    public static DataManager instance = null;
-    public SaveData currentSaveData = new SaveData();
+    public GameSaveData[] currentSaveData;
+    public SettingSaveData settingSaveData;
+    public AudioMixer audioMixer;
+
     // 세팅 세이브 데이터 만들기
+    private SettingSaveData defaultSetting = new SettingSaveData();
+    public SettingSaveData DefaultSetting => defaultSetting;
 
-    public const string saveDirectory = "/SaveData/";
-    public const string fileName = "SaveGame.sav";
+    public readonly string saveDirectory = "/SaveData/";
+    public readonly string[] gameSaveNames = new string[] {"SaveGame0.sav", 
+                                                      "SaveGame1.sav",
+                                                      "SaveGame2.sav"};
 
-    private void Awake()
+    public readonly string settingfileName = "SettingSave.sav";
+
+    public void Init()
     {
-        if (instance == null)
+        defaultSetting.masterVolume = 0.0f;
+        defaultSetting.SFXVolume = 0.0f;
+        defaultSetting.musicVolume = 0.0f;
+        defaultSetting.resolutionIndex = Screen.resolutions.Length - 1;
+        defaultSetting.urpAssetsIndex = QualitySettings.names.Length - 1;
+
+        currentSaveData = new GameSaveData[gameSaveNames.Length];
+
+        for (int i = 0; i < currentSaveData.Length; i++)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
+            LoadGame(i);
         }
 
-        else
-        {
-            Destroy(gameObject);
-        }
+        settingSaveData = LoadSetting();
+
+        QualitySettings.SetQualityLevel(settingSaveData.urpAssetsIndex, true);
+        Screen.SetResolution(Screen.resolutions[settingSaveData.resolutionIndex].width,
+                             Screen.resolutions[settingSaveData.resolutionIndex].height,
+                             settingSaveData.isFullScreen);
+
+        audioMixer = audioMixer = Resources.Load<AudioMixer>("Mixer/AudioMixer");
     }
 
-    public bool SaveGame()
+    private void Start()
+    {
+        audioMixer.SetFloat("Master", settingSaveData.masterVolume);
+        audioMixer.SetFloat("Music", settingSaveData.musicVolume);
+        audioMixer.SetFloat("SFX", settingSaveData.SFXVolume);
+    }
+
+    /// <summary>
+    /// 지정한 파일 인덱스로 저장
+    /// </summary>
+    /// <param name="saveFileIndex"></param>
+    /// <returns>저장 성공시 true를 반환</returns>
+    public bool SaveGame(int saveFileIndex)
     {
         string _dir = Application.persistentDataPath + saveDirectory;
 
         if (!Directory.Exists(_dir))
             Directory.CreateDirectory(_dir);
 
-        string _json = JsonUtility.ToJson(currentSaveData, prettyPrint : true);
+        string _json = JsonUtility.ToJson(currentSaveData[saveFileIndex], prettyPrint : true);
         /*
+         * 
          * prettyprint = true  -> 읽기 쉽게
          * prettyprint = false -> 파일 용량 최적화
          */
 
-        File.WriteAllText(path: _dir + fileName, contents: _json);
+        File.WriteAllText(path: _dir + gameSaveNames[saveFileIndex], contents: _json);
 
         GUIUtility.systemCopyBuffer = _dir;
         Debug.Log($"Save 경로 : {_dir}");
@@ -49,22 +82,80 @@ public class DataManager : MonoBehaviour//, IInitManager
         return true;
     }
 
-    public void LoadGame()
+    /// <summary>
+    /// 게임 세이브 파일을 인덱스로 받아서 부름
+    /// </summary>
+    /// <param name="fileIndex">데이터 메니저의 파일 이름 string index로 파일을 찾음</param>
+    /// <returns>디렉토리에 있는 파일을 return 없을 시 default 파일 return</returns>
+    public void LoadGame(int fileIndex)
     {
-        string fullPath = Application.persistentDataPath + saveDirectory + fileName;
-        SaveData loadedData = new SaveData();
+        string fullPath = Application.persistentDataPath + saveDirectory + gameSaveNames[fileIndex];
+        GameSaveData loadedData = new GameSaveData();
 
         if (File.Exists(fullPath))
         {
             string json = File.ReadAllText(fullPath);
-            loadedData = JsonUtility.FromJson<SaveData>(json);
+            loadedData = JsonUtility.FromJson<GameSaveData>(json);
+            currentSaveData[fileIndex] = loadedData;
         }
 
         else
         {
-            Debug.LogError(message: "Save Data does not exist!");
+            Debug.Log(message: "Save Data does not exist!");
+            currentSaveData[fileIndex] = null;
         }
 
-        currentSaveData = loadedData;
+    }
+    /// <summary>
+    /// 세팅 파일을 디렉토리에서 부름
+    /// </summary>
+    /// <returns>디렉토리에 있는 파일을 return 없을 시 default 파일을 return</returns>
+    public SettingSaveData LoadSetting()
+    {
+        string fullPath = Application.persistentDataPath + saveDirectory + settingfileName;
+        SettingSaveData loadedData = defaultSetting;
+
+        if (File.Exists(fullPath))
+        {
+            string json = File.ReadAllText(fullPath);
+            loadedData = JsonUtility.FromJson<SettingSaveData>(json);
+        }
+
+        else
+        {
+            Debug.Log(message: "Save Data does not exist!");
+        }
+
+        return loadedData;
+    }
+    public bool SaveSetting()
+    {
+        string _dir = Application.persistentDataPath + saveDirectory;
+
+        if (!Directory.Exists (_dir))
+            Directory.CreateDirectory(_dir);
+
+        string json = JsonUtility.ToJson(settingSaveData, prettyPrint : true);
+
+        File.WriteAllText(path : _dir + settingfileName, contents : json);
+        GUIUtility.systemCopyBuffer = _dir;
+        Debug.Log($"세팅 저장 경로 {_dir}");
+
+        return true;
+    }
+
+    public void DeleteGameSave(int fileIndex)
+    {
+        string filePath = Application.persistentDataPath + saveDirectory + gameSaveNames[fileIndex];
+
+        if (File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+
+        else
+        {
+            Debug.Log("해당 파일이 없습니다.");
+        }
     }
 }

@@ -18,7 +18,6 @@ public class ToggleSwitch_UI : MonoBehaviour
 
     [Header("버튼 이벤트")]
     public UnityEvent onToggle_Event;
-    public UnityEvent offToggle_Event;
 
     [SerializeField]
     private float aniDuration;
@@ -31,10 +30,25 @@ public class ToggleSwitch_UI : MonoBehaviour
      * 이전 bool이 저기~ 라면 이 값을 저기~ 라면 이 값을
      */
 
-    private void Start()
+    private void Awake()
     {
         slider = GetComponent<Slider>();
         fill = transform.GetChild(1).GetChild(0).GetComponent<Image>();
+    }
+
+    public void AssignValueToSlider()
+    {
+        if (isOn)
+        {
+            slider.value = 1.0f;
+            fill.color = onColor_Fill;
+        }
+
+        else
+        {
+            slider.value = 0.0f;
+            fill.color = offColor_Fill;
+        }
     }
 
     public void OnClickAni()
@@ -53,16 +67,16 @@ public class ToggleSwitch_UI : MonoBehaviour
         {
             _endValue = 0.0f;
             _endColor = offColor_Fill;
-            offToggle_Event?.Invoke();
         }
 
         else
         {
             _endValue = 1.0f;
             _endColor = onColor_Fill;
-            onToggle_Event?.Invoke();
         }
+
         isOn = !isOn;
+        onToggle_Event?.Invoke();
 
 
 
@@ -74,9 +88,8 @@ public class ToggleSwitch_UI : MonoBehaviour
 
             yield return null;
         }
-
+        
+        fill.color = _endColor;
         slider.value = _endValue;
-
-        Debug.Log("코루틴 종료");
     }
 }
