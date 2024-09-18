@@ -11,6 +11,8 @@ public class PlayerFollowRoot : MonoBehaviour
 
     private void Start()
     {
+        player = Managers.Instance.Game.player.GetComponent<PlayerController>();
+
         transform.position = player.transform.position + defualtCamPos;
     }
 

@@ -5,18 +5,23 @@ using UnityEngine.Audio;
 
 public class DataManager : MonoBehaviour, IInitManager
 {
+    //Save Files
     public GameSaveData[] currentSaveData;
     public SettingSaveData settingSaveData;
     public AudioMixer audioMixer;
+
+    //현재 세이브 파일 index
+    public int currentSaveIndex;
 
     // 세팅 세이브 데이터 만들기
     private SettingSaveData defaultSetting = new SettingSaveData();
     public SettingSaveData DefaultSetting => defaultSetting;
 
+    //file name hardcoding
     public readonly string saveDirectory = "/SaveData/";
     public readonly string[] gameSaveNames = new string[] {"SaveGame0.sav", 
-                                                      "SaveGame1.sav",
-                                                      "SaveGame2.sav"};
+                                                           "SaveGame1.sav",
+                                                           "SaveGame2.sav"};
 
     public readonly string settingfileName = "SettingSave.sav";
 
@@ -80,6 +85,15 @@ public class DataManager : MonoBehaviour, IInitManager
         //씬 로드 같은 경우 등등 save에 이상이 갈 사항이 있다면 체크하여 false를 반환하자.
         
         return true;
+    }
+
+    public void CreateNewGame(int saveFileIndex, string userName)
+    {
+        GameSaveData _newGamedata = new GameSaveData();
+
+        _newGamedata.savePlayerData.name = userName;
+        currentSaveData[saveFileIndex] = _newGamedata;
+        SaveGame(saveFileIndex);
     }
 
     /// <summary>

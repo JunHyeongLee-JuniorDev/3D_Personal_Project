@@ -1,12 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.ShaderGraph;
+using JetBrains.Annotations;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEditor.Rendering.LookDev;
-using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -46,6 +41,10 @@ public class PlayerController : MonoBehaviour
     public Timer meleeBtnTimer { get; private set; }
 
     //Player
+
+    //Stat
+    public PlayerData m_playerData;
+
     //Hide
     [HideInInspector]
     public float m_speed;
@@ -75,14 +74,13 @@ public class PlayerController : MonoBehaviour
     //Player
 
     //Prefabs
-    [field: Header("프리팹")]
-    [field: SerializeField]
     public GameObject lockOnCanvas { get; private set; }
     public float lockOnCanvasScale { get; private set; } = 0.5f;
-    [field: SerializeField]
     public Transform lockOnTarget { get; private set; }
-    [field: SerializeField]
     public Transform lockOnTargetRoot { get; private set; }
+    public FakeSlider_UI hpSlider { get; private set; }
+    public FakeSlider_UI spSlider { get; private set; }
+    public FakeSlider_UI apSlider { get; private set; }
 
     //Enemy Targetting System
     //***************************************************************************
@@ -115,11 +113,16 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        //컴포넌트 캐싱
         m_Controller = GetComponent<CharacterController>();
         m_input = GetComponent<PlayerinputSystem>();
         m_animator = GetComponent<Animator>();
         m_playerInput = GetComponent<PlayerInput>();
         thirdPersonCam = GetComponent<ThirdPersonCam>();
+        //컴포넌트 캐싱
+
+        //스테이트 & 타이머 초기화
+        //m_playerData = Managers.Instance.Data.currentSaveData[Managers.Instance.Data.currentSaveIndex].savePlayerData;
         m_input.player = this; // input에서 player의 상태 bool값 변경
         m_StateMachine = new PlayerStateMachine(this);
         targetBtnTimer = new Timer(0.0f, 0.5f, this);
@@ -129,6 +132,16 @@ public class PlayerController : MonoBehaviour
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
 
+        //프리펩 생성
+        if(lockOnTarget == null)
+        lockOnTarget = new GameObject("EnemyTarget_Locator").transform;
+        if(lockOnTargetRoot == null)
+        lockOnTargetRoot = Managers.Instance.InstantiateResouce("Player/TargetCamRoot", "TargetCamRoot").transform;
+        if(lockOnCanvas == null)
+            lockOnCanvas = Managers.Instance.InstantiateResouce("Player/LockOnCanvas", "LockOnCanvas");
+        //프리펩 생성
+
+        //각 State 생성
         var _locoState = new PlayerLocoState(m_StateMachine);
         var _attackState = new PlayerAttackState(m_StateMachine);
         var _battleState = new PlayerBattleState(m_StateMachine);

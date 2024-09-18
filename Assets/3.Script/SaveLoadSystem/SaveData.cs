@@ -6,6 +6,21 @@ using UnityEngine;
 [Serializable]
 public class GameSaveData
 {
+    public GameSaveData()
+    {
+        savePlayerData = new PlayerData();
+
+        consumeInvData = new InventorySaveData();
+        consumeInvData.slots = new List<InventorySlot>();
+
+        equipmentInvData = new InventorySaveData();
+        equipmentInvData.slots = new List<InventorySlot>();
+
+        missionInvData = new InventorySaveData();
+        missionInvData.slots = new List<InventorySlot>();
+    }
+
+
     public PlayerData savePlayerData;
 
     //모든 몬스터의 데이터를 담을 무언가가 필요
@@ -30,6 +45,9 @@ public class SettingSaveData
 [Serializable]
 public class PlayerData
 {
+    //User Name
+    public string name;
+
     //Physics
     public Vector3 playerPosition;
     public Quaternion playerRotation;
@@ -40,10 +58,10 @@ public class PlayerData
 
     //Stat
     public int level;// 레벨
-    public int life;// 생명력
-    public int strength;// 힘(소드)
-    public int stamina;// 스테미나(도끼, 활)
-    public int intelligence;// 지능(마법)
+    public int lifeStat;// 생명력
+    public int strengthStat;// 힘(소드)
+    public int staminaStat;// 스테미나(도끼, 활)
+    public int intelligenceStat;// 지능(마법)
     public int wallet;//지갑~
 }
 

@@ -5,28 +5,33 @@ using UnityEngine.SceneManagement;
 
 public class SceneManagerEX : MonoBehaviour, IInitManager
 {
+    public BaseScene currentScene { get { return FindObjectOfType<BaseScene>(); } }
     public void Init()
     {
 
     }
+
+    public string GetSceneName(EScene sceneType)
+    {
+        return System.Enum.GetName(typeof(EScene), sceneType);
+    }
+
     public void ChangeScene(EScene scene)
     {
         Managers.Instance.Game.UIGroups.Clear();
-        switch (scene)
-        {
-            case EScene.TITLE:
-                break;
 
-            case EScene.PLAYER:
-                break;
-        }
-        SceneManager.LoadScene((int)scene);
+        SceneManager.LoadScene(GetSceneName(scene));
     }
 
+    public void Clear()
+    {
+        currentScene.Clear();
+    }
 }
 
 public enum EScene
 {
+    UNKNOWN,
     TITLE,
-    PLAYER
+    GAME
 };

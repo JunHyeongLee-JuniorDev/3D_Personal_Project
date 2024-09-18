@@ -27,12 +27,18 @@ public class Title_UIManager : MonoBehaviour
     private Button popupYes_Btn;
     private Button popupNo_Btn;
     private TextMeshProUGUI popup_Text;
+    private TextMeshProUGUI popupWarnning_Text;
+    private TMP_InputField popupInput_InputField;
 
+    //cashing
     private int selectedFileIndex;
+    private string createdUserName = string.Empty;
 
     private void Start()
     {
         popup_Text = popUpPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        popupInput_InputField = popUpPanel.transform.GetChild(3).GetChild(0).GetComponent<TMP_InputField>();
+        popupWarnning_Text = popUpPanel.transform.GetChild(4).GetComponent<TextMeshProUGUI>();
         popupYes_Btn = popUpPanel.transform.GetChild(1).GetComponent<Button>();
         popupNo_Btn = popUpPanel.transform.GetChild(2).GetComponent<Button>();
 
@@ -63,7 +69,6 @@ public class Title_UIManager : MonoBehaviour
         {
             if (_saveDatas[i] == null)
             {
-                Debug.Log("false는 없는 것이냐...");
                 newGameSlots[i].SetActive(true);
                 existGameSlots[i].SetActive(false);
             }
@@ -74,12 +79,17 @@ public class Title_UIManager : MonoBehaviour
                 existGameSlots[i].SetActive(true);
 
                 existGameSlots[i].GetComponentInChildren<TextMeshProUGUI>().text =
+                    $"이름 : {_saveDatas[i].savePlayerData.name}\n" +
                     $"레벨 : {_saveDatas[i].savePlayerData.level}\n" +
                     $"돈 : {_saveDatas[i].savePlayerData.wallet}";
             }
         }
     }
 
+    /// <summary>
+    /// delete 버튼을 popup메뉴의 
+    /// </summary>
+    /// <param name="fileIndex"></param>
     public void OnClickDelete(int fileIndex)
     {
         selectedFileIndex = fileIndex;
@@ -87,6 +97,9 @@ public class Title_UIManager : MonoBehaviour
         Managers.Instance.Game.UIGroups?.Push(popUpPanel);
 
         popup_Text.text = "정말 삭제하시겠습니까?";
+        popupWarnning_Text.text = string.Empty;
+        createdUserName = string.Empty;
+        popupInput_InputField.transform.parent.gameObject.SetActive(false);
         popupYes_Btn.onClick.RemoveAllListeners();
         popupYes_Btn.onClick.AddListener(DeleteSaveFile);
         popupYes_Btn.onClick.AddListener(() =>
@@ -102,17 +115,27 @@ public class Title_UIManager : MonoBehaviour
         Managers.Instance.Game.UIGroups?.Push(popUpPanel);
 
         popup_Text.text = "정말 새 게임을 생성하시겠습니까?";
+        popupWarnning_Text.text = string.Empty;
+        createdUserName = string.Empty;
+        popupInput_InputField.transform.parent.gameObject.SetActive(true);
+        popupInput_InputField.text = string.Empty;
         popupYes_Btn.onClick.RemoveAllListeners();
         popupYes_Btn.onClick.AddListener(CreateNewGame);
-        popupYes_Btn.onClick.AddListener(() =>
-        {
-            Managers.Instance.Game.UIGroups.Pop().SetActive(false);
-        });
     }
 
-    public void OnClickNextScene()
+    /// <summary>
+    /// 개임을 선택했을 시 데이터를 불러오면서 씬 전환하기
+    /// </summary>
+    /// <param name="fileIndex"> 파일의 인덱스를 메개변수로 받아 데이터 메니저에 전달 </param>
+    public void OnClickNextScene(int fileIndex)
     {
-        Managers.Instance.Scene.ChangeScene(EScene.PLAYER);// for debug
+        Managers.Instance.Data.currentSaveIndex = fileIndex;
+        Managers.Instance.Scene.ChangeScene(EScene.GAME);// for debug
+    }
+
+    public void OnEnterUserName()
+    {
+        createdUserName = popupInput_InputField.text;
     }
 
     public void DeleteSaveFile()
@@ -125,8 +148,14 @@ public class Title_UIManager : MonoBehaviour
 
     public void CreateNewGame()
     {
-        Managers.Instance.Data.currentSaveData[selectedFileIndex] = new GameSaveData();
-        Managers.Instance.Data.SaveGame(selectedFileIndex);
+        if (createdUserName.Equals(string.Empty))
+        {
+            popupWarnning_Text.text = "이름을 입력해주세요.";
+            return;
+        }
+
+        Managers.Instance.Game.UIGroups.Pop().SetActive(false);
+        Managers.Instance.Data.CreateNewGame(selectedFileIndex, createdUserName);
         RefreshPlayPanel();
     }
 

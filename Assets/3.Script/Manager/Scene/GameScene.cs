@@ -1,0 +1,32 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class GameScene : BaseScene
+{
+    protected override void Init()
+    {
+        base.Init();
+
+        sceneType = EScene.GAME;
+        Managers.Instance.Inventory.LoadInventory();
+        GameObject _itemCanvas = GameObject.Find("ItemCanvas");
+
+        if( _itemCanvas != null )
+        Managers.Instance.Game.itemCanvas = _itemCanvas.GetComponent<CanvasGroup>();
+
+        else
+            Managers.Instance.Game.itemCanvas = 
+                Managers.Instance.InstantiateResouce("Prefabs/UI/ItemCanvas", "ItemCanvas").GetComponent<CanvasGroup>();
+
+        Managers.Instance.Game.itemCanvas.gameObject.SetActive(false);
+        Managers.Instance.Game.player = FindObjectOfType<PlayerInput>();
+        Managers.Instance.Game.PlayerHud_UI = FindObjectOfType<PlayerHud_UI>();
+    }
+
+    public override void Clear()
+    {
+        
+    }
+}

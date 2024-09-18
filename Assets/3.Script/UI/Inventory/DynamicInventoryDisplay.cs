@@ -22,13 +22,13 @@ public class DynamicInventoryDisplay : MonoBehaviour
         switch (invType_UI)
         {
             case EItemType.GEAR:
-                inventorySystem = InventoryManager.instance.InvSys_Gear;
+                inventorySystem = Managers.Instance.Inventory.InvSys_Gear;
                 break;
             case EItemType.MISSION:
-                inventorySystem = InventoryManager.instance.InvSys_mission;
+                inventorySystem = Managers.Instance.Inventory.InvSys_mission;
                 break;
             case EItemType.CONSUME:
-                inventorySystem = InventoryManager.instance.InvSys_Consume;
+                inventorySystem = Managers.Instance.Inventory.InvSys_Consume;
                 break;
             default:
                 Debug.LogWarning("할당되지 않은 인벤토리 type");

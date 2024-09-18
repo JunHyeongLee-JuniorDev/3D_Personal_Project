@@ -22,25 +22,26 @@ public class PlayerBattleState : PlayerBaseState
 
     public override void Enter()
     {
-        dirToTarget = Vector2.zero;
-
         nearlistEnemy = null;
 
-        battleAniX = 0.0f;
-        battleAniY = 0.0f;
-
-        player.m_Controller.Move(Vector3.zero);
-        player.lockOnCanvas.SetActive(true);
-        inputActions["Look"].started += OnLook;
-        inputActions["Jump"].started += OnRoll;
-        inputActions["Sprint"].Disable();
-        player.thirdPersonCam.enabled = false;
-
-        animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
         AssignTarget(true, true);
 
-        if(player.m_targetEnemy != null)
+        if (player.m_targetEnemy != null)
+        {
+            dirToTarget = Vector2.zero;
             player.cinemachineAnimator.Play("TargetCamera");
+            animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+            player.lockOnCanvas.SetActive(true);
+            player.thirdPersonCam.enabled = false;
+
+            battleAniX = 0.0f;
+            battleAniY = 0.0f;
+
+            player.m_Controller.Move(Vector3.zero);
+            inputActions["Look"].started += OnLook;
+            inputActions["Jump"].started += OnRoll;
+            inputActions["Sprint"].Disable();
+        }
     }
 
     public override void Update()
@@ -64,6 +65,7 @@ public class PlayerBattleState : PlayerBaseState
     public override void LateUpdate()
     {
         base.LateUpdate();
+        if (player.m_targetEnemy == null) return;
 
         Vector3 orignPos = dirToTarget;
         orignPos.y = 0.0f;

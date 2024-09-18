@@ -6,16 +6,14 @@ using System;
 /// 실제 플레이어가 갖고 있는 인벤토리
 /// </summary>
 [Serializable]
-public class InventoryManager : MonoBehaviour // IInitManager
+public class InventoryManager : MonoBehaviour, IInitManager
 {
-    public static InventoryManager instance = null; // For debug
-
     [SerializeField]
-    private int gearInvSize;// 인벤토리 리스트의 크기를 정함
+    private int gearInvSize = 20;// 인벤토리 리스트의 크기를 정함
     [SerializeField]
-    private int consumeInvSize;// 인벤토리 리스트의 크기를 정함
+    private int consumeInvSize = 20;// 인벤토리 리스트의 크기를 정함
     [SerializeField]
-    private int missionInvSize;// 인벤토리 리스트의 크기를 정함
+    private int missionInvSize = 20;// 인벤토리 리스트의 크기를 정함
 
 
     [SerializeField]
@@ -31,21 +29,36 @@ public class InventoryManager : MonoBehaviour // IInitManager
 
     public int wallet;
 
-    public static UnityAction<InventorySystem> OnDynamicInventoryDisplayRequest;// 인벤토리가 UI와 상호작용이 있을 때
-    public void Awake()
+    public UnityAction<InventorySystem> OnDynamicInventoryDisplayRequest;// 인벤토리가 UI와 상호작용이 있을 때
+
+    public void Init()
     {
-        if (instance == null)
+        invSys_Gear = new InventorySystem(gearInvSize);
+        invSys_Consume = new InventorySystem(consumeInvSize);
+        invSys_mission = new InventorySystem(missionInvSize);
+    }
+
+    public void LoadInventory()
+    {
+        GameSaveData _currentSaveData = Managers.Instance.Data.currentSaveData[Managers.Instance.Data.currentSaveIndex];
+
+        invSys_Gear = new InventorySystem(gearInvSize);
+        invSys_Consume = new InventorySystem(consumeInvSize);
+        invSys_mission = new InventorySystem(missionInvSize);
+
+        foreach (InventorySlot item in _currentSaveData.equipmentInvData.slots)
         {
-            instance = this;
-            DontDestroyOnLoad(gameObject);
-            invSys_Gear = new InventorySystem(gearInvSize);
-            invSys_Consume = new InventorySystem(consumeInvSize);
-            invSys_mission = new InventorySystem(missionInvSize);
+            invSys_Gear.AddToInventory(item.ItemData, item.StackSize);
         }
 
-        else
+        foreach (InventorySlot item in _currentSaveData.consumeInvData.slots)
         {
-            Destroy(gameObject);
+            invSys_Consume.AddToInventory(item.ItemData, item.StackSize);
+        }
+
+        foreach (InventorySlot item in _currentSaveData.missionInvData.slots)
+        {
+            invSys_mission.AddToInventory(item.ItemData, item.StackSize);
         }
     }
 }
