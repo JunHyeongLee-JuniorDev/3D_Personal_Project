@@ -33,7 +33,10 @@ public class ToggleSwitch_UI : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
+        Debug.Log(slider);
         fill = transform.GetChild(1).GetChild(0).GetComponent<Image>();
+        Debug.Log(fill);
+        AssignValueToSlider();
     }
 
     public void AssignValueToSlider()

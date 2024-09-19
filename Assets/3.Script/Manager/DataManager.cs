@@ -22,8 +22,10 @@ public class DataManager : MonoBehaviour, IInitManager
     public readonly string[] gameSaveNames = new string[] {"SaveGame0.sav", 
                                                            "SaveGame1.sav",
                                                            "SaveGame2.sav"};
-
     public readonly string settingfileName = "SettingSave.sav";
+
+    public readonly string itemModelPath = "Prefabs/ItemObj";
+    public readonly string[] equipmentModelPaths = new string[] { ""};
 
     public void Init()
     {
@@ -32,6 +34,7 @@ public class DataManager : MonoBehaviour, IInitManager
         defaultSetting.musicVolume = 0.0f;
         defaultSetting.resolutionIndex = Screen.resolutions.Length - 1;
         defaultSetting.urpAssetsIndex = QualitySettings.names.Length - 1;
+        defaultSetting.isFullScreen = true;
 
         currentSaveData = new GameSaveData[gameSaveNames.Length];
 
@@ -90,8 +93,8 @@ public class DataManager : MonoBehaviour, IInitManager
     public void CreateNewGame(int saveFileIndex, string userName)
     {
         GameSaveData _newGamedata = new GameSaveData();
-
         _newGamedata.savePlayerData.name = userName;
+
         currentSaveData[saveFileIndex] = _newGamedata;
         SaveGame(saveFileIndex);
     }

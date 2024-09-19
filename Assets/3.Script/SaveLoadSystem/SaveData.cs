@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
 public class GameSaveData
@@ -9,25 +10,33 @@ public class GameSaveData
     public GameSaveData()
     {
         savePlayerData = new PlayerData();
+        savePlayerData.eqiupments = new InventorySlot[savePlayerData.eqiupmentLength];//3칸으로 하드코딩
 
-        consumeInvData = new InventorySaveData();
-        consumeInvData.slots = new List<InventorySlot>();
+        for (int i = 0; i < savePlayerData.eqiupments.Length; i++)
+        {
+            savePlayerData.eqiupments[i] = new InventorySlot();
+        }
 
-        equipmentInvData = new InventorySaveData();
-        equipmentInvData.slots = new List<InventorySlot>();
+        consumeInvData = new InventorySystem(consumeInvSize);
+        equipmentInvData = new InventorySystem(equipmentInvSize);
+        missionInvData = new InventorySystem(missionInvSize);
 
-        missionInvData = new InventorySaveData();
-        missionInvData.slots = new List<InventorySlot>();
+        monsterSaveDatas = new List<monsterSaveData>();
     }
 
 
     public PlayerData savePlayerData;
 
-    //모든 몬스터의 데이터를 담을 무언가가 필요
+    //모든 몬스터의 데이터를 담을 무언가가 필요 리스트로 저장 전 클리어 후 다시 add
+    public List<monsterSaveData> monsterSaveDatas;
 
-    public InventorySaveData consumeInvData;
-    public InventorySaveData equipmentInvData;
-    public InventorySaveData missionInvData;
+    public InventorySystem consumeInvData;
+    public InventorySystem equipmentInvData;
+    public InventorySystem missionInvData;
+
+    private readonly int consumeInvSize = 20;
+    private readonly int equipmentInvSize = 20;
+    private readonly int missionInvSize = 20;
 }
 
 [Serializable]
@@ -63,18 +72,19 @@ public class PlayerData
     public int staminaStat;// 스테미나(도끼, 활)
     public int intelligenceStat;// 지능(마법)
     public int wallet;//지갑~
+
+    //Gears
+    public readonly int eqiupmentLength = 3;
+    /// <summary>
+    /// (0 : 무기, 1 : 체력, 2 : 마나)
+    /// </summary>
+    public InventorySlot[] eqiupments;
 }
 
-[Serializable]
-public class InventorySaveData
-{
-    public List<InventorySlot> slots;
-}
-
-/// <summary>
-/// 몬스터의 데미지는 하드코딩 되어 있습니다.
-/// </summary>
-[Serializable]
+    /// <summary>
+    /// 몬스터의 데미지는 하드코딩 되어 있습니다.
+    /// </summary>
+    [Serializable]
 public class monsterSaveData
 {
     //Physics
@@ -83,4 +93,5 @@ public class monsterSaveData
 
     //Health
     public float currentHealth;
+    public float maxHealth;
 }

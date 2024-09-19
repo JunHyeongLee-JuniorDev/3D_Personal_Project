@@ -9,9 +9,9 @@ using UnityEngine.UI;
 public class Title_UIManager : MonoBehaviour
 {
     //Each UI Obj
-    [SerializeField] private GameObject loadGame_UI;
-    [SerializeField] private GameObject settings_UI;
-    [SerializeField] private GameObject more_UI;
+    [SerializeField] private FadeInOut_UI loadGame_UI;
+    [SerializeField] private FadeInOut_UI settings_UI;
+    [SerializeField] private FadeInOut_UI more_UI;
 
     //frist selected button
     [SerializeField] private Button titlePlay_Btn;
@@ -21,7 +21,7 @@ public class Title_UIManager : MonoBehaviour
     //objs
     [SerializeField] private GameObject[] newGameSlots;
     [SerializeField] private GameObject[] existGameSlots;
-    [SerializeField] private GameObject popUpPanel;
+    [SerializeField] private FadeInOut_UI popUpPanel;
 
     //popup UI
     private Button popupYes_Btn;
@@ -44,16 +44,16 @@ public class Title_UIManager : MonoBehaviour
 
         popupNo_Btn.onClick.AddListener(() => 
         { 
-            Managers.Instance.Game.UIGroups.Pop().SetActive(false); 
+            Managers.Instance.Game.UIGroupStack.Pop().OnClickFade_Btn(); 
         });
     }
 
     public void OnClickPlay()
     {
-        Managers.Instance.Game.UIGroups?.Push(loadGame_UI);
+        Managers.Instance.Game.UIGroupStack?.Push(loadGame_UI);
 
         RefreshPlayPanel();
-        loadGame_UI.SetActive(true);
+        loadGame_UI.gameObject.SetActive(true);
     }
 
     public void RefreshPlayPanel()
@@ -93,8 +93,8 @@ public class Title_UIManager : MonoBehaviour
     public void OnClickDelete(int fileIndex)
     {
         selectedFileIndex = fileIndex;
-        popUpPanel.SetActive(true);
-        Managers.Instance.Game.UIGroups?.Push(popUpPanel);
+        popUpPanel.gameObject.SetActive(true);
+        Managers.Instance.Game.UIGroupStack?.Push(popUpPanel);
 
         popup_Text.text = "정말 삭제하시겠습니까?";
         popupWarnning_Text.text = string.Empty;
@@ -104,15 +104,15 @@ public class Title_UIManager : MonoBehaviour
         popupYes_Btn.onClick.AddListener(DeleteSaveFile);
         popupYes_Btn.onClick.AddListener(() =>
         {
-            Managers.Instance.Game.UIGroups.Pop().SetActive(false);
+            Managers.Instance.Game.UIGroupStack.Pop().OnClickFade_Btn();
         });
     }
 
     public void OnClickCreate(int fileIndex)
     {
         selectedFileIndex = fileIndex;
-        popUpPanel.SetActive(true);
-        Managers.Instance.Game.UIGroups?.Push(popUpPanel);
+        popUpPanel.gameObject.SetActive(true);
+        Managers.Instance.Game.UIGroupStack?.Push(popUpPanel);
 
         popup_Text.text = "정말 새 게임을 생성하시겠습니까?";
         popupWarnning_Text.text = string.Empty;
@@ -154,29 +154,30 @@ public class Title_UIManager : MonoBehaviour
             return;
         }
 
-        Managers.Instance.Game.UIGroups.Pop().SetActive(false);
+        Managers.Instance.Game.UIGroupStack.Pop().OnClickFade_Btn();
         Managers.Instance.Data.CreateNewGame(selectedFileIndex, createdUserName);
+        OnClickNextScene(selectedFileIndex);
         RefreshPlayPanel();
     }
 
     public void OnClickSettings()
     {
-        Managers.Instance.Game.UIGroups?.Push(settings_UI);
-        settings_UI.SetActive(true);
+        Managers.Instance.Game.UIGroupStack?.Push(settings_UI);
+        settings_UI.gameObject.SetActive(true);
         settingFirst_Btn.Select();
     }
 
     public void OnClickMore()
     {
-        Managers.Instance.Game.UIGroups?.Push(more_UI);
-        more_UI.SetActive(true);
+        Managers.Instance.Game.UIGroupStack?.Push(more_UI);
+        more_UI.gameObject.SetActive(true);
         moreFirst_Btn.Select();
     }
 
     public void ClosePopUp()
     {
-        if (Managers.Instance.Game.UIGroups.Count > 0)
-            Managers.Instance.Game.UIGroups?.Pop().SetActive(false);
+        if (Managers.Instance.Game.UIGroupStack.Count > 0)
+            Managers.Instance.Game.UIGroupStack?.Pop().OnClickFade_Btn();
     }
 
     public void OnClickQuit()

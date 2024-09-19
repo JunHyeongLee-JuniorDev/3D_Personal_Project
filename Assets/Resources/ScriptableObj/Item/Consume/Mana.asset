@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ec3b2a8f9af60b844971625e570406e8, type: 3}
-  m_Name: Stamina
+  m_Name: Mana
   m_EditorClassIdentifier: 
-  displayName: "\uC2A4\uD14C\uBBF8\uB098 \uBB3C\uC57D"
+  displayName: "\uB9C8\uB098 \uBB3C\uC57D"
   description: "\uD65C\uB825\uC744 \uBD81\uB3CB\uC2B5\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: 6592b916f86b19e428db6f6847c7b6dd, type: 3}
   maxStackSize: 8

@@ -18,8 +18,7 @@ public class SceneManagerEX : MonoBehaviour, IInitManager
 
     public void ChangeScene(EScene scene)
     {
-        Managers.Instance.Game.UIGroups.Clear();
-
+        Managers.Instance.Game.UIGroupStack.Clear();
         SceneManager.LoadScene(GetSceneName(scene));
     }
 

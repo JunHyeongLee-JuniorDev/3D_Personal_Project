@@ -11,10 +11,9 @@ public class PopUpButtonManager : MonoBehaviour
     private Slider slider;
 
     [SerializeField]
-    private InputActionMap actionMap;
-
-    [SerializeField]
     private List<GameObject> popupMenus = new List<GameObject>();
+
+    [SerializeField] private Navigation.Mode navigationMode;
 
     private int menuIndex;
 
@@ -30,6 +29,7 @@ public class PopUpButtonManager : MonoBehaviour
     {
         menuIndex = 0;
         popupMenus[0].SetActive(true);
+        SetSelectedDefaultBtn();
     }
 
     public void OnClickMenu_Btn(int index)
@@ -38,16 +38,21 @@ public class PopUpButtonManager : MonoBehaviour
         menuIndex = index;
         popupMenus[index].SetActive(true);
 
-        Navigation newNav = new Navigation();
-        newNav.mode = Navigation.Mode.Explicit;
-
-        newNav.selectOnRight = popupMenus[index].transform.GetChild(0).Find("FirstBtn").GetComponent<Selectable>();
-
         foreach (var btn in buttons)
         {
-            newNav.selectOnUp = btn.navigation.selectOnUp;
-            newNav.selectOnDown = btn.navigation.selectOnDown;
-            btn.navigation = newNav;
+            switch (navigationMode)
+            { 
+                case Navigation.Mode.Vertical:
+                    Navigation newNav = new Navigation();
+                    newNav.mode = Navigation.Mode.Explicit;
+                    newNav.selectOnRight = popupMenus[index].transform.GetChild(0).Find("FirstBtn").GetComponent<Selectable>();
+                    newNav.selectOnUp = btn.navigation.selectOnUp;
+                    newNav.selectOnDown = btn.navigation.selectOnDown;
+                    btn.navigation = newNav;
+                    break;
+                case Navigation.Mode.Horizontal:
+                    break;
+            }
         }
     }
 

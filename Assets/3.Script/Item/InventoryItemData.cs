@@ -14,7 +14,6 @@ public enum EEquipmentType
     AXE,
     SWORD,
     MAGICSTICK,
-    BOW,
     SHIELD
 };
 /// <summary>

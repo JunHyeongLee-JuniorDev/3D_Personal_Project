@@ -82,7 +82,6 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
         //Access display class
         Debug.Log($"{gameObject} 우클릭 눌림");
         parentDisplay?.SlotRightClicked(this);
-        TurnOnSideDisplay();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -90,12 +89,6 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
         // 우클릭 구현
         if(eventData.button.Equals(PointerEventData.InputButton.Right))
         OnUISlotRightClick();
-    }
-
-    private void TurnOnSideDisplay()
-    {
-        // 우클릭 시 띄울 UI 표시 메서드
-        Debug.Log("우클릭 UI를 띄워야한다.");
     }
 }
 

@@ -16,7 +16,6 @@ public class InventorySystem
     public List<InventorySlot> InventorySlots => inventorySlots;
 
     public int InventorySize => InventorySlots.Count;
-    public int Wallet;
 
     public UnityAction<InventorySlot> OnInventorySlotChanged;// 인벤토리 슬롯이 변화 되었다면
 
@@ -86,6 +85,7 @@ public class InventorySystem
          */
         freeSlot = inventorySlots.FirstOrDefault(slot => slot.ItemData == null);
 
+        //null != true, null == false
         return freeSlot != null;
     }
 }

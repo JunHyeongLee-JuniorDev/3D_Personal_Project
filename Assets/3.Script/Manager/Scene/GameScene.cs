@@ -21,8 +21,9 @@ public class GameScene : BaseScene
                 Managers.Instance.InstantiateResouce("Prefabs/UI/ItemCanvas", "ItemCanvas").GetComponent<CanvasGroup>();
 
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(false);
-        Managers.Instance.Game.player = FindObjectOfType<PlayerInput>();
+        Managers.Instance.Game.playerInput = FindObjectOfType<PlayerInput>();
         Managers.Instance.Game.PlayerHud_UI = FindObjectOfType<PlayerHud_UI>();
+        Managers.Instance.Game.CursorLock(true);
     }
 
     public override void Clear()

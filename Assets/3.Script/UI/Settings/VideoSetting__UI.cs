@@ -43,7 +43,6 @@ public class VideoSetting_UI : MonoBehaviour
         fullScreenBtn.isOn = saveData.isFullScreen;
 
         Debug.Log("화면 해상도 인덱스 : " + saveData.resolutionIndex);
-        fullScreenBtn.AssignValueToSlider();
         AssignShownQuality();
     }
 

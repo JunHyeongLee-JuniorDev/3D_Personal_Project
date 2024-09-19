@@ -53,7 +53,7 @@ public class ThirdPersonCam : MonoBehaviour
         m_cinemachineTargetPitch = ClampAngle(m_cinemachineTargetPitch, m_bottomClamp, m_topClamp);
 
         m_cinemachineCamTarget.transform.rotation = Quaternion.Euler(m_cinemachineTargetPitch,
-                                                                   m_cinemachineTargetYaw, 0f);
+                                                m_cinemachineTargetYaw, 0f);
     }
 
     private float ClampAngle(float _lfAngle, float _lfMin, float _lfMax)

@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -40,11 +41,7 @@ public class PlayerController : MonoBehaviour
 
     public Timer meleeBtnTimer { get; private set; }
 
-    //Player
-
-    //Stat
-    public PlayerData m_playerData;
-
+    //Player--------------------------------------------------------------------------------
     //Hide
     [HideInInspector]
     public float m_speed;
@@ -71,7 +68,7 @@ public class PlayerController : MonoBehaviour
     //SerializeField
     [Range(0.0f, 25.0f)]
     public float m_blockAniBlend = 5.0f;
-    //Player
+    //Player--------------------------------------------------------------------------------
 
     //Prefabs
     public GameObject lockOnCanvas { get; private set; }
@@ -136,9 +133,9 @@ public class PlayerController : MonoBehaviour
         if(lockOnTarget == null)
         lockOnTarget = new GameObject("EnemyTarget_Locator").transform;
         if(lockOnTargetRoot == null)
-        lockOnTargetRoot = Managers.Instance.InstantiateResouce("Player/TargetCamRoot", "TargetCamRoot").transform;
+        lockOnTargetRoot = Managers.Instance.InstantiateResouce("Prefabs/Player/TargetCamRoot", "TargetCamRoot").transform;
         if(lockOnCanvas == null)
-            lockOnCanvas = Managers.Instance.InstantiateResouce("Player/LockOnCanvas", "LockOnCanvas");
+            lockOnCanvas = Managers.Instance.InstantiateResouce("Prefabs/Player/LockOnCanvas", "LockOnCanvas");
         //橇府崎 积己
 
         //阿 State 积己
@@ -148,7 +145,6 @@ public class PlayerController : MonoBehaviour
         var _jumpState = new PlayerJumpState(m_StateMachine);
         var _fallState = new PlayerFallState(m_StateMachine);
         //transition from to by condition
-        
 
         //AnyTransition
         m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack));

@@ -6,28 +6,39 @@ using UnityEngine.InputSystem;
 
 public class DynamicInventoryDisplay : MonoBehaviour
 {
+    protected PlayerHud_UI playerHud_UI;
     protected InventorySystem inventorySystem;
     protected Dictionary<InventorySlot_UI, InventorySlot> slotDictionary;
-    protected Transform viewerTransform;
-    [SerializeField] protected InventorySlot_UI slotPrefab;
+    [SerializeField]protected Transform viewerTransform;
+    protected InventorySlot_UI slotPrefab;
 
     public InventorySystem InventorySystem => inventorySystem;
     public Dictionary<InventorySlot_UI, InventorySlot> SlotDictionary => slotDictionary;
 
     [field : SerializeField]
-    public EItemType invType_UI { get; private set; }
+    public InventoryType invType_UI { get; private set; }
+
+    public enum InventoryType
+    { 
+        Equipment,
+        Mission,
+        Consume
+    };
 
     protected virtual void Start()
     {
+        playerHud_UI = GetComponentInParent<PlayerHud_UI>();
+        slotPrefab = Resources.Load<InventorySlot_UI>("Prefabs/InventorySlot_UI");
+
         switch (invType_UI)
         {
-            case EItemType.GEAR:
+            case InventoryType.Equipment:
                 inventorySystem = Managers.Instance.Inventory.InvSys_Gear;
                 break;
-            case EItemType.MISSION:
+            case InventoryType.Mission:
                 inventorySystem = Managers.Instance.Inventory.InvSys_mission;
                 break;
-            case EItemType.CONSUME:
+            case InventoryType.Consume:
                 inventorySystem = Managers.Instance.Inventory.InvSys_Consume;
                 break;
             default:
@@ -38,7 +49,7 @@ public class DynamicInventoryDisplay : MonoBehaviour
         AssignSlot(inventorySystem);
     }
 
-    public void AssignSlot(InventorySystem invToDisplay)
+    public virtual void AssignSlot(InventorySystem invToDisplay)
     {
         slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
 
@@ -65,18 +76,45 @@ public class DynamicInventoryDisplay : MonoBehaviour
         }
     }
 
-    public void SlotRightClicked(InventorySlot_UI clickedUISlot)
-    {
-        if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
-
-        //item 설명을 띄워줌
-    }
 
     public void SlotLeftClicked(InventorySlot_UI clickedUISlot)
     {
         if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
 
-        //아이템 상호작용 UI를 띄워줌
+        switch (clickedUISlot.AssignedInventorySlot.ItemData.ItemType)
+        {
+            case EItemType.CONSUME:
+                Debug.Log("설명 로직 필요");
+                break;
+
+            case EItemType.GEAR:
+                Debug.Log("설명 로직 필요");
+                break;
+
+            case EItemType.MISSION:
+                Debug.Log("설명 로직 필요");
+                break;
+        }
+    }
+    public void SlotRightClicked(InventorySlot_UI clickedUISlot)
+    {
+        if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
+
+        switch (invType_UI)
+        {
+            case InventoryType.Equipment:
+                Debug.Log("우클릭 UI 창 띄우기.");
+                break;
+            case InventoryType.Mission:
+                Debug.Log("우클릭 UI 창 띄우기.");
+                break;
+            case InventoryType.Consume:
+                Debug.Log("우클릭 UI 창 띄우기.");
+                break;
+            default:
+                Debug.LogWarning("할당되지 않은 인벤토리 type");
+                break;
+        }
     }
 
 }

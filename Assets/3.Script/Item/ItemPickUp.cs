@@ -29,7 +29,7 @@ public class ItemPickUp : MonoBehaviour
 
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(true);
         Managers.Instance.Game.itemCanvas.transform.GetChild(0).GetComponent<Image>().sprite = itemData.Icon;
-        Managers.Instance.Game.player.actions["Interaction"].started += PickUp;
+        Managers.Instance.Game.playerInput.actions["Interaction"].started += PickUp;
 
         tweenCash?.Kill();
         tweenCash = Managers.Instance.Game.itemCanvas.DOFade(0.8f, 1.0f).SetLoops(-1,LoopType.Yoyo).SetEase(Ease.Linear);
@@ -42,7 +42,7 @@ public class ItemPickUp : MonoBehaviour
         tweenCash?.Kill();
         interactionCanvas.alpha = 1.0f;
         interactionCanvas.gameObject.SetActive(false);
-        Managers.Instance.Game.player.actions["Interaction"].started -= PickUp;
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
     }
 
     private void PickUp(InputAction.CallbackContext context)
@@ -56,7 +56,7 @@ public class ItemPickUp : MonoBehaviour
                     tweenCash?.Kill();
                     interactionCanvas.alpha = 1.0f;
                     interactionCanvas.gameObject.SetActive(false);
-                    Managers.Instance.Game.player.actions["Interaction"].started -= PickUp;
+                    Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
                     Destroy(gameObject); // µé¾î°¬´Ù¸é Destroy
                 }
                 break;
@@ -68,7 +68,7 @@ public class ItemPickUp : MonoBehaviour
                     tweenCash?.Kill();
                     interactionCanvas.alpha = 1.0f;
                     interactionCanvas.gameObject.SetActive(false);
-                    Managers.Instance.Game.player.actions["Interaction"].started -= PickUp;
+                    Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
                     Destroy(gameObject); // µé¾î°¬´Ù¸é Destroy
                 }
                 break;
@@ -80,7 +80,7 @@ public class ItemPickUp : MonoBehaviour
                     tweenCash?.Kill();
                     interactionCanvas.alpha = 1.0f;
                     interactionCanvas.gameObject.SetActive(false);
-                    Managers.Instance.Game.player.actions["Interaction"].started -= PickUp;
+                    Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
                     Destroy(gameObject); // µé¾î°¬´Ù¸é Destroy
                 }
                 break;

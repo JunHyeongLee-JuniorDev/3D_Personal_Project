@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.UI;
 
+[RequireComponent(typeof(CanvasGroup))]
 public class FadeInOut_UI : MonoBehaviour
 {
     /*
@@ -13,28 +14,29 @@ public class FadeInOut_UI : MonoBehaviour
     private CanvasGroup group;
     private Tween tween;
 
-    private void Start()
+    private void Awake()
     {
         group = GetComponent<CanvasGroup>();
+        group.alpha = 0.0f;
     }
 
     private void OnEnable()
     {
         tween?.Kill();
-        tween = group.DOFade(1.0f, 1.0f);
-    }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.T))// For Debug
-        {
-            OnClickFade_Btn();
-        }
+        tween = group.DOFade(1.0f, 0.5f).SetEase(Ease.OutQuad);
     }
 
     public void OnClickFade_Btn()
     {
         tween?.Kill();
-        tween = group.DOFade(0.0f, 1.0f).OnComplete(() => gameObject.SetActive(false));
+
+        tween = group.DOFade(0.0f, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => gameObject.SetActive(false));
+    }
+
+    private void OnDisable()
+    {
+        tween?.Kill();
+        group.alpha = 0.0f;
     }
 }

@@ -66,16 +66,4 @@ public void OnMove(InputAction.CallbackContext context)
         else if (context.canceled)
         player.isRightClicked = false;
     }
-
-
-    private void OnApplicationFocus(bool focus)
-    {
-        CursorLock();
-    }
-
-    private void CursorLock()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-    }
 }

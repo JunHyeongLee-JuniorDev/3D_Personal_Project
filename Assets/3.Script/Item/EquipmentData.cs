@@ -5,42 +5,46 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Inventory System/Equipment Item")]
 public class EquipmentData : InventoryItemData
 {
-    [SerializeField]
-    private EEquipmentType type;
+    //장비 모델
+    [SerializeField] private GameObject model;
+    public GameObject Model => model;
+
+    //장비 종류
+    [SerializeField] private EEquipmentType type;
     public EEquipmentType Type => type;
 
-    [SerializeField]
-    private int level;
+    //아이템 레벨
+    [SerializeField] private int level;
     public int Level => level;
 
-    [SerializeField]
-    private float state;
-    public float State => state;
+    //아이템 스텟
+    [SerializeField] private float stat;
+    public float Stat => stat;
 
-    [SerializeField]
-    private float reinforceState;
+    //아이템 강화 상승치
+    [SerializeField] private float reinforceStat;
+    public float ReinforceStat => reinforceStat;
 
-    public float ReinforceState => reinforceState;
-
-    [SerializeField]
-    private float buyPrice;
+    //아이템 구매 가격
+    [SerializeField] private float buyPrice;
     public float BuyPrice => buyPrice;
 
-    [SerializeField]
-    private float priceRate;
-    public float PriceRate => priceRate;
+    //아이템 강화시 가격 상승치
+    [SerializeField] private float reinforceRate;
+    public float ReinforceRate => reinforceRate;
 
-    [SerializeField]
-    private float reinforcePrice;
+    //아이템 강화 가격
+    [SerializeField] private float reinforcePrice;
     public float ReinforcePrice => reinforcePrice;
 
     /// <summary>
     /// 레벨 1, 스텟, 강화 가격 상승
     /// </summary>
-    public void reinforce()
+    public void Reinforce()
     {
         level += 1;
-        state *= reinforceState;
-        reinforceState *= priceRate;
+        stat *= reinforceStat;
+        reinforceStat *= reinforceRate;
+        reinforceRate *= reinforcePrice;
     }
 }

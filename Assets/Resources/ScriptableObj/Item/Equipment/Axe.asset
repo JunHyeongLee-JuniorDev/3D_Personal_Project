@@ -24,8 +24,11 @@ MonoBehaviour:
   itemType: 0
   isCanSale: 1
   isCanDrop: 1
+  model: {fileID: 8164283214986944742, guid: 5bcd01e9c23554e4eb1f4629b26162b3, type: 3}
   type: 0
   level: 1
-  state: 25
+  stat: 0
+  reinforceStat: 0
   buyPrice: 1000
+  reinforceRate: 0
   reinforcePrice: 1
