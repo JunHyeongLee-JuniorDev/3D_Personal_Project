@@ -25,9 +25,10 @@ public abstract class BaseScene : MonoBehaviour
         InputActionAsset inputActions = eventSystem.GetComponent<InputSystemUIInputModule>().actionsAsset;
         Managers.Instance.Game.UIInputActions = inputActions;
 
-        inputActions["Cancel"].canceled -= Managers.Instance.Game.OnClickExit_UIGroup;
-        inputActions["Cancel"].canceled += Managers.Instance.Game.OnClickExit_UIGroup;
+        inputActions["Cancel"].started -= Managers.Instance.Game.OnClickExit_UIGroup;
+        inputActions["Cancel"].started += Managers.Instance.Game.OnClickExit_UIGroup;
     }
 
     public abstract void Clear();
+
 }

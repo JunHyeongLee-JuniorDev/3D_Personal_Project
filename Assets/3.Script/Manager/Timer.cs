@@ -5,16 +5,21 @@ using UnityEngine;
 public class Timer 
 {
     private float maxTime;
-    private Coroutine coroutineCash;
+    public Coroutine coroutineCash { get; private set; }
     private MonoBehaviour controller;
 
     public bool isEnd { get; private set; }
 
-    public Timer(float defaultTime, float maxTime, MonoBehaviour monoBehaviour)
+    public Timer(float maxTime, MonoBehaviour monoBehaviour)
     {
         this.maxTime = maxTime;
         controller = monoBehaviour;
         isEnd = true;
+    }
+
+    public void UpdateMaxTime(float maxTime)
+    {
+        this.maxTime = maxTime;
     }
 
     public void StartTimer()

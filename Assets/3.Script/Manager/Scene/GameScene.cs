@@ -22,6 +22,7 @@ public class GameScene : BaseScene
 
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(false);
         Managers.Instance.Game.playerInput = FindObjectOfType<PlayerInput>();
+        Managers.Instance.Game.playerController = Managers.Instance.Game.playerInput.GetComponent<PlayerController>();
         Managers.Instance.Game.PlayerHud_UI = FindObjectOfType<PlayerHud_UI>();
         Managers.Instance.Game.CursorLock(true);
     }

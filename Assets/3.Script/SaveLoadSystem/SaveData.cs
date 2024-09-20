@@ -10,12 +10,6 @@ public class GameSaveData
     public GameSaveData()
     {
         savePlayerData = new PlayerData();
-        savePlayerData.eqiupments = new InventorySlot[savePlayerData.eqiupmentLength];//3칸으로 하드코딩
-
-        for (int i = 0; i < savePlayerData.eqiupments.Length; i++)
-        {
-            savePlayerData.eqiupments[i] = new InventorySlot();
-        }
 
         consumeInvData = new InventorySystem(consumeInvSize);
         equipmentInvData = new InventorySystem(equipmentInvSize);
@@ -51,6 +45,9 @@ public class SettingSaveData
     public float musicVolume; // 음악 볼륨
 }
 
+/// <summary>
+/// PlayerSaveData(health, mana, postion, etc...)
+/// </summary>
 [Serializable]
 public class PlayerData
 {
@@ -74,11 +71,63 @@ public class PlayerData
     public int wallet;//지갑~
 
     //Gears
-    public readonly int eqiupmentLength = 3;
+    public readonly int eqiupmentLength = 4;
     /// <summary>
-    /// (0 : 무기, 1 : 체력, 2 : 마나)
+    /// (0 : 무기, 1 : 체력, 2 : 마나, 3 : 방패)
     /// </summary>
-    public InventorySlot[] eqiupments;
+    public Dictionary<string, InventorySlot> equipments;
+
+    public UnityAction<InventorySlot> OnWeaponChanged;
+
+    public PlayerData()
+    {
+        equipments = new Dictionary<string, InventorySlot>();
+
+        Debug.Log("근데 여긴 당연히 안들어오는거 아닌가?");
+        equipments.Add("Weapon", new InventorySlot());
+        equipments.Add("Shield", new InventorySlot());
+    }
+
+    /// <summary>
+    /// 장비는 착용 소비 아이템은 소비
+    /// </summary>
+    /// <param name="newEquipment"></param>
+    /// <param name="amount"></param>
+    public void UseEquipments(InventoryItemData newEquipment, int amount)
+    {
+        if (newEquipment.ItemType.Equals(EItemType.GEAR))
+        {
+            if((newEquipment as EquipmentData).EquipmentType.Equals(EEquipmentType.SHIELD))
+            {
+                equipments["Shield"].UpdateInventorySlot(newEquipment, amount);
+                return;
+            }
+            equipments["Weapon"].UpdateInventorySlot(newEquipment, amount);
+            return;
+        }
+
+        switch(newEquipment.DisplayName)
+        {
+            case "체력 물약":
+                if (equipments["Heal"].StackSize > 0)
+                    equipments["Heal"].RemoveFromStack(amount);
+                break;
+
+            case "마나 물약":
+                if (equipments["Mana"].StackSize > 0)
+                    equipments["Mana"].RemoveFromStack(amount);
+                break;
+        }
+    }
+
+    public void refillPotion()
+    {
+        ConsumeItemData _itemData = equipments["Heal"].ItemData as ConsumeItemData;
+        equipments["Heal"].AddToStack(_itemData.UpdatableStack);
+
+        _itemData = equipments["Mana"].ItemData as ConsumeItemData;
+        equipments["Mana"].AddToStack(_itemData.UpdatableStack);
+    }
 }
 
     /// <summary>

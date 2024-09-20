@@ -4,12 +4,9 @@ using UnityEngine;
 
 public class PlayerSetDisplayer : MonoBehaviour
 {
-    [SerializeField] private InventorySlot_UI[] equipments;
+    private Dictionary<string, InventorySlot_UI> equipments;
 
     private PlayerHud_UI PlayerHud_UI;
-
-
-    private Dictionary<InventorySlot, InventorySlot_UI> equipmentsDictionary = new Dictionary<InventorySlot, InventorySlot_UI>();
 
     private void Start()
     {
@@ -22,17 +19,30 @@ public class PlayerSetDisplayer : MonoBehaviour
     /// <param name="playerData">플레이어 데이터 내부의 장비 데이터를 불러옴</param>
     public void AssignSlot(PlayerData playerData)
     {
-        for (int i = 0; i < playerData.eqiupmentLength; i++)
-        {
-            equipmentsDictionary.Add(playerData.eqiupments[i], equipments[i]);
-            equipments[i].Init(playerData.eqiupments[i]);
-        }
+        equipments = new Dictionary<string, InventorySlot_UI>();
 
-        Managers.Instance.Inventory.OnDynamicGearSetChanged += UpdateEquipment;
+
+        InventorySlot_UI _uiSlot = transform.GetChild(0).GetComponent<InventorySlot_UI>();
+        _uiSlot.Init(playerData.equipments["Weapon"]);
+        equipments.Add("Weapon", _uiSlot);
+
+        _uiSlot = transform.GetChild(1).GetComponent<InventorySlot_UI>();
+        _uiSlot.Init(playerData.equipments["Heal"]);
+        equipments.Add("Heal", _uiSlot);
+
+        _uiSlot = transform.GetChild(2).GetComponent<InventorySlot_UI>();
+        _uiSlot.Init(playerData.equipments["Mana"]);
+        equipments.Add("Mana", _uiSlot);
+
+        playerData.OnWeaponChanged += SwitchWeapon;
     }
 
-    private void UpdateEquipment(InventorySlot inventorySlot)
+    private void SwitchWeapon(InventorySlot inventorySlot)
     {
-        equipmentsDictionary[inventorySlot].UpdateUISlot(inventorySlot);
+        if (inventorySlot.ItemData.ItemType.Equals(EItemType.GEAR))
+        {
+            equipments["Weapon"].UpdateUISlot(inventorySlot);
+            return;
+        }
     }
 }

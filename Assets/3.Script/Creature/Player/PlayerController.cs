@@ -1,7 +1,6 @@
-using JetBrains.Annotations;
 using System;
 using UnityEngine;
-using UnityEngine.Events;
+using Cinemachine;
 using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
@@ -23,6 +22,7 @@ public class PlayerController : MonoBehaviour
     public PlayerInput m_playerInput { get; private set; }
     public Animator m_animator { get; private set; }
     public Camera m_mainCam { get; private set; }
+    public CinemachineStateDrivenCamera stateDrivenCamera { get; private set; }
     public ThirdPersonCam thirdPersonCam { get; private set; }
     public Animator cinemachineAnimator;
 
@@ -38,8 +38,7 @@ public class PlayerController : MonoBehaviour
     //Timer
     public Timer targetBtnTimer { get; private set; }
     public Timer rollBtnTimer { get; private set; }
-
-    public Timer meleeBtnTimer { get; private set; }
+    public Timer attackBtnTimer { get; private set; }
 
     //Player--------------------------------------------------------------------------------
     //Hide
@@ -96,16 +95,15 @@ public class PlayerController : MonoBehaviour
         if (m_mainCam == null)
         {
             m_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-            cinemachineAnimator = m_mainCam.gameObject.GetComponentInChildren<Animator>();
-
-            if (cinemachineAnimator == null)
-                Debug.Log("시네머신 할당 X");
         }
 
         if (m_PhysicsData == null)
         {
             m_PhysicsData = Resources.Load<PlayerSO>(playerDataPath);
         }
+
+        cinemachineAnimator = m_mainCam.GetComponentInChildren<Animator>();
+        stateDrivenCamera = m_mainCam.GetComponentInChildren<CinemachineStateDrivenCamera>();
     }
 
     private void Start()
@@ -119,13 +117,11 @@ public class PlayerController : MonoBehaviour
         //컴포넌트 캐싱
 
         //스테이트 & 타이머 초기화
-        //m_playerData = Managers.Instance.Data.currentSaveData[Managers.Instance.Data.currentSaveIndex].savePlayerData;
         m_input.player = this; // input에서 player의 상태 bool값 변경
         m_StateMachine = new PlayerStateMachine(this);
-        targetBtnTimer = new Timer(0.0f, 0.5f, this);
-        rollBtnTimer = new Timer(0.0f, 1.0f, this);
-        meleeBtnTimer = new Timer(0.0f, 0.5f, this);
-
+        targetBtnTimer = new Timer(0.5f, this);
+        rollBtnTimer = new Timer(1.0f, this);
+        attackBtnTimer = new Timer(0.5f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
 
@@ -136,6 +132,14 @@ public class PlayerController : MonoBehaviour
         lockOnTargetRoot = Managers.Instance.InstantiateResouce("Prefabs/Player/TargetCamRoot", "TargetCamRoot").transform;
         if(lockOnCanvas == null)
             lockOnCanvas = Managers.Instance.InstantiateResouce("Prefabs/Player/LockOnCanvas", "LockOnCanvas");
+
+        foreach (var camera in stateDrivenCamera.ChildCameras)
+        {//카메라 할당
+            if (camera.name.Equals("targetCamera"))
+            {
+                camera.Follow = lockOnTargetRoot;
+            }
+        }
         //프리펩 생성
 
         //각 State 생성

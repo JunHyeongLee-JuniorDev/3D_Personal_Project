@@ -9,14 +9,32 @@ public class PlayerAttackState : PlayerBaseState
     {
 
     }
-    private int attackIndex;
 
+    private string[] attackAniClips;
+    private int attackIndex = 0;
+    private int maxAttackIndex = 0;
     public override void Enter()
     {
         base.Enter();
         attackIndex = 0;
-        player.meleeBtnTimer.StartTimer();
-        animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);
+
+        if ((Managers.Instance.Inventory.PlayerData.equipments["Weapon"].ItemData == null))
+        {
+            attackAniClips = player.m_aniData.meleeAtackClips;
+            player.attackBtnTimer.UpdateMaxTime(0.5f);
+        }
+
+        else
+        {
+            attackAniClips = (Managers.Instance.Inventory.PlayerData.equipments["weapon"].ItemData as EquipmentData).AnimationClips;
+            player.attackBtnTimer.UpdateMaxTime((Managers.Instance.Inventory.PlayerData.equipments["weapon"].ItemData as EquipmentData).ComboBtnCoolTime);
+        }
+
+        attackIndex = 0;
+        maxAttackIndex = attackAniClips.Length;
+
+        player.attackBtnTimer.StartTimer();
+        animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
         inputActions["Move"].Disable();
         inputActions["Sprint"].Disable();
@@ -51,7 +69,6 @@ public class PlayerAttackState : PlayerBaseState
     public override void Exit()
     {
         base.Exit();
-        attackIndex = 0;
         inputActions["Fire"].started -= OnFire;
         inputActions["Move"].Enable();
         inputActions["Sprint"].Enable();
@@ -71,13 +88,13 @@ public class PlayerAttackState : PlayerBaseState
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (player.meleeBtnTimer.isEnd)
+        if (player.attackBtnTimer.isEnd)
         {
-            player.meleeBtnTimer.StartTimer();
-            animator.CrossFade(player.m_aniData._comboClip[attackIndex++], 0.2f);
+          player.attackBtnTimer.StartTimer();
+            animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
         }
-
-        if (attackIndex >= player.m_aniData._comboClip.Length)
+        
+        if (attackIndex >= maxAttackIndex)
             attackIndex = 0;
     }
 }

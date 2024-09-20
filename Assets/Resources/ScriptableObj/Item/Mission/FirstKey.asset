@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: FirstKey
   m_EditorClassIdentifier: 
   displayName: "\uC131\uBB38 \uC5F4\uC1E0"
-  description: 
+  description: "\uC870\uC601\uC900 \uBC31\uC791\uC758 \uC9D1 \uC5F4\uC1E0"
+  effectString: "\uC131\uBB38\uC744 \uC5FD\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: c705f913005feb7499c34a30f99a08f9, type: 3}
   maxStackSize: 1
   itemType: 0

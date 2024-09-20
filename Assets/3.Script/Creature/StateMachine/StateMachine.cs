@@ -12,7 +12,7 @@ public abstract class StateMachine
 
     protected StateNode current;
     protected Dictionary<Type, StateNode> nodes = new Dictionary<Type, StateNode>();
-    protected HashSet<ITransition> anyTransitions = new HashSet<ITransition>(); 
+    protected HashSet<ITransition> anyTransitions = new HashSet<ITransition>();
 
     /// <summary>
     /// 각 노드 별로 각 상태 저장 HashSet으로 Transition 조건 저장

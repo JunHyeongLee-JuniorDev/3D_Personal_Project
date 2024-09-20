@@ -86,5 +86,8 @@ public class InventorySlot
     public void RemoveFromStack(int amount)
     {
         stackSize -= amount;
+
+        if(stackSize <= 0)
+            ClearSlot();
     }
 }

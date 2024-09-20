@@ -17,16 +17,21 @@ MonoBehaviour:
     \uC2E4\uC218 \uD22C\uC131\uC774\uC758 \uB300\uC7A5\uC7A5\uC774\uAC00 \uB9CC\uB4E4\uC5C8\uC9C0\uB9CC
     \uB9CE\uC740 \uC0AC\uB78C\uC744 \uBCA0\uC5B4\uB0B4\uC5B4 \uBA85\uAC80\uC73C\uB85C
     \uBD88\uB9BD\uB2C8\uB2E4."
+  effectString: 
   icon: {fileID: 21300000, guid: 4ad16adfdf2d1a441879a598de742eb6, type: 3}
   maxStackSize: 1
   itemType: 0
   isCanSale: 1
   isCanDrop: 1
   model: {fileID: 8464679834358705886, guid: 7b02e38c28ae7bc40b7f6c758b47443f, type: 3}
-  type: 1
+  equipmentType: 1
   level: 1
   stat: 0
   reinforceStat: 0
   buyPrice: 1000
   reinforceRate: 0
   reinforcePrice: 1
+  skillstring: "\uD45C\uD6A8"
+  animationClips:
+  - Base Layer.Attack.Sword And Shield Slash1
+  - Base Layer.Attack.Sword And Shield Slash2

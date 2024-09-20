@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class DynamicInventoryDisplay : MonoBehaviour
 {
-    protected PlayerHud_UI playerHud_UI;
+    [SerializeField]protected PlayerHud_UI playerHud_UI;
     protected InventorySystem inventorySystem;
     protected Dictionary<InventorySlot_UI, InventorySlot> slotDictionary;
     [SerializeField]protected Transform viewerTransform;
@@ -27,7 +27,6 @@ public class DynamicInventoryDisplay : MonoBehaviour
 
     protected virtual void Start()
     {
-        playerHud_UI = GetComponentInParent<PlayerHud_UI>();
         slotPrefab = Resources.Load<InventorySlot_UI>("Prefabs/InventorySlot_UI");
 
         switch (invType_UI)
@@ -84,37 +83,24 @@ public class DynamicInventoryDisplay : MonoBehaviour
         switch (clickedUISlot.AssignedInventorySlot.ItemData.ItemType)
         {
             case EItemType.CONSUME:
-                Debug.Log("설명 로직 필요");
+                playerHud_UI.consumeDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.ItemData);
                 break;
 
             case EItemType.GEAR:
-                Debug.Log("설명 로직 필요");
+                playerHud_UI.gearDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.ItemData);
                 break;
 
             case EItemType.MISSION:
-                Debug.Log("설명 로직 필요");
+                playerHud_UI.missionDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.ItemData);
                 break;
         }
     }
     public void SlotRightClicked(InventorySlot_UI clickedUISlot)
     {
         if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
-
-        switch (invType_UI)
-        {
-            case InventoryType.Equipment:
-                Debug.Log("우클릭 UI 창 띄우기.");
-                break;
-            case InventoryType.Mission:
-                Debug.Log("우클릭 UI 창 띄우기.");
-                break;
-            case InventoryType.Consume:
-                Debug.Log("우클릭 UI 창 띄우기.");
-                break;
-            default:
-                Debug.LogWarning("할당되지 않은 인벤토리 type");
-                break;
-        }
+        Managers.Instance.Game.UIGroupStack.Push(playerHud_UI.mouseItemControl.GetComponent<FadeInOut_UI>());
+        playerHud_UI.mouseItemControl.gameObject.SetActive(true);
+        playerHud_UI.mouseItemControl.UpdateMouseStat(clickedUISlot.AssignedInventorySlot);
     }
 
 }

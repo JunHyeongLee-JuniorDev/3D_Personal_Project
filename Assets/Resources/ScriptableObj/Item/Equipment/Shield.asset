@@ -15,16 +15,21 @@ MonoBehaviour:
   displayName: "\uD669\uAE08 \uBC29\uD328"
   description: "\uBB34\uB2AC\uB294 \uD654\uB824\uD558\uC9C0\uB9CC \uC704\uB825\uC740
     \uD3C9\uBC94\uD55C \uBC29\uD328\uC785\uB2C8\uB2E4."
+  effectString: 
   icon: {fileID: 0}
   maxStackSize: 0
   itemType: 0
   isCanSale: 1
   isCanDrop: 1
   model: {fileID: 704519027706757440, guid: 9e46dcb51f3dd02449573609374bece1, type: 3}
-  type: 4
+  equipmentType: 3
   level: 1
   stat: 0
   reinforceStat: 0
   buyPrice: 500
   reinforceRate: 0
   reinforcePrice: 1
+  skillstring: "\uC644\uBCBD\uD55C \uB9C9\uAE30"
+  animationClips:
+  - Base Layer.Attack.Sword And Shield Slash1
+  - Base Layer.Attack.Sword And Shield Slash2

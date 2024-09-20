@@ -57,6 +57,7 @@ public class ItemPickUp : MonoBehaviour
                     interactionCanvas.alpha = 1.0f;
                     interactionCanvas.gameObject.SetActive(false);
                     Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
+                    Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
                     Destroy(gameObject); // µé¾î°¬´Ù¸é Destroy
                 }
                 break;
@@ -69,6 +70,7 @@ public class ItemPickUp : MonoBehaviour
                     interactionCanvas.alpha = 1.0f;
                     interactionCanvas.gameObject.SetActive(false);
                     Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
+                    Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
                     Destroy(gameObject); // µé¾î°¬´Ù¸é Destroy
                 }
                 break;
@@ -81,6 +83,7 @@ public class ItemPickUp : MonoBehaviour
                     interactionCanvas.alpha = 1.0f;
                     interactionCanvas.gameObject.SetActive(false);
                     Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
+                    Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
                     Destroy(gameObject); // µé¾î°¬´Ù¸é Destroy
                 }
                 break;

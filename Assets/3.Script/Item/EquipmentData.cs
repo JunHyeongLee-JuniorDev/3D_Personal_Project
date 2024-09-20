@@ -1,3 +1,4 @@
+using DG.Tweening.Plugins;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,8 +11,8 @@ public class EquipmentData : InventoryItemData
     public GameObject Model => model;
 
     //장비 종류
-    [SerializeField] private EEquipmentType type;
-    public EEquipmentType Type => type;
+    [SerializeField] private EEquipmentType equipmentType;
+    public EEquipmentType EquipmentType => equipmentType;
 
     //아이템 레벨
     [SerializeField] private int level;
@@ -36,6 +37,29 @@ public class EquipmentData : InventoryItemData
     //아이템 강화 가격
     [SerializeField] private float reinforcePrice;
     public float ReinforcePrice => reinforcePrice;
+
+    //아이템 스킬 string
+    [SerializeField] private string skillstring;
+
+    public string Skillstring => skillstring;
+
+    [SerializeField] private int comboBtnCoolTime;
+    public int ComboBtnCoolTime => comboBtnCoolTime;
+
+    [TextArea(1, 4)]
+    [SerializeField] private string[] animationClips;
+    public string[] AnimationClips
+    {
+        get { return animationClips; }
+    }
+
+    [TextArea(1, 4)]
+    [SerializeField] private string skillAniClip;
+
+    public string SkillAniClip
+    {
+        get { return skillAniClip; }
+    }
 
     /// <summary>
     /// 레벨 1, 스텟, 강화 가격 상승

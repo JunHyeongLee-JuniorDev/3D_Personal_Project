@@ -7,15 +7,13 @@ public enum EPlayerAni
 {
     LOCO,
     LOCOSPEED,
-    ATTACK,
-    MELEEATTACK1,
-    MELEEATTACK2,
     JUMP,
     RUNJUMP,
     FALL,
     BATTLE,
     BLOCK,
-    ROLL
+    ROLL,
+    GRAB
 };
 
 /// <summary>
@@ -41,7 +39,7 @@ public class PlayerAnimationDataBase
     public Dictionary<EPlayerAni, int> _DTaniClipID { get; private set; }
     public Dictionary<EPlayerAniParam, int> _DTaniBoolID { get; private set; }
 
-    public int[] _comboClip = new int[2];
+    public string[] meleeAtackClips;
 
     /// <summary>
     /// Initialize 애니메이션 데이터를 Hash값으로 바꿈
@@ -56,16 +54,16 @@ public class PlayerAnimationDataBase
 
         _DTaniClipID = new Dictionary<EPlayerAni, int>();
         _DTaniBoolID = new Dictionary<EPlayerAniParam, int>();
+        meleeAtackClips = new string[2];
 
         //Clip ID
-        _DTaniClipID.Add(EPlayerAni.LOCO, Animator.StringToHash("Base Layer.Loco"));
+        _DTaniClipID.Add(EPlayerAni.LOCO, Animator.StringToHash("Base Layer.LocoState.Loco"));
+        _DTaniClipID.Add(EPlayerAni.GRAB, Animator.StringToHash("Base Layer.LocoState.GetItem"));
         _DTaniClipID.Add(EPlayerAni.LOCOSPEED, Animator.StringToHash("Speed"));
-        _DTaniClipID.Add(EPlayerAni.MELEEATTACK1, Animator.StringToHash("Base Layer.Attack.Sword And Shield Slash1"));
-        _DTaniClipID.Add(EPlayerAni.MELEEATTACK2, Animator.StringToHash("Base Layer.Attack.Sword And Shield Slash2"));
         _DTaniClipID.Add(EPlayerAni.JUMP, Animator.StringToHash("Base Layer.InAir.Jump"));
         _DTaniClipID.Add(EPlayerAni.RUNJUMP, Animator.StringToHash("Base Layer.InAir.RunningJump"));
         _DTaniClipID.Add(EPlayerAni.BATTLE, Animator.StringToHash("Base Layer.Battle.Battle"));
-        _DTaniClipID.Add(EPlayerAni.BLOCK, Animator.StringToHash("Upper.Sword And Shield Block"));
+        _DTaniClipID.Add(EPlayerAni.BLOCK, Animator.StringToHash("LeftHand.Sword And Shield Block"));
         _DTaniClipID.Add(EPlayerAni.ROLL, Animator.StringToHash("Base Layer.Battle.Stand To Roll"));
 
         //Ani Parameter
@@ -74,8 +72,5 @@ public class PlayerAnimationDataBase
         _DTaniBoolID.Add(EPlayerAniParam.BATTLEX, Animator.StringToHash("BattleX"));
         _DTaniBoolID.Add(EPlayerAniParam.BATTLEY, Animator.StringToHash("BattleY"));
 
-        //combo clip
-        _comboClip[0] = _DTaniClipID[EPlayerAni.MELEEATTACK1];
-        _comboClip[1] = _DTaniClipID[EPlayerAni.MELEEATTACK2];
     }
 }

@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: SecondKey
   m_EditorClassIdentifier: 
   displayName: "\uB3D9\uCABD \uC131\uBB38 \uC5F4\uC1E0"
-  description: 
+  description: "\uB4DC\uC6CC\uD504\uAC00 \uB9CC\uB4E0 \uBB38\uC758 \uC5F4\uC1E0"
+  effectString: "\uB3D9\uCABD \uBB38\uC744 \uC5EC\uB294 \uC5F4\uC1E0\uC785\uB2C8\uB2E4."
   icon: {fileID: 21300000, guid: 4e4c73965b9df4a46a0c3f48a0d33705, type: 3}
   maxStackSize: 1
   itemType: 0

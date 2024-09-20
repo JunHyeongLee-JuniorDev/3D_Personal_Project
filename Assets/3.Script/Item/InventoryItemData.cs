@@ -13,7 +13,7 @@ public enum EEquipmentType
 {
     AXE,
     SWORD,
-    MAGICSTICK,
+    MAGIC,
     SHIELD
 };
 /// <summary>
@@ -30,6 +30,9 @@ public class InventoryItemData : ScriptableObject
     [SerializeField]
     protected string description;
     public string Description => description;
+    [SerializeField]
+    protected string effectString;
+    public string EffectString => effectString;
 
     [SerializeField]
     protected Sprite icon;

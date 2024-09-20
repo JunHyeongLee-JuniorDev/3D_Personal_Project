@@ -31,8 +31,9 @@ public class InventoryManager : MonoBehaviour, IInitManager
 
     public int wallet; // 지갑!
 
-    public UnityAction<InventorySlot> OnDynamicGearSetChanged;// 장비를 착용 혹은 사용했을 경우
-    public UnityAction<InventorySystem> OnDynamicInventoryDisplayRequest;// 인벤토리가 UI와 상호작용이 있을 때
+
+    public UnityAction OnDynamicWeaponChanged;
+    public UnityAction OnDynamicInventoryChanged;
 
     public void Init()
     {

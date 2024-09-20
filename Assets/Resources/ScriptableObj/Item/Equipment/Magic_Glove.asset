@@ -10,22 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 262a235404db136408704b71d3d68f27, type: 3}
-  m_Name: Magic_Wand
+  m_Name: Magic_Glove
   m_EditorClassIdentifier: 
   displayName: "\uD604\uC790\uC758 \uC9C0\uD321\uC774"
   description: "\uB108\uBB34 \uC624\uB798\uB41C \uC9C0\uD321\uC774\uB85C \uC8FC\uC778\uC774
     \uB204\uAD70\uC9C0 \uC870\uCC28 \uBAA8\uB985\uB2C8\uB2E4. \uD558\uC9C0\uB9CC
     \uADF8 \uC704\uB825\uB9CC\uD07C\uC740 \uBB34\uC2DC\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
-  icon: {fileID: 21300000, guid: 23e3487bd159e544bbce0a44b6faadc4, type: 3}
+  effectString: 
+  icon: {fileID: 21300000, guid: c49db764686ae57449a25be7397a31d1, type: 3}
   maxStackSize: 1
   itemType: 0
   isCanSale: 1
   isCanDrop: 1
   model: {fileID: 1945844888486271477, guid: 1725b29fe9fa3c5418f4f65a729ee9f1, type: 3}
-  type: 2
+  equipmentType: 2
   level: 1
   stat: 0
   reinforceStat: 0
   buyPrice: 2000
   reinforceRate: 0
   reinforcePrice: 1
+  skillstring: "\uD30C\uC774\uC5B4"
+  animationString:
+  - 

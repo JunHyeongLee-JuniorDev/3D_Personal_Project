@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour, IInitManager
 
     //Obj
     public CanvasGroup itemCanvas;
+    public PlayerController playerController;
     public PlayerInput playerInput;
     public PlayerHud_UI PlayerHud_UI;
     public InputActionAsset UIInputActions;
@@ -21,7 +22,7 @@ public class GameManager : MonoBehaviour, IInitManager
     {
         if (UIGroupStack.Count > 0)
         {
-            UIGroupStack.Pop().OnClickFade_Btn();
+            UIGroupStack.Pop()?.OnClickFade_Btn();
 
             if (playerInput != null &&
                 UIGroupStack.Count == 0)

@@ -6,8 +6,14 @@ using UnityEngine.InputSystem;
 
 public class PlayerLocoState : PlayerBaseState
 {
+    private Timer itemGrabAniTimer;
+    private bool isGrabAniOn;
+
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine) 
     {
+        Managers.Instance.Inventory.OnDynamicInventoryChanged += GrabItem;
+        itemGrabAniTimer = new Timer(1.0f, player);
+        isGrabAniOn = false;
     }
 
     public override void Enter()
@@ -40,7 +46,7 @@ public class PlayerLocoState : PlayerBaseState
         Move();
         Jump();
         Gravity();
-        UpperBodyAni();
+        ShieldAni();
 
         if (player.isGrouded)
         player.m_animator.SetFloat(DTAniClipID[EPlayerAni.LOCOSPEED], player.m_animationBlend);
@@ -49,6 +55,7 @@ public class PlayerLocoState : PlayerBaseState
     public override void Exit()
     {
         base.Exit();
+        isGrabAniOn = false;
     }
 
     
@@ -57,8 +64,22 @@ public class PlayerLocoState : PlayerBaseState
         base.PhysicsUpdate();
     }
 
-    private void UpperBodyAni()
+    public override void SetAniBool()
     {
+        base.SetAniBool();
+
+        if (isGrabAniOn && itemGrabAniTimer.isEnd)
+        {
+            isGrabAniOn = false;
+            Debug.Log("다시 로코로~");
+            animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+        }
+    }
+
+    private void ShieldAni()
+    {
+        if (Managers.Instance.Inventory.PlayerData.equipments["Shield"].ItemData == null) return;
+
         if (player.isRightClicked)
         {
             player.m_blockWeight = Mathf.Lerp(player.m_blockWeight, 1f, player.m_blockAniBlend * Time.deltaTime);
@@ -70,5 +91,12 @@ public class PlayerLocoState : PlayerBaseState
             player.m_blockWeight = Mathf.Lerp(player.m_blockWeight, 0f, player.m_blockAniBlend * Time.deltaTime);
             animator.SetLayerWeight(1, player.m_blockWeight);
         }
+    }
+
+    private void GrabItem()
+    {
+        itemGrabAniTimer.StartTimer();
+        isGrabAniOn = true;
+        animator.CrossFade(DTAniClipID[EPlayerAni.GRAB], 0.1f);
     }
 }
