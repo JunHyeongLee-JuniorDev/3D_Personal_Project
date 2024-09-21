@@ -33,6 +33,7 @@ public class PlayerFallState : PlayerBaseState
 
 
         Move();
+        Jump();
         Gravity();
     }
 

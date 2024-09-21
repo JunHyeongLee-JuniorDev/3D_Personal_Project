@@ -92,15 +92,14 @@ public class DataManager : MonoBehaviour, IInitManager
 
     public void CreateNewGame(int saveFileIndex, string userName)
     {
+        ConsumeItemData initHealPotion = Resources.Load<ConsumeItemData>("ScriptableObj/Item/Consume/Heal");
+        ConsumeItemData initManaPotion = Resources.Load<ConsumeItemData>("ScriptableObj/Item/Consume/Mana");
         GameSaveData _newGamedata = new GameSaveData();
+        _newGamedata.savePlayerData = new PlayerData(new InventorySlot(initHealPotion, initHealPotion.UpdatableStack),
+                                                     new InventorySlot(initManaPotion, initManaPotion.MaxStackSize));
         _newGamedata.savePlayerData.name = userName;
 
-        ConsumeItemData consumeItemData = Resources.Load<ConsumeItemData>("ScriptableObj/Item/Consume/Heal");
-        _newGamedata.savePlayerData.equipments.Add("Heal", new InventorySlot(consumeItemData, consumeItemData.UpdatableStack));
-        consumeItemData = Resources.Load<ConsumeItemData>("ScriptableObj/Item/Consume/Mana");
-        _newGamedata.savePlayerData.equipments.Add("Mana", new InventorySlot(consumeItemData, consumeItemData.UpdatableStack));
         currentSaveData[saveFileIndex] = _newGamedata;
-        Debug.Log("积己等 霸烙 单捞磐" + currentSaveData[saveFileIndex].savePlayerData.equipments.Count);
         SaveGame(saveFileIndex);
     }
 
@@ -112,12 +111,11 @@ public class DataManager : MonoBehaviour, IInitManager
     public void LoadGame(int fileIndex)
     {
         string fullPath = Application.persistentDataPath + saveDirectory + gameSaveNames[fileIndex];
-        GameSaveData loadedData = new GameSaveData();
 
         if (File.Exists(fullPath))
         {
             string json = File.ReadAllText(fullPath);
-            loadedData = JsonUtility.FromJson<GameSaveData>(json);
+            GameSaveData loadedData = JsonUtility.FromJson<GameSaveData>(json);
             currentSaveData[fileIndex] = loadedData;
         }
 

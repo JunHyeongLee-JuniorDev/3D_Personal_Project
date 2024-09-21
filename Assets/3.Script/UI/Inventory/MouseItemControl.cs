@@ -89,12 +89,12 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                     assignedItem.ClearSlot();
                     Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.Invoke(newItemData);
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
-                    if (Managers.Instance.Inventory.PlayerData.equipments["Weapon"]
+                    if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon]
                     .Equals(assignedItem))
                     {
-                        Managers.Instance.Inventory.PlayerData.equipments["Weapon"].ClearSlot();
+                        Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ClearSlot();
                         Managers.Instance.Inventory.PlayerData.OnWeaponChanged?
-                        .Invoke(Managers.Instance.Inventory.PlayerData.equipments["Weapon"]);
+                        .Invoke(Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon]);
                     }
                     OnClickClose();
                 });

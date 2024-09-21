@@ -12,13 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 262a235404db136408704b71d3d68f27, type: 3}
   m_Name: Axe
   m_EditorClassIdentifier: 
-  displayName: "\uBB18\uC9C0\uAE30 \uB3C4\uB07C"
-  description: "\uC800\uC8FC\uBC1B\uC740 \uB300\uC7A5\uAC04\uC5D0\uC11C \uB9CC\uB4E4\uC5B4\uC9C4
-    \uC774 \uAC70\uB300\uD55C \uB3C4\uB07C\uB294 \uC801\uB4E4\uC758 \uD53C\uB85C
-    \uBB3C\uB4E4\uC5B4 \uC788\uC2B5\uB2C8\uB2E4. \uD718\uB450\uB97C \uB54C\uB9C8\uB2E4
-    \uB3C4\uB07C\uC5D0 \uAC07\uD78C \uC601\uD63C\uB4E4\uC774 \uD480\uB824\uB098\uBA70,
-    \uADF8\uB4E4\uC758 \uACE0\uD1B5\uC2A4\uB7EC\uC6B4 \uBE44\uBA85\uC774 \uC804\uC7A5\uC744
-    \uC6B8\uB824 \uD37C\uC9C0\uAC8C \uD569\uB2C8\uB2E4."
+  displayName: "\uD669\uAE08 \uB3C4\uB07C"
+  description: "\uACE0\uB300 \uC804\uC7C1\uC758 \uC2E0\uC774 \uC0AC\uC6A9\uD588\uB2E4\uACE0
+    \uC804\uD574\uC9C0\uB294 \uB3C4\uB07C\uB85C, \uD718\uB450\uB97C \uB54C\uB9C8\uB2E4
+    \uC801\uC758 \uD53C\uB97C \uB9C8\uC154 \uD30C\uAD34\uC801\uC778 \uD798\uC744
+    \uBC1C\uD718\uD55C\uB2E4."
   effectString: 
   icon: {fileID: 21300000, guid: 97eb33f17282b874aafc04781652f343, type: 3}
   maxStackSize: 1
@@ -26,13 +24,14 @@ MonoBehaviour:
   isCanSale: 1
   isCanDrop: 1
   model: {fileID: 8164283214986944742, guid: 5bcd01e9c23554e4eb1f4629b26162b3, type: 3}
-  equipmentType: 0
+  weaponType: 0
   level: 1
-  stat: 0
+  stat: 15
   reinforceStat: 0
   buyPrice: 1000
   reinforceRate: 0
-  reinforcePrice: 1
+  reinforcePrice: 0
   skillstring: "\uBC88\uAC1C"
-  animationString:
-  - 
+  comboBtnCoolTime: 0
+  animationClips: []
+  skillAniClip: 

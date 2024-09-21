@@ -3,16 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "Inventory System/Equipment Item")]
-public class EquipmentData : InventoryItemData
+[CreateAssetMenu(menuName = "Inventory System/Weapon Item")]
+public class WeaponData : InventoryItemData
 {
     //장비 모델
     [SerializeField] private GameObject model;
     public GameObject Model => model;
 
     //장비 종류
-    [SerializeField] private EEquipmentType equipmentType;
-    public EEquipmentType EquipmentType => equipmentType;
+    [SerializeField] private EWeaponType weaponType;
+    public EWeaponType WeaponType => weaponType;
 
     //아이템 레벨
     [SerializeField] private int level;
@@ -43,8 +43,8 @@ public class EquipmentData : InventoryItemData
 
     public string Skillstring => skillstring;
 
-    [SerializeField] private int comboBtnCoolTime;
-    public int ComboBtnCoolTime => comboBtnCoolTime;
+    [SerializeField] private float comboBtnCoolTime;
+    public float ComboBtnCoolTime => comboBtnCoolTime;
 
     [TextArea(1, 4)]
     [SerializeField] private string[] animationClips;

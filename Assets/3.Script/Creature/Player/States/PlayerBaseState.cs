@@ -131,18 +131,17 @@ public class PlayerBaseState : IState
             {
                 //H * -2 * G = 목표까지의 원하는 velocity
                 player.m_verticalVelocity = Mathf.Sqrt(airData.JumpHeight * -2f * airData.Gravity);
+                player.m_jumpTimeOutDelta = player.m_PhysicsData.AirData.JumpTimeout;
             }
 
             if (player.m_jumpTimeOutDelta >= 0.0f)
             {
                 player.m_jumpTimeOutDelta -= Time.deltaTime;
             }
-
         }
 
         else
         {
-            player.isFall = true;
             player.isBattle = false;
             player.m_targetEnemy = null;
             player.isJump = false;
@@ -152,9 +151,22 @@ public class PlayerBaseState : IState
 
     protected virtual void Gravity()
     {
-        if (player.m_verticalVelocity < player.m_terminalVelocity)
+        if (!player.isGrouded)
         {
-            player.m_verticalVelocity += airData.Gravity * Time.deltaTime;
+            if (player.m_verticalVelocity < player.m_terminalVelocity)
+            {
+                player.m_verticalVelocity += airData.Gravity * Time.deltaTime;
+            }
+
+            if (player.m_jumpTimeOutDelta >= 0.0f)
+            {
+                player.m_jumpTimeOutDelta -= Time.deltaTime;
+            }
+
+            else
+            {
+                player.isFall = true;
+            }
         }
     }
 

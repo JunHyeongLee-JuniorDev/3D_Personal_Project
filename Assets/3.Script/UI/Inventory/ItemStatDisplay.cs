@@ -46,9 +46,9 @@ public class ItemStatDisplay : MonoBehaviour
             itemEffect_Text.text = itemData.EffectString;
 
         if (skill_Text != null)
-            skill_Text.text = (itemData as EquipmentData).Skillstring;
+            skill_Text.text = (itemData as WeaponData).Skillstring;
 
         if (stat_Text != null)
-            stat_Text.text = ((int)(itemData as EquipmentData).Stat).ToString();
+            stat_Text.text = ((int)(itemData as WeaponData).Stat).ToString();
     }
 }

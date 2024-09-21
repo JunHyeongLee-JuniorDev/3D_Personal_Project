@@ -78,7 +78,7 @@ public class PlayerLocoState : PlayerBaseState
 
     private void ShieldAni()
     {
-        if (Managers.Instance.Inventory.PlayerData.equipments["Shield"].ItemData == null) return;
+        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].ItemData == null) return;
 
         if (player.isRightClicked)
         {

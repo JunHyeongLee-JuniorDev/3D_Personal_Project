@@ -9,7 +9,7 @@ public enum EItemType
     MISSION
 };
 
-public enum EEquipmentType
+public enum EWeaponType
 {
     AXE,
     SWORD,

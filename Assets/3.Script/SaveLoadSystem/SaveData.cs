@@ -4,13 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+public enum EEquipmentType
+{
+    Shield,
+    Weapon,
+    Heal,
+    Mana,
+    Length
+};
+
 [Serializable]
 public class GameSaveData
 {
     public GameSaveData()
     {
-        savePlayerData = new PlayerData();
-
         consumeInvData = new InventorySystem(consumeInvSize);
         equipmentInvData = new InventorySystem(equipmentInvSize);
         missionInvData = new InventorySystem(missionInvSize);
@@ -72,20 +79,22 @@ public class PlayerData
 
     //Gears
     public readonly int eqiupmentLength = 4;
-    /// <summary>
-    /// (0 : 무기, 1 : 체력, 2 : 마나, 3 : 방패)
-    /// </summary>
-    public Dictionary<string, InventorySlot> equipments;
+    public InventorySlot[] equipments;
 
     public UnityAction<InventorySlot> OnWeaponChanged;
 
-    public PlayerData()
+    /// <summary>
+    /// 처음 게임을 생성하면 생성 무기, 방패는 원래 비어있기에 빈 슬롯할당
+    /// </summary>
+    /// <param name="healPotion">외부에서 resources폴더에서 할당</param>
+    /// <param name="manaPotion">외부에서 resources폴더에서 할당</param>
+    public PlayerData(InventorySlot healPotion, InventorySlot manaPotion)
     {
-        equipments = new Dictionary<string, InventorySlot>();
-
-        Debug.Log("근데 여긴 당연히 안들어오는거 아닌가?");
-        equipments.Add("Weapon", new InventorySlot());
-        equipments.Add("Shield", new InventorySlot());
+        equipments = new InventorySlot[(int)EEquipmentType.Length];
+        equipments[(int)EEquipmentType.Shield] = new InventorySlot();
+        equipments[(int)EEquipmentType.Weapon] = new InventorySlot();
+        equipments[(int)EEquipmentType.Heal] = healPotion;
+        equipments[(int)EEquipmentType.Mana] = manaPotion;
     }
 
     /// <summary>
@@ -97,36 +106,36 @@ public class PlayerData
     {
         if (newEquipment.ItemType.Equals(EItemType.GEAR))
         {
-            if((newEquipment as EquipmentData).EquipmentType.Equals(EEquipmentType.SHIELD))
+            if((newEquipment as WeaponData).WeaponType.Equals(EWeaponType.SHIELD))
             {
-                equipments["Shield"].UpdateInventorySlot(newEquipment, amount);
+                equipments[(int)EEquipmentType.Shield].UpdateInventorySlot(newEquipment, amount);
                 return;
             }
-            equipments["Weapon"].UpdateInventorySlot(newEquipment, amount);
+            equipments[(int)EEquipmentType.Weapon].UpdateInventorySlot(newEquipment, amount);
             return;
         }
 
         switch(newEquipment.DisplayName)
         {
             case "체력 물약":
-                if (equipments["Heal"].StackSize > 0)
-                    equipments["Heal"].RemoveFromStack(amount);
+                if (equipments[(int)EEquipmentType.Heal].StackSize > 0)
+                    equipments[(int)EEquipmentType.Heal].RemoveFromStack(amount);
                 break;
 
             case "마나 물약":
-                if (equipments["Mana"].StackSize > 0)
-                    equipments["Mana"].RemoveFromStack(amount);
+                if (equipments[(int)EEquipmentType.Mana].StackSize > 0)
+                    equipments[(int)EEquipmentType.Mana].RemoveFromStack(amount);
                 break;
         }
     }
 
     public void refillPotion()
     {
-        ConsumeItemData _itemData = equipments["Heal"].ItemData as ConsumeItemData;
-        equipments["Heal"].AddToStack(_itemData.UpdatableStack);
+        ConsumeItemData _itemData = equipments[(int)EEquipmentType.Heal].ItemData as ConsumeItemData;
+        equipments[(int)EEquipmentType.Heal].AddToStack(_itemData.UpdatableStack);
 
-        _itemData = equipments["Mana"].ItemData as ConsumeItemData;
-        equipments["Mana"].AddToStack(_itemData.UpdatableStack);
+        _itemData = equipments[(int)EEquipmentType.Mana].ItemData as ConsumeItemData;
+        equipments[(int)EEquipmentType.Mana].AddToStack(_itemData.UpdatableStack);
     }
 }
 

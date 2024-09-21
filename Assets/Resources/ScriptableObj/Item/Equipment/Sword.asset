@@ -24,14 +24,16 @@ MonoBehaviour:
   isCanSale: 1
   isCanDrop: 1
   model: {fileID: 8464679834358705886, guid: 7b02e38c28ae7bc40b7f6c758b47443f, type: 3}
-  equipmentType: 1
+  weaponType: 1
   level: 1
-  stat: 0
+  stat: 25
   reinforceStat: 0
   buyPrice: 1000
   reinforceRate: 0
   reinforcePrice: 1
-  skillstring: "\uD45C\uD6A8"
+  skillstring: "\uD3EC\uD6A8"
+  comboBtnCoolTime: 0.5
   animationClips:
   - Base Layer.Attack.Sword And Shield Slash1
   - Base Layer.Attack.Sword And Shield Slash2
+  skillAniClip: 

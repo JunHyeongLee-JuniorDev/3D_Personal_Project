@@ -15,6 +15,7 @@ public class Timer
         this.maxTime = maxTime;
         controller = monoBehaviour;
         isEnd = true;
+
     }
 
     public void UpdateMaxTime(float maxTime)
@@ -26,13 +27,12 @@ public class Timer
     {
         if(coroutineCash != null)
             controller.StopCoroutine(coroutineCash);
-
+        isEnd = false;
         coroutineCash = controller.StartCoroutine(StartTimer_co());
     }
 
     private IEnumerator StartTimer_co()
     {
-        isEnd = false;
         yield return new WaitForSeconds(maxTime);
         isEnd = true;
     }

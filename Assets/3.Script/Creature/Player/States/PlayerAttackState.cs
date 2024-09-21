@@ -18,7 +18,7 @@ public class PlayerAttackState : PlayerBaseState
         base.Enter();
         attackIndex = 0;
 
-        if ((Managers.Instance.Inventory.PlayerData.equipments["Weapon"].ItemData == null))
+        if ((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData == null))
         {
             attackAniClips = player.m_aniData.meleeAtackClips;
             player.attackBtnTimer.UpdateMaxTime(0.5f);
@@ -26,13 +26,12 @@ public class PlayerAttackState : PlayerBaseState
 
         else
         {
-            attackAniClips = (Managers.Instance.Inventory.PlayerData.equipments["weapon"].ItemData as EquipmentData).AnimationClips;
-            player.attackBtnTimer.UpdateMaxTime((Managers.Instance.Inventory.PlayerData.equipments["weapon"].ItemData as EquipmentData).ComboBtnCoolTime);
+            attackAniClips = (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData as WeaponData).AnimationClips;
+            player.attackBtnTimer.UpdateMaxTime((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData as WeaponData).ComboBtnCoolTime);
         }
 
         attackIndex = 0;
         maxAttackIndex = attackAniClips.Length;
-
         player.attackBtnTimer.StartTimer();
         animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
