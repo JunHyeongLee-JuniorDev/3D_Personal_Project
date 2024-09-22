@@ -6,13 +6,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerLocoState : PlayerBaseState
 {
-    private Timer itemGrabAniTimer;
     private bool isGrabAniOn;
 
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine) 
     {
-        Managers.Instance.Inventory.OnDynamicInventoryChanged += GrabItem;
-        itemGrabAniTimer = new Timer(1.0f, player);
+        Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
         isGrabAniOn = false;
     }
 
@@ -68,17 +66,16 @@ public class PlayerLocoState : PlayerBaseState
     {
         base.SetAniBool();
 
-        if (isGrabAniOn && itemGrabAniTimer.isEnd)
+        if (isGrabAniOn && player.itemGrabAniTimer.isEnd)
         {
             isGrabAniOn = false;
-            Debug.Log("다시 로코로~");
             animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
         }
     }
 
     private void ShieldAni()
     {
-        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].ItemData == null) return;
+        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data == null) return;
 
         if (player.isRightClicked)
         {
@@ -95,7 +92,7 @@ public class PlayerLocoState : PlayerBaseState
 
     private void GrabItem()
     {
-        itemGrabAniTimer.StartTimer();
+        player.itemGrabAniTimer.StartTimer();
         isGrabAniOn = true;
         animator.CrossFade(DTAniClipID[EPlayerAni.GRAB], 0.1f);
     }

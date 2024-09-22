@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4131437023405378}
@@ -4853,6 +4853,8 @@ GameObject:
   - component: {fileID: 4131437023405378}
   - component: {fileID: 198853902749890928}
   - component: {fileID: 199034871832436634}
+  - component: {fileID: 7521347205552308994}
+  - component: {fileID: 5847750333910980341}
   m_Layer: 0
   m_Name: ItemObj
   m_TagString: Untagged
@@ -4870,7 +4872,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 1, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4410048752619904}
@@ -9686,6 +9688,57 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!135 &7521347205552308994
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654736843778140}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 1.165
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &5847750333910980341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1654736843778140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94422efa7e4410e4ba0168faaba6229a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  assignName: 
+  pickUpRadius: 1
+  itemSlot:
+    data:
+      displayName: 
+      description: 
+      effectString: 
+      maxStackSize: 0
+      itemType: 0
+      isCanSale: 0
+      isCanDrop: 0
+      stat: 0
+      updatableStack: 0
+      weaponType: 0
+      level: 0
+      reinforceStat: 0
+      reinforcePrice: 0
+    stackSize: -1
 --- !u!1 &1675696825032014
 GameObject:
   m_ObjectHideFlags: 0
@@ -9714,7 +9767,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4131437023405378}

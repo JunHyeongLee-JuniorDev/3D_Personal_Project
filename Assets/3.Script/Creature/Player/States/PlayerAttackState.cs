@@ -18,16 +18,16 @@ public class PlayerAttackState : PlayerBaseState
         base.Enter();
         attackIndex = 0;
 
-        if ((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData == null))
+        if ((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data == null))
         {
-            attackAniClips = player.m_aniData.meleeAtackClips;
+            attackAniClips = player.m_aniData.meleeAttackClips;
             player.attackBtnTimer.UpdateMaxTime(0.5f);
         }
 
         else
-        {
-            attackAniClips = (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData as WeaponData).AnimationClips;
-            player.attackBtnTimer.UpdateMaxTime((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData as WeaponData).ComboBtnCoolTime);
+        {//클립 추가 요망
+            //attackAniClips = (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.;
+            //player.attackBtnTimer.UpdateMaxTime((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData as WeaponData).ComboBtnCoolTime);
         }
 
         attackIndex = 0;

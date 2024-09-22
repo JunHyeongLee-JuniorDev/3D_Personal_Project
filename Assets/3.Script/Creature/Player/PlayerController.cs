@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
     public Timer targetBtnTimer { get; private set; }
     public Timer rollBtnTimer { get; private set; }
     public Timer attackBtnTimer { get; private set; }
+    public Timer itemGrabAniTimer { get; private set; }
 
     //Player--------------------------------------------------------------------------------
     //Hide
@@ -122,6 +123,7 @@ public class PlayerController : MonoBehaviour
         targetBtnTimer = new Timer(0.5f, this);
         rollBtnTimer = new Timer(1.0f, this);
         attackBtnTimer = new Timer(0.5f, this);
+        itemGrabAniTimer = new Timer(2.0f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
 

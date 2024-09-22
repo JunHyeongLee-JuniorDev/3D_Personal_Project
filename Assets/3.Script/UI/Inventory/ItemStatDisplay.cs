@@ -35,20 +35,20 @@ public class ItemStatDisplay : MonoBehaviour
             stat_Text.text = string.Empty;
     }
 
-    public void UpdateUI(InventoryItemData itemData)
+    public void UpdateUI(ItemData itemData)
     {
-        itemIcon.sprite = itemData.Icon;
+        itemIcon.sprite = Managers.Instance.Data.itemDataBase.GetSprite(itemData.displayName);
         itemIcon.color = Color.white;
-        itemName_Text.text = itemData.DisplayName;
-        itemDescription_Text.text = itemData.Description;
+        itemName_Text.text = itemData.displayName;
+        itemDescription_Text.text = itemData.description;
 
         if (itemEffect_Text != null)
-            itemEffect_Text.text = itemData.EffectString;
+            itemEffect_Text.text = itemData.effectString;
 
         if (skill_Text != null)
-            skill_Text.text = (itemData as WeaponData).Skillstring;
+            skill_Text.text = itemData.effectString;
 
         if (stat_Text != null)
-            stat_Text.text = ((int)(itemData as WeaponData).Stat).ToString();
+            stat_Text.text = itemData.stat.ToString();
     }
 }

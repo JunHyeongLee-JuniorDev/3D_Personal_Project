@@ -75,32 +75,31 @@ public class DynamicInventoryDisplay : MonoBehaviour
         }
     }
 
-
     public void SlotLeftClicked(InventorySlot_UI clickedUISlot)
     {
-        if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
+        if (clickedUISlot.AssignedInventorySlot.Data == null) return;
 
-        switch (clickedUISlot.AssignedInventorySlot.ItemData.ItemType)
+        switch (clickedUISlot.AssignedInventorySlot.Data.itemType)
         {
             case EItemType.CONSUME:
-                playerHud_UI.consumeDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.ItemData);
+                playerHud_UI.consumeDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.Data);
                 break;
 
             case EItemType.GEAR:
-                playerHud_UI.gearDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.ItemData);
+                playerHud_UI.gearDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.Data);
                 break;
 
             case EItemType.MISSION:
-                playerHud_UI.missionDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.ItemData);
+                playerHud_UI.missionDisplay.UpdateUI(clickedUISlot.AssignedInventorySlot.Data);
                 break;
         }
     }
     public void SlotRightClicked(InventorySlot_UI clickedUISlot)
     {
-        if (clickedUISlot.AssignedInventorySlot.ItemData == null) return;
+        if (clickedUISlot.AssignedInventorySlot.Data == null) return;
         Managers.Instance.Game.UIGroupStack.Push(playerHud_UI.mouseItemControl.GetComponent<FadeInOut_UI>());
         playerHud_UI.mouseItemControl.gameObject.SetActive(true);
-        playerHud_UI.mouseItemControl.UpdateMouseStat(clickedUISlot.AssignedInventorySlot);
+        playerHud_UI.mouseItemControl.UpdateMouseStat(clickedUISlot);
     }
 
 }

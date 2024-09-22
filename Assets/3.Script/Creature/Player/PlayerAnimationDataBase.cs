@@ -39,7 +39,10 @@ public class PlayerAnimationDataBase
     public Dictionary<EPlayerAni, int> _DTaniClipID { get; private set; }
     public Dictionary<EPlayerAniParam, int> _DTaniBoolID { get; private set; }
 
-    public string[] meleeAtackClips;
+    public string[] meleeAttackClips; 
+    public string[] swordAttackClips;
+    public string[] axeAttackClips;
+    public string[] magicAttackClips;
 
     /// <summary>
     /// Initialize 애니메이션 데이터를 Hash값으로 바꿈
@@ -54,7 +57,10 @@ public class PlayerAnimationDataBase
 
         _DTaniClipID = new Dictionary<EPlayerAni, int>();
         _DTaniBoolID = new Dictionary<EPlayerAniParam, int>();
-        meleeAtackClips = new string[2];
+        meleeAttackClips = new string[2];
+        swordAttackClips = new string[2];
+        axeAttackClips = new string[2];
+        magicAttackClips = new string[2];
 
         //Clip ID
         _DTaniClipID.Add(EPlayerAni.LOCO, Animator.StringToHash("Base Layer.LocoState.Loco"));
@@ -72,5 +78,6 @@ public class PlayerAnimationDataBase
         _DTaniBoolID.Add(EPlayerAniParam.BATTLEX, Animator.StringToHash("BattleX"));
         _DTaniBoolID.Add(EPlayerAniParam.BATTLEY, Animator.StringToHash("BattleY"));
 
+        //Attack Clips
     }
 }

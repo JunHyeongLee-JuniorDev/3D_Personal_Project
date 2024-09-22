@@ -6,13 +6,14 @@ using UnityEngine;
 /// 실제 아이템 슬롯 아이템이 없다면 null
 /// 아이템을 추가하면 데이터와 해당 개수를 입력, maxStackSize에 기반한
 /// </summary>
+
 [Serializable]
 public class InventorySlot
 {
-    [SerializeField] private InventoryItemData itemData;
+    [SerializeField] private ItemData data;
     [SerializeField] private int stackSize;
 
-    public InventoryItemData ItemData => itemData;
+    public ItemData Data => data;
     public int StackSize => stackSize;
 
     /// <summary>
@@ -20,9 +21,9 @@ public class InventorySlot
     /// </summary>
     /// <param name="source"></param>
     /// <param name="amount"></param>
-    public InventorySlot(InventoryItemData source, int amount)
+    public InventorySlot(ItemData source, int amount)
     {
-        itemData = source;
+        data = source;
         stackSize = amount;
     }
 
@@ -31,16 +32,16 @@ public class InventorySlot
     /// </summary>
     public InventorySlot()
     {
-        itemData = null;
+        data = null;
         stackSize = -1;
     }
 
     public void AssignItem(InventorySlot invSlot)
     {
-        if (itemData == invSlot.itemData) AddToStack(invSlot.stackSize);
+        if (data == invSlot.data) AddToStack(invSlot.stackSize);
         else
         {
-            itemData = invSlot.itemData;
+            data = invSlot.data;
             stackSize = 0;
             AddToStack(invSlot.stackSize);
         }
@@ -48,13 +49,13 @@ public class InventorySlot
 
     public void ClearSlot()
     {
-        itemData = null;
+        data = null;
         stackSize = -1;
     }
 
-    public void UpdateInventorySlot(InventoryItemData Data, int amount)
+    public void UpdateInventorySlot(ItemData Data, int amount)
     {
-        itemData = Data;
+        data = Data;
         stackSize = amount;
     }
 
@@ -66,14 +67,14 @@ public class InventorySlot
     /// <returns></returns>
     public bool IsroomLeftInStack(int amountToAdd, out int amountRemaining)
     {
-        amountRemaining = itemData.MaxStackSize - stackSize;
+        amountRemaining = data.maxStackSize - stackSize;
 
         return IsroomLeftInStack(amountToAdd);
     }
 
     public bool IsroomLeftInStack(int amountToAdd)
     {
-        if (stackSize + amountToAdd <= itemData.MaxStackSize) return true;
+        if (stackSize + amountToAdd <= data.maxStackSize) return true;
 
         return false;
     }
@@ -86,8 +87,5 @@ public class InventorySlot
     public void RemoveFromStack(int amount)
     {
         stackSize -= amount;
-
-        if(stackSize <= 0)
-            ClearSlot();
     }
 }

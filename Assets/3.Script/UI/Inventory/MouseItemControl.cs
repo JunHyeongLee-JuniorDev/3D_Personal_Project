@@ -34,15 +34,16 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
     /// SetActive = true 로 만들면서 바로 할당해주기
     /// </summary>
     /// <param name="newItemData"></param>
-    public void UpdateMouseStat(InventorySlot newItemData)
+    public void UpdateMouseStat(InventorySlot_UI slot_UI)
     {
-        if(newItemData.ItemData == null) return;// 이거 부르는 곳에서 처리해줘야함
-        assignedItem = newItemData;
+        if(slot_UI.AssignedInventorySlot.Data == null) return;// 이거 부르는 곳에서 처리해줘야함
+        assignedItem = slot_UI.AssignedInventorySlot;
+        Debug.Log("여기가 왜 불리는거야?");
 
         first_Btn.onClick.RemoveAllListeners();
         second_Btn.onClick.RemoveAllListeners();
 
-        switch (assignedItem.ItemData.ItemType)
+        switch (assignedItem.Data.itemType)
         {
             case EItemType.CONSUME:
                 /*
@@ -51,7 +52,8 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 second_Btn.gameObject.SetActive(true);
                 secondBtn_Text.gameObject.SetActive(true);
 
-                first_Btn.onClick.AddListener(() => {
+                first_Btn.onClick.AddListener(() => 
+                {
                     assignedItem.RemoveFromStack(1);
                     Managers.Instance.Inventory.InvSys_Consume.OnInventorySlotChanged?.Invoke(assignedItem);
                     OnClickClose();
@@ -60,7 +62,8 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
 
                 firstBtn_Text.text = "사용";
                 
-                second_Btn.onClick.AddListener(() => {
+                second_Btn.onClick.AddListener(() => 
+                {
                     assignedItem.RemoveFromStack(1);
                     Managers.Instance.Inventory.InvSys_Consume.OnInventorySlotChanged?.Invoke(assignedItem);
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
@@ -76,26 +79,25 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 second_Btn.gameObject.SetActive(true);
                 secondBtn_Text.gameObject.SetActive(true);
 
-                first_Btn.onClick.AddListener(() => {
-                    Managers.Instance.Inventory.PlayerData.UseEquipments(newItemData.ItemData, 1);
-                    Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.Invoke(newItemData);
+                first_Btn.onClick.AddListener(() => 
+                {
+                    assignedItem.RemoveFromStack(1);
+                    Managers.Instance.Inventory.PlayerData.UpdateWeaponAndShield(slot_UI, 1);
+                    Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.Invoke();
                     Managers.Instance.Inventory.OnDynamicWeaponChanged?.Invoke();
+                    Managers.Instance.Inventory.InvSys_Gear.OnInventorySlotChanged?.Invoke(slot_UI.AssignedInventorySlot);
                     OnClickClose();
                 });
 
                 firstBtn_Text.text = "장착";
                             
-                second_Btn.onClick.AddListener(() => {
+                second_Btn.onClick.AddListener(() => 
+                {
+                    GameObject trash = Instantiate(Resources.Load<GameObject>(Managers.Instance.Data.itemModelPath));
+                    trash.GetComponent<ItemPickUp>().itemSlot = new InventorySlot(assignedItem.Data, assignedItem.StackSize);
+                    trash.transform.position = Managers.Instance.Game.playerController.transform.position;
                     assignedItem.ClearSlot();
-                    Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.Invoke(newItemData);
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
-                    if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon]
-                    .Equals(assignedItem))
-                    {
-                        Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ClearSlot();
-                        Managers.Instance.Inventory.PlayerData.OnWeaponChanged?
-                        .Invoke(Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon]);
-                    }
                     OnClickClose();
                 });
 
@@ -108,8 +110,9 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 second_Btn.gameObject.SetActive(false);
                 secondBtn_Text.gameObject.SetActive(false);
 
-                first_Btn.onClick.AddListener(() => {
-                    playerHUD_UI.missionDisplay.UpdateUI(assignedItem.ItemData);
+                first_Btn.onClick.AddListener(() => 
+                {
+                    playerHUD_UI.missionDisplay.UpdateUI(assignedItem.Data);
                     OnClickClose();
                 });
 

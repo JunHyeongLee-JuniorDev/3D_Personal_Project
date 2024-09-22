@@ -100,7 +100,20 @@ MonoBehaviour:
   itemSprite: {fileID: 4730016300785395023}
   itemCount: {fileID: 4953567888889267821}
   assignedInventorySlot:
-    itemData: {fileID: 0}
+    data:
+      displayName: 
+      description: 
+      effectString: 
+      maxStackSize: 0
+      itemType: 0
+      isCanSale: 0
+      isCanDrop: 0
+      stat: 0
+      updatableStack: 0
+      weaponType: 0
+      level: 0
+      reinforceStat: 0
+      reinforcePrice: 0
     stackSize: -1
 --- !u!222 &5668230390167985881
 CanvasRenderer:

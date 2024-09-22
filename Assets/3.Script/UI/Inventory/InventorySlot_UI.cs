@@ -14,7 +14,6 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     [SerializeField] private Image itemSprite;
     [SerializeField] private TextMeshProUGUI itemCount;
     [SerializeField] private InventorySlot assignedInventorySlot;
-
     private Button button;
 
     public InventorySlot AssignedInventorySlot => assignedInventorySlot;
@@ -25,7 +24,6 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
         ClearSlot();
         button = GetComponent<Button>();
         button?.onClick.AddListener(OnUISlotLeftClick);
-
         parentDisplay = GetComponentInParent<DynamicInventoryDisplay>();
     }
 
@@ -37,23 +35,26 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
 
     public void UpdateUISlot(InventorySlot slot)
     {// Ui slot을 실제 inventory itemData로부터 갱신
-        if (slot.ItemData != null)
-        {
-            itemSprite.sprite = assignedInventorySlot.ItemData.Icon;
-            itemSprite.color = Color.white;
+        itemSprite.sprite = Managers.Instance.Data.itemDataBase.GetSprite(slot.Data.displayName);
+        itemSprite.color = Color.white;
 
-            if (slot.StackSize > 1) itemCount.text = slot.StackSize.ToString();
-            else itemCount.text = string.Empty;
+        if (slot.StackSize > 1)
+        { 
+            itemCount.text = slot.StackSize.ToString();
+        }
+
+
+        else if (slot.StackSize == 1)
+        {
+            itemCount.text = string.Empty;
         }
 
         else
+        {
+            slot.ClearSlot();
             ClearSlot();
+        }
     }
-
-    //public void UpdateUISlot() 필요를 못 느끼겠음...
-    //{
-    //    if(assignedInventorySlot != null) UpdateUISlot(assignedInventorySlot);
-    //}
 
     /// <summary>
     /// 실제 slot backend 데이터를 clear하면서 sprite, text 초기화

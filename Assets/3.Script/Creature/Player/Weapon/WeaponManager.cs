@@ -15,7 +15,7 @@ public class WeaponManager : MonoBehaviour
      * 인벤토리에 있는 모든 장비 아이템의 모델들 생성해 놓기
      * 무기의 콜라이더 스크립트 참조하기
      */
-    private Dictionary<WeaponData, GameObject> weaponModels = new Dictionary<WeaponData, GameObject>();
+    private Dictionary<string, GameObject> weaponModels = new Dictionary<string, GameObject>();
 
     [SerializeField]private Transform rightHandRoot;
     [SerializeField]private Transform leftHandRoot;
@@ -28,124 +28,49 @@ public class WeaponManager : MonoBehaviour
     /// </summary>
     private void Start()
     {
-        foreach (InventorySlot slot in Managers.Instance.Inventory.InvSys_Gear.InventorySlots)
-        {// 인벤토리 슬롯 순회
-            if (slot.ItemData != null)
-            {// 인벤토리가 존재하면
-                WeaponData _weaponData = slot.ItemData as WeaponData;// 무기로 케스팅
-
-                if (_weaponData.Model != null)
-                {// 모델이 존재한다면
-                    if (!_weaponData.WeaponType.Equals(EWeaponType.SHIELD))
-                    {// 일반 무기라면 오른손에 생성
-                        CreateNewWeapon(_weaponData, rightHandRoot);
-                    }
-
-                    else
-                    {// 방패라면 왼손에 생성
-                        CreateNewWeapon(_weaponData, leftHandRoot);
-                    }
-                }
-
-                else//모델 할당 요망
-                    Debug.Log("모델이 할당되지 않음");
-            }
-        }
         bareHand = Managers.Instance.InstantiateResouce("Prefabs/Weapons/BareHand", "BareHand");
+        bareHand.SetActive(false);
+        GameObject _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("도끼"), rightHandRoot);
+        weaponModels.Add("도끼", _newModel);
+        _newModel.SetActive(false);
+        _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("검"), rightHandRoot);
+        weaponModels.Add("검", _newModel);
+        _newModel.SetActive(false);
+        _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("마법장갑"), rightHandRoot);
+        weaponModels.Add("마법장갑", _newModel);
+        _newModel.SetActive(false);
+        _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("방패"), leftHandRoot);
+        weaponModels.Add("방패", _newModel);
+        _newModel.SetActive(false);
+
         Managers.Instance.Inventory.PlayerData.OnWeaponChanged += ActivateModel;
-        Managers.Instance.Inventory.InvSys_Gear.OnInventorySlotChanged += UpdateModel;
-
-        if(Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].ItemData != null)
-            ActivateModel(Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield]);
-
-        if (Managers.Instance.Inventory.PlayerData.equipments[(int )EEquipmentType.Weapon].ItemData != null)
-            ActivateModel(Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon]);
+        ActivateModel();
     }
 
-    /// <summary>
-    /// 새로 등록하는 것이라면 생성/비우는 것이라면 제거
-    /// </summary>
-    /// <param name="slot"></param>
-    private void UpdateModel(InventorySlot slot)
-    {
-        WeaponData _weaponData = slot.ItemData as WeaponData;
-
-        if (_weaponData == null)
-        {// 아이템이 비워진거라면
-            // 문제점 아이템을 비우면 key를 잃어버린다.
-
-            foreach (var _modelKey in weaponModels.Keys)
-            {//키로 모델 찾아서 있으면 dictionary에서 제거 X 해당 모델이 인벤에 없다면 dictionary에서 제거
-                bool isInInventory = false;
-
-                foreach (var _invSlot in Managers.Instance.Inventory.InvSys_Gear.InventorySlots)
-                {
-                    if (weaponModels[_modelKey].Equals((_invSlot.ItemData as WeaponData).Model))
-                    {//만약 key에 해당하는 모델과 같은 모델이 있을 시 true
-                        isInInventory = true;
-                    }
-                }
-
-                if (!isInInventory)
-                {//만약 모델이 인벤에 존재하지 않다면 제거
-                    Destroy(weaponModels[_modelKey]);
-                    weaponModels.Remove(_modelKey);
-                }
-            }
-        }
-
-        else if (!weaponModels.ContainsKey(_weaponData))
-        {//추가된 슬롯이 딕셔너리에 없다면 새로운 모델을 생성하고 딕셔너리에 등록
-            if (_weaponData.WeaponType.Equals((int)EWeaponType.SHIELD))
-                CreateNewWeapon(_weaponData, leftHandRoot);
-
-            else
-                CreateNewWeapon(_weaponData, rightHandRoot);
-        }
-    }
     /// <summary>
     /// 무기 변환시 불릴 메소드
     /// </summary>
     /// <param name="activeWeaponSlot">활성화되는 무기</param>
-    private void ActivateModel(InventorySlot activeWeaponSlot)
+    private void ActivateModel()
     {//들고 있는 아이템의 모델 활성화
-        WeaponData weaponData = activeWeaponSlot.ItemData as WeaponData;
-
-        if (weaponData != null)
+        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].StackSize > 0)
         {
-            if(weaponData.WeaponType.Equals(EWeaponType.SHIELD))
-            {
-                currentLeftHandModel?.SetActive(false);
-                currentLeftHandModel = weaponModels[weaponData];
-                currentLeftHandModel.SetActive(true);
-            }
-
-            else
-            {
-                currentRightHandModel?.SetActive(false);
-                currentRightHandModel = weaponModels[weaponData];
-                currentRightHandModel.SetActive(true);
-            }
+            currentLeftHandModel = weaponModels[Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data.displayName];
+            currentLeftHandModel?.SetActive(true);
         }
+        else
+            currentLeftHandModel?.SetActive(false);
 
-        else if(Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].ItemData == null)
+        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
+        {
+            currentRightHandModel = weaponModels[Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.displayName];
+            currentRightHandModel?.SetActive(true);
+        }
+        else
         {
             currentLeftHandModel?.SetActive(false);
+            bareHand?.SetActive(true);
         }
 
-        else if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData == null)
-        {
-            currentRightHandModel?.SetActive(false);
-            currentRightHandModel = bareHand;
-            currentRightHandModel.SetActive(true);
-        }
-
-    }
-
-    private void CreateNewWeapon(WeaponData newWeaponData, Transform parent)
-    {
-        GameObject newWeapon = Instantiate(newWeaponData.Model, parent);
-        weaponModels.Add(newWeaponData, newWeapon);
-        newWeapon.SetActive(false);
     }
 }

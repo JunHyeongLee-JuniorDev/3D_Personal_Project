@@ -37,7 +37,7 @@ public class InventorySystem
     /// 만약 인벤토리에 아이템을 넣지 못하면 false를 반환하며 담기지 않음
     /// </summary>
     /// <returns></returns>
-    public bool AddToInventory(InventoryItemData itemToAdd, int amountToAdd)
+    public bool AddToInventory(ItemData itemToAdd, int amountToAdd)
     {
         if (IsContainsItem(itemToAdd, out List<InventorySlot> invSlot))
         {// 같은 아이템이 인벤토리에 있는지 확인
@@ -64,9 +64,9 @@ public class InventorySystem
         return false;
     }
 
-    public bool IsContainsItem(InventoryItemData itemToAdd, out List<InventorySlot> invSlot)
+    public bool IsContainsItem(ItemData itemToAdd, out List<InventorySlot> invSlot)
     {
-        invSlot = inventorySlots.Where(slot => slot.ItemData == itemToAdd).ToList();
+        invSlot = inventorySlots.Where(slot => slot.Data == itemToAdd).ToList();
 
         //같은 아이템의 슬롯이 한 개 이상이라면 true 아니면 false
         return invSlot.Count > 0;
@@ -83,7 +83,7 @@ public class InventorySystem
          * 클래스는 null을 반환, int 는 0을 반환...
          * 클래스는 null을 반환, int 는 0을 반환...
          */
-        freeSlot = inventorySlots.FirstOrDefault(slot => slot.ItemData == null);
+        freeSlot = inventorySlots.FirstOrDefault(slot => slot.StackSize <= 0);
 
         //null != true, null == false
         return freeSlot != null;

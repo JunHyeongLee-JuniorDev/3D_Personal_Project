@@ -1,0 +1,63 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3c854f1349da5c48b8560ddeb087fd3, type: 3}
+  m_Name: ResourcesList
+  m_EditorClassIdentifier: 
+  _list:
+  - <itemName>k__BackingField: "\uB2E8\uC11D"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: ca6299f192d72b047a99c160e51a72d0,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}
+  - <itemName>k__BackingField: "\uD3EC\uC158 \uC7AC\uB8CC"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: 439e344a84692ef4bac917364e8d6b43,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}
+  - <itemName>k__BackingField: "\uCCB4\uB825 \uD3EC\uC158"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: a20d322c5e65a6746808e67a31dfe555,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}
+  - <itemName>k__BackingField: "\uB9C8\uB098 \uD3EC\uC158"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: 6592b916f86b19e428db6f6847c7b6dd,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}
+  - <itemName>k__BackingField: "\uB3C4\uB07C"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: 97eb33f17282b874aafc04781652f343,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 8164283214986944742, guid: 5bcd01e9c23554e4eb1f4629b26162b3,
+      type: 3}
+  - <itemName>k__BackingField: "\uAC80"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: 4ad16adfdf2d1a441879a598de742eb6,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 8464679834358705886, guid: 7b02e38c28ae7bc40b7f6c758b47443f,
+      type: 3}
+  - <itemName>k__BackingField: "\uB9C8\uBC95\uC7A5\uAC11"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: c49db764686ae57449a25be7397a31d1,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 1975959190090480, guid: eca000ab44c908d4dab395f654753038,
+      type: 3}
+  - <itemName>k__BackingField: "\uBC29\uD328"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: a42b3b2bb82524b4c9e97aca1cb294fe,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 704519027706757440, guid: 9e46dcb51f3dd02449573609374bece1,
+      type: 3}
+  - <itemName>k__BackingField: "\uC131\uBB38 \uC5F4\uC1E0"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: c705f913005feb7499c34a30f99a08f9,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}
+  - <itemName>k__BackingField: "\uC11C\uCABD\uBB38 \uC5F4\uC1E0"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: 4e4c73965b9df4a46a0c3f48a0d33705,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}
+  - <itemName>k__BackingField: "\uC870\uC601\uC900\uC758 \uAC80"
+    <itemIcon>k__BackingField: {fileID: 21300000, guid: d31aa8412a4d374458c912d11686642a,
+      type: 3}
+    <itemModel>k__BackingField: {fileID: 0}

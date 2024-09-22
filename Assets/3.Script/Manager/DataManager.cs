@@ -5,6 +5,9 @@ using UnityEngine.Audio;
 
 public class DataManager : MonoBehaviour, IInitManager
 {
+    //Item DataBase
+    public ItemDataBase itemDataBase { get; private set; }
+
     //Save Files
     public GameSaveData[] currentSaveData;
     public SettingSaveData settingSaveData;
@@ -29,6 +32,7 @@ public class DataManager : MonoBehaviour, IInitManager
 
     public void Init()
     {
+        itemDataBase = new ItemDataBase();
         defaultSetting.masterVolume = 0.0f;
         defaultSetting.SFXVolume = 0.0f;
         defaultSetting.musicVolume = 0.0f;
@@ -92,13 +96,13 @@ public class DataManager : MonoBehaviour, IInitManager
 
     public void CreateNewGame(int saveFileIndex, string userName)
     {
-        ConsumeItemData initHealPotion = Resources.Load<ConsumeItemData>("ScriptableObj/Item/Consume/Heal");
-        ConsumeItemData initManaPotion = Resources.Load<ConsumeItemData>("ScriptableObj/Item/Consume/Mana");
+        ItemData initHealPotion = itemDataBase.GetItemData("체력 포션");
+        ItemData initManaPotion = itemDataBase.GetItemData("마나 포션");
         GameSaveData _newGamedata = new GameSaveData();
-        _newGamedata.savePlayerData = new PlayerData(new InventorySlot(initHealPotion, initHealPotion.UpdatableStack),
-                                                     new InventorySlot(initManaPotion, initManaPotion.MaxStackSize));
+        _newGamedata.savePlayerData = new PlayerData(new InventorySlot(initHealPotion, initHealPotion.updatableStack),
+                                                     new InventorySlot(initManaPotion, initManaPotion.updatableStack));
         _newGamedata.savePlayerData.name = userName;
-
+        
         currentSaveData[saveFileIndex] = _newGamedata;
         SaveGame(saveFileIndex);
     }
@@ -124,7 +128,6 @@ public class DataManager : MonoBehaviour, IInitManager
             Debug.Log(message: "Save Data does not exist!");
             currentSaveData[fileIndex] = null;
         }
-
     }
     /// <summary>
     /// 세팅 파일을 디렉토리에서 부름

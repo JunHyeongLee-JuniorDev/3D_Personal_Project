@@ -20,6 +20,7 @@ public class GameScene : BaseScene
             Managers.Instance.Game.itemCanvas = 
                 Managers.Instance.InstantiateResouce("Prefabs/UI/ItemCanvas", "ItemCanvas").GetComponent<CanvasGroup>();
 
+        Managers.Instance.Inventory.OnDynamicInventoryChanged?.RemoveAllListeners();
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(false);
         Managers.Instance.Game.playerInput = FindObjectOfType<PlayerInput>();
         Managers.Instance.Game.playerController = Managers.Instance.Game.playerInput.GetComponent<PlayerController>();
@@ -29,6 +30,6 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
-        
+        Managers.Instance.Inventory.OnDynamicInventoryChanged?.RemoveAllListeners();
     }
 }

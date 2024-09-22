@@ -178,7 +178,7 @@ GameObject:
   - component: {fileID: -6251673831985298435}
   - component: {fileID: 3594597990688913541}
   m_Layer: 0
-  m_Name: DivineSword
+  m_Name: Sword
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
