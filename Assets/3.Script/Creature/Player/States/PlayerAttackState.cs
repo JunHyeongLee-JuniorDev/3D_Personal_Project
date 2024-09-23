@@ -10,28 +10,52 @@ public class PlayerAttackState : PlayerBaseState
 
     }
 
-    private string[] attackAniClips;
+    private int[] attackAniClips;
     private int attackIndex = 0;
-    private int maxAttackIndex = 0;
+    private float attackFadeDuration = 0.0f;
     public override void Enter()
     {
         base.Enter();
-        attackIndex = 0;
-
-        if ((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data == null))
+        if ((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].StackSize < 0))
         {
             attackAniClips = player.m_aniData.meleeAttackClips;
-            player.attackBtnTimer.UpdateMaxTime(0.5f);
+            player.attackBtnTimer.UpdateMaxTime(player.m_aniData.meleeComboCool);
+            attackFadeDuration = player.m_aniData.meleeFadeDuration;
         }
 
         else
         {//클립 추가 요망
-            //attackAniClips = (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.;
-            //player.attackBtnTimer.UpdateMaxTime((Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].ItemData as WeaponData).ComboBtnCoolTime);
+            switch (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)
+            {
+                case EWeaponType.None:
+                    Debug.LogWarning("정해지지않은 무기 타입");
+                    break;
+
+                case EWeaponType.SWORD:
+                    attackAniClips = player.m_aniData.swordAttackClips;
+                    player.attackBtnTimer.UpdateMaxTime(player.m_aniData.swordComboCool);
+                    attackFadeDuration = player.m_aniData.swordFadeDuration;
+                    break;
+
+                case EWeaponType.AXE:
+                    attackAniClips = player.m_aniData.axeAttackClips;
+                    player.attackBtnTimer.UpdateMaxTime(player.m_aniData.axeComboCool);
+                    attackFadeDuration = player.m_aniData.axeFadeDuration;
+                    break;
+
+                case EWeaponType.MAGIC:
+                    attackAniClips = player.m_aniData.magicAttackClips;
+                    player.attackBtnTimer.UpdateMaxTime(player.m_aniData.magicComboCool);
+                    attackFadeDuration = player.m_aniData.magicFadeDuration;
+                    break;
+
+                default:
+                    Debug.LogWarning("범위를 넘어선 무기 타입");
+                    break;
+            }
         }
 
         attackIndex = 0;
-        maxAttackIndex = attackAniClips.Length;
         player.attackBtnTimer.StartTimer();
         animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
@@ -87,13 +111,16 @@ public class PlayerAttackState : PlayerBaseState
 
     public void OnFire(InputAction.CallbackContext context)
     {
+        Debug.Log("공격 index : " + attackIndex);
+
         if (player.attackBtnTimer.isEnd)
         {
           player.attackBtnTimer.StartTimer();
-            animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
+
+            if (attackIndex >= attackAniClips.Length)
+                attackIndex = 0;
+
+            animator.CrossFade(attackAniClips[attackIndex++], attackFadeDuration);
         }
-        
-        if (attackIndex >= maxAttackIndex)
-            attackIndex = 0;
     }
 }

@@ -58,6 +58,7 @@ public class InventorySystem
         {// 남은 슬롯이 있는지
             freeSlot.UpdateInventorySlot(itemToAdd, amountToAdd);
             OnInventorySlotChanged?.Invoke(freeSlot);
+            Debug.Log(freeSlot.Data.displayName);
             return true;
         }
 

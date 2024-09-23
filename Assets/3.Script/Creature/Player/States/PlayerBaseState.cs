@@ -27,7 +27,7 @@ public class PlayerBaseState : IState
         airData = player.m_PhysicsData.AirData;
         animator = player.m_animator;
         DTAniClipID = player.m_aniData._DTaniClipID;
-        DTAniParamID = player.m_aniData._DTaniBoolID;
+        DTAniParamID = player.m_aniData._DTaniParamID;
         inputActions = player.m_playerInput.actions;
     }
 

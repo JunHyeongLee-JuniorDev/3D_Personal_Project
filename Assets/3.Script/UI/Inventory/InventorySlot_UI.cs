@@ -18,6 +18,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
 
     public InventorySlot AssignedInventorySlot => assignedInventorySlot;
     public DynamicInventoryDisplay parentDisplay {  get; private set; }
+    public PlayerSetDisplayer anotherSetDisplay { get; private set; }
     //부모에 display하는 컴포넌트 참조
     private void Awake()
     {
@@ -25,6 +26,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
         button = GetComponent<Button>();
         button?.onClick.AddListener(OnUISlotLeftClick);
         parentDisplay = GetComponentInParent<DynamicInventoryDisplay>();
+        anotherSetDisplay = GetComponentInParent<PlayerSetDisplayer>();
     }
 
     public void Init(InventorySlot slot)
@@ -35,18 +37,20 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
 
     public void UpdateUISlot(InventorySlot slot)
     {// Ui slot을 실제 inventory itemData로부터 갱신
-        itemSprite.sprite = Managers.Instance.Data.itemDataBase.GetSprite(slot.Data.displayName);
-        itemSprite.color = Color.white;
 
         if (slot.StackSize > 1)
         { 
             itemCount.text = slot.StackSize.ToString();
+            itemSprite.sprite = Managers.Instance.Data.itemDataBase.GetSprite(slot.Data.displayName);
+            itemSprite.color = Color.white;
         }
 
 
         else if (slot.StackSize == 1)
         {
             itemCount.text = string.Empty;
+            itemSprite.sprite = Managers.Instance.Data.itemDataBase.GetSprite(slot.Data.displayName);
+            itemSprite.color = Color.white;
         }
 
         else
@@ -61,7 +65,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void ClearSlot()
     {
-        assignedInventorySlot?.ClearSlot();
+        assignedInventorySlot = new InventorySlot();
 
         itemSprite.sprite = null;
         itemSprite.color = Color.clear;
@@ -76,6 +80,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
         //Access display class
         Debug.Log($"{gameObject} 좌클릭 눌림");
         parentDisplay?.SlotLeftClicked(this);
+        anotherSetDisplay?.OnLeftClicked(this);
     }
 
     public void OnUISlotRightClick()

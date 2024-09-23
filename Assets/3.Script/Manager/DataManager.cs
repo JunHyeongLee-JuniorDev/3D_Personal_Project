@@ -16,7 +16,7 @@ public class DataManager : MonoBehaviour, IInitManager
     //현재 세이브 파일 index
     public int currentSaveIndex;
 
-    // 세팅 세이브 데이터 만들기
+    // 디볼트 세이브 데이터 
     private SettingSaveData defaultSetting = new SettingSaveData();
     public SettingSaveData DefaultSetting => defaultSetting;
 
@@ -102,6 +102,22 @@ public class DataManager : MonoBehaviour, IInitManager
         _newGamedata.savePlayerData = new PlayerData(new InventorySlot(initHealPotion, initHealPotion.updatableStack),
                                                      new InventorySlot(initManaPotion, initManaPotion.updatableStack));
         _newGamedata.savePlayerData.name = userName;
+
+        //스텟 초기화
+        _newGamedata.savePlayerData.currentHealth = 200f;
+        _newGamedata.savePlayerData.maxHealth = 200f;
+        _newGamedata.savePlayerData.currentMana = 100f;
+        _newGamedata.savePlayerData.maxMana = 100f;
+        _newGamedata.savePlayerData.currentStamina = 100f;
+        _newGamedata.savePlayerData.maxStamina = 100f;
+        _newGamedata.savePlayerData.staminaStat = 1;
+        _newGamedata.savePlayerData.strengthStat = 1;
+        _newGamedata.savePlayerData.lifeStat = 1;
+        _newGamedata.savePlayerData.manaStat = 1;
+        _newGamedata.savePlayerData.level = 1;
+        _newGamedata.savePlayerData.magicDamage = 20f;
+        _newGamedata.savePlayerData.weaponDamage = 25f;
+        _newGamedata.savePlayerData.wallet = 0;
         
         currentSaveData[saveFileIndex] = _newGamedata;
         SaveGame(saveFileIndex);
@@ -121,6 +137,8 @@ public class DataManager : MonoBehaviour, IInitManager
             string json = File.ReadAllText(fullPath);
             GameSaveData loadedData = JsonUtility.FromJson<GameSaveData>(json);
             currentSaveData[fileIndex] = loadedData;
+            currentSaveData[fileIndex].savePlayerData.currentPotion = 
+                currentSaveData[fileIndex].savePlayerData.equipments[(int)EEquipmentType.Heal];
         }
 
         else

@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
+using UnityEngine.Events;
 
 public class PlayerController : MonoBehaviour
 {
@@ -34,12 +35,16 @@ public class PlayerController : MonoBehaviour
     public bool isFall;
     public bool isJump;
     public bool isRightClicked;
+    public bool isDrinkPotion;
+    public bool isSpellCast;
 
     //Timer
     public Timer targetBtnTimer { get; private set; }
     public Timer rollBtnTimer { get; private set; }
     public Timer attackBtnTimer { get; private set; }
     public Timer itemGrabAniTimer { get; private set; }
+    public Timer potionTimer { get; private set; }
+    public Timer skillTimer { get; private set; }
 
     //Player--------------------------------------------------------------------------------
     //Hide
@@ -123,7 +128,9 @@ public class PlayerController : MonoBehaviour
         targetBtnTimer = new Timer(0.5f, this);
         rollBtnTimer = new Timer(1.0f, this);
         attackBtnTimer = new Timer(0.5f, this);
-        itemGrabAniTimer = new Timer(2.0f, this);
+        itemGrabAniTimer = new Timer(0.8f, this);
+        potionTimer = new Timer(1.0f, this);
+        skillTimer = new Timer(1.0f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
 

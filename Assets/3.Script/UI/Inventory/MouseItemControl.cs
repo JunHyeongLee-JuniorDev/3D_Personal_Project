@@ -38,7 +38,6 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
     {
         if(slot_UI.AssignedInventorySlot.Data == null) return;// 이거 부르는 곳에서 처리해줘야함
         assignedItem = slot_UI.AssignedInventorySlot;
-        Debug.Log("여기가 왜 불리는거야?");
 
         first_Btn.onClick.RemoveAllListeners();
         second_Btn.onClick.RemoveAllListeners();
@@ -79,34 +78,36 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 second_Btn.gameObject.SetActive(true);
                 secondBtn_Text.gameObject.SetActive(true);
 
+                firstBtn_Text.text = "장착";
                 first_Btn.onClick.AddListener(() => 
                 {
-                    assignedItem.RemoveFromStack(1);
                     Managers.Instance.Inventory.PlayerData.UpdateWeaponAndShield(slot_UI, 1);
                     Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.Invoke();
                     Managers.Instance.Inventory.OnDynamicWeaponChanged?.Invoke();
+                    assignedItem.ClearSlot();
                     Managers.Instance.Inventory.InvSys_Gear.OnInventorySlotChanged?.Invoke(slot_UI.AssignedInventorySlot);
                     OnClickClose();
                 });
 
-                firstBtn_Text.text = "장착";
                             
+                secondBtn_Text.text = "버리기";
                 second_Btn.onClick.AddListener(() => 
                 {
                     GameObject trash = Instantiate(Resources.Load<GameObject>(Managers.Instance.Data.itemModelPath));
                     trash.GetComponent<ItemPickUp>().itemSlot = new InventorySlot(assignedItem.Data, assignedItem.StackSize);
                     trash.transform.position = Managers.Instance.Game.playerController.transform.position;
                     assignedItem.ClearSlot();
+                    Managers.Instance.Inventory.InvSys_Gear.OnInventorySlotChanged?.Invoke(assignedItem);
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
                     OnClickClose();
                 });
 
-                secondBtn_Text.text = "버리기";
                 break;
             case EItemType.MISSION:
                 /*
                  * 설명, 닫기
                  */
+                firstBtn_Text.text = "설명";
                 second_Btn.gameObject.SetActive(false);
                 secondBtn_Text.gameObject.SetActive(false);
 
@@ -115,8 +116,6 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                     playerHUD_UI.missionDisplay.UpdateUI(assignedItem.Data);
                     OnClickClose();
                 });
-
-                firstBtn_Text.text = "설명";
                 break;
 
             default:

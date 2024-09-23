@@ -65,23 +65,33 @@ public class PlayerData
     public Vector3 playerPosition;
     public Quaternion playerRotation;
 
-    //Health
+    //Status
     public float currentHealth;
     public float maxHealth;
+    public float currentMana;
+    public float maxMana;
+    public float currentStamina;
+    public float maxStamina;
+    public float weaponDamage;
+    public float magicDamage;
 
     //Stat
     public int level;// 레벨
     public int lifeStat;// 생명력
     public int strengthStat;// 힘(소드)
     public int staminaStat;// 스테미나(도끼, 활)
-    public int intelligenceStat;// 지능(마법)
+    public int manaStat;//(마법)
     public int wallet;//지갑~
 
     //Gears
     public readonly int eqiupmentLength = 4;
     public InventorySlot[] equipments;
+    public InventorySlot currentPotion;
 
-    public UnityAction OnWeaponChanged;
+    public UnityEvent OnWeaponChanged;
+    public UnityEvent OnChangeHealPotion;
+    public UnityEvent OnRefillStatus;
+    public UnityEvent OnReduceStatus;
 
     /// <summary>
     /// 처음 게임을 생성하면 생성 무기, 방패는 원래 비어있기에 빈 슬롯할당
@@ -95,6 +105,7 @@ public class PlayerData
         equipments[(int)EEquipmentType.Weapon] = new InventorySlot();
         equipments[(int)EEquipmentType.Heal] = healPotion;
         equipments[(int)EEquipmentType.Mana] = manaPotion;
+        currentPotion = healPotion;
     }
 
     /// <summary>
@@ -108,9 +119,22 @@ public class PlayerData
         {
             if((newEquipment.AssignedInventorySlot.Data.weaponType.Equals(EWeaponType.SHIELD)))
             {
+                if (equipments[(int)EEquipmentType.Shield].StackSize > 0)
+                {
+                    Managers.Instance.Inventory.InvSys_Gear.AddToInventory(equipments[(int)EEquipmentType.Shield].Data,
+                                                                           equipments[(int)EEquipmentType.Shield].StackSize);
+                }
+
                 equipments[(int)EEquipmentType.Shield].UpdateInventorySlot(
                                 newEquipment.AssignedInventorySlot.Data, amount);
                 return;
+            }
+
+            if (equipments[(int)EEquipmentType.Weapon].StackSize > 0)
+            {
+                Debug.Log("이전 무기 stack size : " + equipments[(int)EEquipmentType.Weapon].StackSize);
+                Managers.Instance.Inventory.InvSys_Gear.AddToInventory(equipments[(int)EEquipmentType.Weapon].Data,
+                                                                       equipments[(int)EEquipmentType.Weapon].StackSize);
             }
 
             equipments[(int)EEquipmentType.Weapon].UpdateInventorySlot(
@@ -118,7 +142,6 @@ public class PlayerData
             return;
         }
     }
-
     public void refillPotion()
     {
         ItemData _itemData = equipments[(int)EEquipmentType.Heal].Data;
@@ -126,6 +149,46 @@ public class PlayerData
 
         _itemData = equipments[(int)EEquipmentType.Mana].Data;
         equipments[(int)EEquipmentType.Mana].AddToStack(_itemData.updatableStack);
+    }
+    public void DrinkPotion()
+    {
+        if (currentPotion.StackSize > 0)
+        {
+            currentPotion.RemoveFromStack(1);
+            if (currentPotion.Data.displayName == "체력 포션")
+                healHealth(currentPotion.Data.stat);
+
+            else
+                healMana(currentPotion.Data.stat);
+        }
+    }
+    /// <summary>
+    /// max를 넘는 값이 들어오면 나머지 값은 버림
+    /// </summary>
+    /// <param name="addValue"></param>
+    public void healHealth(float addValue)
+    {
+        if(currentHealth + addValue >= maxHealth)
+            currentHealth = maxHealth;
+
+        else
+            currentHealth += addValue;
+    }
+    public void healMana(float addValue)
+    {
+        if (currentMana + addValue >= maxHealth)
+            currentMana = maxHealth;
+
+        else
+            currentMana += addValue;
+    }
+    public void ChangePotion()
+    {
+        if (currentPotion.Equals(equipments[(int)EEquipmentType.Heal]))
+            currentPotion = equipments[(int)EEquipmentType.Mana];
+
+        else
+            currentPotion = equipments[(int)EEquipmentType.Heal];
     }
 }
 

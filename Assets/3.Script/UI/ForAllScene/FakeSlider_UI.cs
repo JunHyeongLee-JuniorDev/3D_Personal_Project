@@ -25,13 +25,32 @@ public class FakeSlider_UI : MonoBehaviour
     //    m_slider.GetComponent<RectTransform>().sizeDelta = rectSize;
     //}
 
-    public void ReduceSlider(float endValue, float maxValue)
+    public void ChangeWithoutTween(float endValue, float maxValue)
+    {
+        float currentValue = endValue / maxValue;
+        m_slider.value = currentValue;
+        m_fakeImage.fillAmount = currentValue;
+    }
+
+    public void ChangeSlider(float endValue, float maxValue)
     {
         realTweenCash?.Kill();
         realTweenCash = m_slider.DOValue(endValue / maxValue, duration).SetEase(Ease.OutExpo);
     }
 
-    public void ReduceSliderWithFake(float endValue, float maxValue)
+    public void RefillWithFakeSlider(float endValue, float maxValue)
+    {
+        fakeTweenCash?.Kill();
+
+        float currentValue = endValue / maxValue;
+
+        fakeTweenCash = m_fakeImage.DOFillAmount(currentValue, duration).OnComplete(() =>
+        {
+            m_fakeImage.fillAmount = currentValue;
+        });
+    }
+
+    public void ChangeSliderWithFake(float endValue, float maxValue)
     {
         if (coroutineCash != null)
         StopCoroutine(coroutineCash);
@@ -42,10 +61,10 @@ public class FakeSlider_UI : MonoBehaviour
         fakeTweenCash?.Kill();
         fakeTweenCash = m_fakeImage.DOFillAmount(currentValue, duration);
 
-        coroutineCash = StartCoroutine(ReduceFake_co(currentValue));
+        coroutineCash = StartCoroutine(ChangeSlider_co(currentValue));
     }
 
-    private IEnumerator ReduceFake_co(float currentValue)
+    private IEnumerator ChangeSlider_co(float currentValue)
     {
         yield return new WaitForSeconds(1.5f);
 

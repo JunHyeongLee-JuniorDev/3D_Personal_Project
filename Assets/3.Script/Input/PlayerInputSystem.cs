@@ -13,7 +13,13 @@ public class PlayerinputSystem : MonoBehaviour
     public Vector2 look { get; private set; }
     public PlayerController player;
 
-public void OnMove(InputAction.CallbackContext context)
+    private void Start()
+    {
+        Managers.Instance.Game.playerInput.actions["T"].started -= OnPressT;
+        Managers.Instance.Game.playerInput.actions["T"].started += OnPressT;
+    }
+
+    public void OnMove(InputAction.CallbackContext context)
     {
         move = context.ReadValue<Vector2>();
     }
@@ -65,5 +71,26 @@ public void OnMove(InputAction.CallbackContext context)
 
         else if (context.canceled)
         player.isRightClicked = false;
+    }
+    
+    public void OnChangeWheel(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("내가 바뀐다.");
+            Managers.Instance.Inventory.PlayerData.ChangePotion();
+            Managers.Instance.Inventory.PlayerData.OnChangeHealPotion?.Invoke();
+        }
+    }
+
+    public void OnPressT(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Debug.Log("T눌림");
+            player.isDrinkPotion = true;
+            Managers.Instance.Inventory.PlayerData.DrinkPotion();
+            Managers.Instance.Inventory.PlayerData.OnRefillStatus?.Invoke(); 
+        }
     }
 }

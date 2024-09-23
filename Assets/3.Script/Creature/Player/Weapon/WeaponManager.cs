@@ -43,7 +43,7 @@ public class WeaponManager : MonoBehaviour
         weaponModels.Add("¹æÆÐ", _newModel);
         _newModel.SetActive(false);
 
-        Managers.Instance.Inventory.PlayerData.OnWeaponChanged += ActivateModel;
+        Managers.Instance.Inventory.PlayerData.OnWeaponChanged.AddListener(ActivateModel);
         ActivateModel();
     }
 
@@ -63,9 +63,11 @@ public class WeaponManager : MonoBehaviour
 
         if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {
+            currentRightHandModel?.SetActive(false);
             currentRightHandModel = weaponModels[Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.displayName];
             currentRightHandModel?.SetActive(true);
         }
+
         else
         {
             currentLeftHandModel?.SetActive(false);

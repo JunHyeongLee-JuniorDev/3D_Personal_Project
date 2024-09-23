@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -70,6 +72,7 @@ public class DynamicInventoryDisplay : MonoBehaviour
         {
             if (slot.Value.Equals(updatedSlot)) // 만약 UI에 있는 아이템과 같은 아이템이라면 추가
             {
+                slot.Key.Init(updatedSlot); 
                 slot.Key.UpdateUISlot(updatedSlot);
             }
         }

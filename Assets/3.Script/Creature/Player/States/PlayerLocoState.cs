@@ -17,12 +17,15 @@ public class PlayerLocoState : PlayerBaseState
     public override void Enter()
     {
         base.Enter();
-        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.25f);
+        inputActions["Skill"].started -= OnSkill;
+        inputActions["Skill"].started += OnSkill;
+        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.3f);
     }
 
     public override void Update()
     {
         base.Update();
+        if (isGrabAniOn || player.isSpellCast) return;
         if (player.m_input.move.Equals(Vector2.zero))
         {
             player.m_targetSpeed = 0f;
@@ -40,7 +43,7 @@ public class PlayerLocoState : PlayerBaseState
                 player.m_targetSpeed = groundData.BaseSpeed;
             }
         }
-
+        
         Move();
         Jump();
         Gravity();
@@ -53,6 +56,7 @@ public class PlayerLocoState : PlayerBaseState
     public override void Exit()
     {
         base.Exit();
+        inputActions["Skill"].started -= OnSkill;
         isGrabAniOn = false;
     }
 
@@ -66,10 +70,12 @@ public class PlayerLocoState : PlayerBaseState
     {
         base.SetAniBool();
 
-        if (isGrabAniOn && player.itemGrabAniTimer.isEnd)
+        if ((isGrabAniOn && player.itemGrabAniTimer.isEnd) ||
+            (player.isSpellCast && player.skillTimer.isEnd))
         {
             isGrabAniOn = false;
-            animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+            player.isSpellCast = false;
+            animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.25f);
         }
     }
 
@@ -94,6 +100,51 @@ public class PlayerLocoState : PlayerBaseState
     {
         player.itemGrabAniTimer.StartTimer();
         isGrabAniOn = true;
-        animator.CrossFade(DTAniClipID[EPlayerAni.GRAB], 0.1f);
+        animator.SetLayerWeight(2, 1f);
+        animator.CrossFade(DTAniClipID[EPlayerAni.GRAB], 0.25f);
+    }
+
+    public void OnSkill(InputAction.CallbackContext context)
+    {
+        if (context.started &&
+         !player.isSpellCast)
+        {
+            player.isSpellCast = true;
+            UseSkill();
+        }
+    }
+
+    private void UseSkill()
+    {
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+
+        if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
+        {
+            switch (_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)
+            {
+                case EWeaponType.SWORD:
+                    player.skillTimer.UpdateMaxTime(1.5f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.SwordSkill], 0.2f);
+                    break;
+
+                case EWeaponType.MAGIC:
+                    player.skillTimer.UpdateMaxTime(3.5f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.MagicSkill], 0.2f);
+                    break;
+
+                case EWeaponType.AXE:
+                    player.skillTimer.UpdateMaxTime(3.0f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.AxeSkill], 0.2f);
+                    break;
+            }
+
+            player.skillTimer.StartTimer();
+        }
+
+        else
+        {
+            player.isSpellCast = false;
+            return;
+        }
     }
 }
