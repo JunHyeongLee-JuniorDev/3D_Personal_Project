@@ -7,9 +7,7 @@ using UnityEngine.Windows;
 
 public class PlayerStateMachine : StateMachine
 {
-    public PlayerController player { get; private set; }
-
-    
+    public PlayerController player {  get; private set; }
     public PlayerStateMachine(PlayerController player)
     {
         this.player = player;

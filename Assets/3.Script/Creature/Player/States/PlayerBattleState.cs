@@ -38,8 +38,12 @@ public class PlayerBattleState : PlayerBaseState
             battleAniY = 0.0f;
 
             player.m_Controller.Move(Vector3.zero);
+            inputActions["Look"].started -= OnLook;
             inputActions["Look"].started += OnLook;
+            inputActions["Jump"].started -= OnRoll;
             inputActions["Jump"].started += OnRoll;
+            inputActions["Skill"].started -= OnSkill;
+            inputActions["Skill"].started += OnSkill;
             inputActions["Sprint"].Disable();
         }
     }
@@ -59,7 +63,6 @@ public class PlayerBattleState : PlayerBaseState
         Move();
         LookAtTarget();
         Gravity();
-        ResetRoll();
     }
 
     public override void LateUpdate()
@@ -76,7 +79,7 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     public override void Move()
     {
-        if(isRolling) return;
+        if(isRolling || player.isSpellCast) return;
 
         if (player.m_input.move.Equals(Vector2.zero))
         {
@@ -332,18 +335,7 @@ public class PlayerBattleState : PlayerBaseState
         player.transform.rotation = Quaternion.Euler(0.0f, rollRotation, 0.0f);
         animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.2f);
     }
-    /// <summary>
-    /// roll 애니메이션 시간
-    /// </summary>
-    private void ResetRoll()
-    {
-        if (isRolling && player.rollBtnTimer.isEnd)
-        {
-            isRolling = false;
-            inputActions["Fire"].Enable();
-            animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);
-        }
-    }
+    
     /// <summary>
     /// 윌드 좌표에 있는 타게팅 카메라 root를 LateUpdate에서 forward를 타겟 방향으로 설정
     /// </summary>
@@ -367,6 +359,7 @@ public class PlayerBattleState : PlayerBaseState
             player.lockOnCanvas.SetActive(false);
             player.m_targetEnemy = null;
             player.thirdPersonCam.enabled = true;
+            inputActions["Skill"].started -= OnSkill;
         }
 
         inputActions["Look"].started -= OnLook;
@@ -378,10 +371,10 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     private void OnLook(InputAction.CallbackContext context)
     {
-        if (player.targetBtnTimer.isEnd && Mathf.Abs(context.ReadValue<Vector2>().x) > 1.0f)
+        if (!player.targetBtnTimer.isTickin && Mathf.Abs(context.ReadValue<Vector2>().x) > 1.0f)
         {
             FindAnotherTarget(context.ReadValue<Vector2>().x);
-            player.targetBtnTimer.StartTimer();
+            player.targetBtnTimer.StartTimer(() => { });
         }
     }
     /// <summary>
@@ -389,12 +382,57 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     private void OnRoll(InputAction.CallbackContext context)
     {
-        if (player.rollBtnTimer.isEnd)
+        if (!player.rollBtnTimer.isTickin)
         {
             isRolling = true;
             inputActions["Fire"].Disable();
-            player.rollBtnTimer.StartTimer();
+            player.rollBtnTimer.StartTimer(() =>
+            {
+                isRolling = false;
+                inputActions["Fire"].Enable();
+                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);
+            });
             PerformRoll();
+        }
+    }
+
+    protected override void UseSkill()
+    {
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+
+        if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
+        {
+            switch (_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)
+            {
+                case EWeaponType.SWORD:
+                    player.skillTimer.UpdateMaxTime(1.5f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.SwordSkill], 0.2f);
+                    break;
+
+                case EWeaponType.MAGIC:
+                    player.skillTimer.UpdateMaxTime(3.5f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.MagicSkill], 0.2f);
+                    break;
+
+                case EWeaponType.AXE:
+                    player.skillTimer.UpdateMaxTime(3.0f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.AxeSkill], 0.2f);
+                    break;
+            }
+
+            player.skillTimer.StartTimer(() =>
+            {
+                player.isSpellCast = false;
+                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+                player.weaponManager.endSkill();
+            });
+            player.weaponManager.actiaveSkill();
+        }
+
+        else
+        {
+            player.isSpellCast = false;
+            return;
         }
     }
 }

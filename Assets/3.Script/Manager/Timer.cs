@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class Timer 
 {
@@ -8,13 +10,13 @@ public class Timer
     public Coroutine coroutineCash { get; private set; }
     private MonoBehaviour controller;
 
-    public bool isEnd { get; private set; }
+    public bool isTickin { get; private set; }
 
     public Timer(float maxTime, MonoBehaviour monoBehaviour)
     {
         this.maxTime = maxTime;
         controller = monoBehaviour;
-        isEnd = true;
+        isTickin = false;
 
     }
 
@@ -23,17 +25,18 @@ public class Timer
         this.maxTime = maxTime;
     }
 
-    public void StartTimer()
+    public void StartTimer(Action onComplete)
     {
         if(coroutineCash != null)
             controller.StopCoroutine(coroutineCash);
-        isEnd = false;
-        coroutineCash = controller.StartCoroutine(StartTimer_co());
+        isTickin = true;
+        coroutineCash = controller.StartCoroutine(StartTimer_co(onComplete));
     }
 
-    private IEnumerator StartTimer_co()
+    private IEnumerator StartTimer_co(Action onComplete)
     {
         yield return new WaitForSeconds(maxTime);
-        isEnd = true;
+        onComplete();
+        isTickin = false;
     }
 }

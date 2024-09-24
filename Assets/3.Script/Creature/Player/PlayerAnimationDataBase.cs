@@ -50,7 +50,7 @@ public class PlayerAnimationDataBase
     public readonly float meleeComboCool = 0.5f;
     public readonly float swordComboCool = 1.0f;
     public readonly float axeComboCool   = 0.4f;
-    public readonly float magicComboCool = 1.0f;
+    public readonly float magicComboCool = 0.8f;
 
     public readonly float meleeFadeDuration = 0.2f;
     public readonly float swordFadeDuration = 0.25f;

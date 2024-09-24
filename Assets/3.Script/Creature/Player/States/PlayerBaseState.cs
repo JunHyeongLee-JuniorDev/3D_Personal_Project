@@ -180,4 +180,54 @@ public class PlayerBaseState : IState
         animator.SetBool(DTAniParamID[EPlayerAniParam.ISGROUND], player.isGrouded);
         animator.SetBool(DTAniParamID[EPlayerAniParam.ISFALL], player.isFall);
     }
+
+    public void OnSkill(InputAction.CallbackContext context)
+    {
+        if (context.started &&
+         !player.isSpellCast)
+        {
+            player.isSpellCast = true;
+            UseSkill();
+        }
+    }
+
+    protected virtual void UseSkill()
+    {
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+
+        if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
+        {
+            switch (_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)
+            {
+                case EWeaponType.SWORD:
+                    player.skillTimer.UpdateMaxTime(1.5f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.SwordSkill], 0.2f);
+                    break;
+
+                case EWeaponType.MAGIC:
+                    player.skillTimer.UpdateMaxTime(3.5f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.MagicSkill], 0.2f);
+                    break;
+
+                case EWeaponType.AXE:
+                    player.skillTimer.UpdateMaxTime(3.0f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.AxeSkill], 0.2f);
+                    break;
+            }
+
+            player.skillTimer.StartTimer(() =>
+            {
+                player.isSpellCast = false;
+                animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+                player.weaponManager.endSkill();
+            });
+            player.weaponManager.actiaveSkill();
+        }
+
+        else
+        {
+            player.isSpellCast = false;
+            return;
+        }
+    }
 }

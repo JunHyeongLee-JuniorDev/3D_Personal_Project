@@ -8,8 +8,6 @@ using System;
 /// </summary>
 public abstract class StateMachine
 {
-    protected float crossFadeDuration = 0.1f;
-
     protected StateNode current;
     protected Dictionary<Type, StateNode> nodes = new Dictionary<Type, StateNode>();
     protected HashSet<ITransition> anyTransitions = new HashSet<ITransition>();

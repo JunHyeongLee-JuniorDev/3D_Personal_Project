@@ -56,7 +56,7 @@ public class PlayerAttackState : PlayerBaseState
         }
 
         attackIndex = 0;
-        player.attackBtnTimer.StartTimer();
+        player.attackBtnTimer.StartTimer(() => {});
         animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
         inputActions["Move"].Disable();
@@ -92,6 +92,7 @@ public class PlayerAttackState : PlayerBaseState
     public override void Exit()
     {
         base.Exit();
+        player.isAttack = false;
         inputActions["Fire"].started -= OnFire;
         inputActions["Move"].Enable();
         inputActions["Sprint"].Enable();
@@ -113,14 +114,13 @@ public class PlayerAttackState : PlayerBaseState
     {
         Debug.Log("АјАн index : " + attackIndex);
 
-        if (player.attackBtnTimer.isEnd)
+        if (!player.attackBtnTimer.isTickin)
         {
-          player.attackBtnTimer.StartTimer();
-
             if (attackIndex >= attackAniClips.Length)
                 attackIndex = 0;
 
             animator.CrossFade(attackAniClips[attackIndex++], attackFadeDuration);
+            player.attackBtnTimer.StartTimer(() => { });
         }
     }
 }

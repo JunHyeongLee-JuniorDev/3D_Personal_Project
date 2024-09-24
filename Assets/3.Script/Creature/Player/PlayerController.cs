@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public CinemachineStateDrivenCamera stateDrivenCamera { get; private set; }
     public ThirdPersonCam thirdPersonCam { get; private set; }
     public Animator cinemachineAnimator;
+    public WeaponManager weaponManager { get; private set; }
 
     //State Bool
     public bool isSprint;
@@ -77,7 +78,7 @@ public class PlayerController : MonoBehaviour
 
     //Prefabs
     public GameObject lockOnCanvas { get; private set; }
-    public float lockOnCanvasScale { get; private set; } = 0.5f;
+    public float lockOnCanvasScale { get; private set; } = 0.1f;
     public Transform lockOnTarget { get; private set; }
     public Transform lockOnTargetRoot { get; private set; }
     public FakeSlider_UI hpSlider { get; private set; }
@@ -120,6 +121,7 @@ public class PlayerController : MonoBehaviour
         m_animator = GetComponent<Animator>();
         m_playerInput = GetComponent<PlayerInput>();
         thirdPersonCam = GetComponent<ThirdPersonCam>();
+        weaponManager = GetComponentInChildren<WeaponManager>();
         //컴포넌트 캐싱
 
         //스테이트 & 타이머 초기화
@@ -137,10 +139,18 @@ public class PlayerController : MonoBehaviour
         //프리펩 생성
         if(lockOnTarget == null)
         lockOnTarget = new GameObject("EnemyTarget_Locator").transform;
-        if(lockOnTargetRoot == null)
-        lockOnTargetRoot = Managers.Instance.InstantiateResouce("Prefabs/Player/TargetCamRoot", "TargetCamRoot").transform;
-        if(lockOnCanvas == null)
-            lockOnCanvas = Managers.Instance.InstantiateResouce("Prefabs/Player/LockOnCanvas", "LockOnCanvas");
+
+        if (lockOnTargetRoot == null)
+        {
+            lockOnTargetRoot = Instantiate(Resources.Load<GameObject>("Prefabs/Player/TargetCamRoot")).transform;
+            lockOnTargetRoot.name = "TargetCamRoot";
+        }
+
+        if (lockOnCanvas == null)
+        {
+            lockOnCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/Player/LockOnCanvas"));
+            lockOnCanvas.name = "LockOnCanvas";
+        }
 
         foreach (var camera in stateDrivenCamera.ChildCameras)
         {//카메라 할당

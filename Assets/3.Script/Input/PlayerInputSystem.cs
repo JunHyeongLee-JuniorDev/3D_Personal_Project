@@ -15,8 +15,8 @@ public class PlayerinputSystem : MonoBehaviour
 
     private void Start()
     {
-        Managers.Instance.Game.playerInput.actions["T"].started -= OnPressT;
-        Managers.Instance.Game.playerInput.actions["T"].started += OnPressT;
+        player.m_playerInput.actions["T"].started -= OnPressT;
+        player.m_playerInput.actions["T"].started += OnPressT;
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -77,7 +77,7 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log("³»°¡ ¹Ù²ï´Ù.");
+            Debug.Log("³»°¡ ¹Ù²ï´Ù. ³­ Â¯¸ÚÀÖ´Ù!");
             Managers.Instance.Inventory.PlayerData.ChangePotion();
             Managers.Instance.Inventory.PlayerData.OnChangeHealPotion?.Invoke();
         }
