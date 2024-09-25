@@ -61,7 +61,6 @@ public abstract class StateMachine
     public void ChangeState(IState state)
     {
         if (current.state.Equals(state)) return;
-
         var previousState = current.state;
         var nextState = state;
 

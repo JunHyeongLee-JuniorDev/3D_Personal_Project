@@ -35,7 +35,9 @@ public class Timer
 
     private IEnumerator StartTimer_co(Action onComplete)
     {
+        Debug.Log("타이머 시간 : " + maxTime);
         yield return new WaitForSeconds(maxTime);
+        Debug.Log("타이머 꺼짐");
         onComplete();
         isTickin = false;
     }

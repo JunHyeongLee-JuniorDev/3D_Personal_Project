@@ -1,13 +1,20 @@
 using System;
 using System.Collections.Generic;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterController : MonoBehaviour
 {
-    //NavMeshAgent
-    private NavMeshAgent navAI;
+    //UnityComponents
+    public NavMeshAgent navAI {  get; private set; }
+    public Animator animator {  get; private set; }
+
+    //Monster Data
+    [field : SerializeField] public MonsterSO monsterSO { get; private set; }
+    [SerializeField] public float PatrolStopDistance = 0.5f;
+    public MonsterAniDataBase aniDataBase { get; private set; }
 
     //State Machine
     private MonsterStateMachine stateMachine;
@@ -17,37 +24,49 @@ public class MonsterController : MonoBehaviour
     [SerializeField] private float sphereRad;
     [SerializeField] private float viewDegree;
     [SerializeField] private LayerMask targetMask;
+    [SerializeField] private LayerMask obstacles;
 
     //Player
-    public Transform player;
+    public Transform player { get; private set; }
 
     //State Conditions
-    public bool isFoundPlayer;
-
+    [field:SerializeField] public bool isCanPatrol { get; private set; }
+    public bool isFoundPlayer = false;
     //Patrol Node
-    [field : SerializeField] public List<Transform> nodes { get; private set; }
+    [field : SerializeField] public List<Transform> nodeList { get; private set; }
 
+    public Stack<Transform> nodeStack { get; private set; }
+
+    //etc...
+    [SerializeField] private float _rotLerp = 0.03f;
+    public Timer attackTimer { get; private set; }
     private void Start()
     {
-        stateMachine = new MonsterStateMachine(this);
+        //GetComponent
+        navAI = GetComponent<NavMeshAgent>();
+        animator = GetComponent<Animator>();
+        aniDataBase = new MonsterAniDataBase();
+        aniDataBase.init();
 
+        //Inits
+        nodeStack = new Stack<Transform>();
+        attackTimer = new Timer(2.0f, this);
+        navAI.updateRotation = false;
+
+        //Init States
+        stateMachine = new MonsterStateMachine(this);
         var _locoState = new MonsterLocoState(stateMachine);
         var _battleState = new MonsterBattleState(stateMachine);
-
         stateMachine.AddTransition(_locoState, _battleState, new FuncPredicate(() => isFoundPlayer));
-        stateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => !isFoundPlayer));
-        //Loco State
-        //Find State
-        //Battle State
+        stateMachine.AddTransition(_battleState, _locoState, new FuncPredicate(() => !isFoundPlayer));
         stateMachine.SetState(_locoState);
-
-        navAI = GetComponent<NavMeshAgent>();
     }
 
     private void Update()
     {
         stateMachine.Update();
-        isFoundPlayer = IsPlayerInView();
+        IsPlayerInView();
+        transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, navAI.desiredVelocity, _rotLerp));
     }
 
     private void FixedUpdate()
@@ -63,20 +82,20 @@ public class MonsterController : MonoBehaviour
     /// <summary>
     /// 구 내부 시야각 안에서 플레이어 감지
     /// </summary>
-    private bool IsPlayerInView()
+    private void IsPlayerInView()
     {
-        if (isFoundPlayer) return true;
+        if (isFoundPlayer) return;
 
         Collider[] colliders = Physics.OverlapSphere(transform.position, sphereRad, layerMask : targetMask);
 
-        if (colliders.Length == 0) return false;
 
-        Vector3 _rightDir = ConvertVector3Degree(transform.eulerAngles.y + viewDegree * 0.5f);
-        Vector3 _leftDir = ConvertVector3Degree(transform.eulerAngles.y - viewDegree * 0.5f);
+        Vector3 _rightDir = ConvertDegreeToDir(transform.eulerAngles.y + viewDegree * 0.5f);
+        Vector3 _leftDir = ConvertDegreeToDir(transform.eulerAngles.y - viewDegree * 0.5f);
 
         Debug.DrawRay(transform.position, _rightDir * sphereRad, Color.green);
         Debug.DrawRay(transform.position, _leftDir * sphereRad, Color.green);
         
+        if (colliders.Length == 0) return;
 
         foreach (var _target in colliders)
         {
@@ -88,21 +107,19 @@ public class MonsterController : MonoBehaviour
 
             if (Vector3.Angle(transform.forward, dirTarget.normalized) < viewDegree * 0.5f)
             {
-                Debug.DrawRay(transform.position, dirTarget, Color.red);
-                if (Physics.Raycast(transform.position, dirTarget.normalized, out RaycastHit hitInfo, 
-                    Vector3.Distance(transform.position, _target.transform.position),targetMask))
+                if (!Physics.Raycast(transform.position, dirTarget.normalized, 
+                    Vector3.Distance(transform.position, _target.transform.position),obstacles))
                 {
-                    player = hitInfo.transform;
+                    player = _target.transform;
                     isFoundPlayer = true;
+                    return;
                 }
             }
-
         }
-
-        return false;
+        isFoundPlayer = false;
     }
 
-    private Vector3 ConvertVector3Degree(float degree)
+    private Vector3 ConvertDegreeToDir(float degree)
     {
         float _rad = Mathf.Deg2Rad * degree;
         return new Vector3(Mathf.Sin(_rad),0.0f, Mathf.Cos(_rad));

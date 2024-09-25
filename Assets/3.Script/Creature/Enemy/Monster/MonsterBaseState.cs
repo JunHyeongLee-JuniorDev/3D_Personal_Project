@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class MonsterBaseState : IState
 {
-    private MonsterController monster;
-    private MonsterAniDataBase MonsterAniDataBase;
-
+    protected MonsterSO monsterSO;
+    protected MonsterController monster;
+    protected MonsterAniDataBase aniDB;
     public MonsterBaseState(MonsterStateMachine stateMachine)
     {
         this.monster = stateMachine.monster;
+        monsterSO = monster.monsterSO;
+        aniDB = monster.aniDataBase;
     }
 
     public virtual void Enter()
