@@ -144,6 +144,7 @@ public class PlayerController : MonoBehaviour
         {
             lockOnTargetRoot = Instantiate(Resources.Load<GameObject>("Prefabs/Player/TargetCamRoot")).transform;
             lockOnTargetRoot.name = "TargetCamRoot";
+            lockOnTargetRoot.GetComponent<PlayerFollowRoot>().AssignPlayer(this);
         }
 
         if (lockOnCanvas == null)
@@ -157,6 +158,11 @@ public class PlayerController : MonoBehaviour
             if (camera.name.Equals("targetCamera"))
             {
                 camera.Follow = lockOnTargetRoot;
+            }
+
+            if (camera.name.Equals("PlayerFollowCamera"))
+            {
+                camera.Follow = transform.GetChild(0);
             }
         }
         //ÇÁ¸®Æé »ý¼º

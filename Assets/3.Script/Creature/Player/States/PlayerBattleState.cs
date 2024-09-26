@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using System;
 using System.Collections;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class PlayerBattleState : PlayerBaseState
 {
@@ -186,12 +187,15 @@ public class PlayerBattleState : PlayerBaseState
     /// <param name="isRight">초기화가 아닐 시 화면의 오른쪽 객체 혹은 왼쪽에 있는 객체를 담습니다.</param>
     private void AssignTarget(bool isInit, bool isRight)
     {
+        Debug.Log(player.enemyLayer);
+
         Collider[] enemys = Physics.OverlapSphere(player.transform.position, player.radiusOfView, player.enemyLayer, QueryTriggerInteraction.Ignore);
         // 범위 안에 적이 있다면 배열에 담습니다.
 
-        if (enemys == null ||
+        if (enemys.Length == 0 ||
             isInit && player.m_targetEnemy != null) return;
 
+        Debug.Log($"근데 여긴 들어가는데... : {enemys.Length}");
         float nearlistEnemyDist = -1.0f; // 무조건 거리는 양수이므로 처음에는 음수를 지정해줍니다.
 
         // For Cashing
@@ -203,8 +207,8 @@ public class PlayerBattleState : PlayerBaseState
 
         foreach (Collider enemy in enemys)
         {
+            Debug.Log("foreach는 들어가고");
             _enemyPos = enemy.transform.position;
-
             if (isInCam(_enemyPos, out Vector3 _enemyViewPos)) // 적이 카메라 내에 있다면
             {
                 if (!isInit)
@@ -232,15 +236,11 @@ public class PlayerBattleState : PlayerBaseState
         }
 
         if (nearlistEnemy != null)
-        {
-            if (player.m_targetEnemy != null) // 디버깅을 위한 이전 객체 체크
-                player.m_targetEnemy.GetComponent<Renderer>().material.color = Color.yellow;
             player.m_targetEnemy = nearlistEnemy;
-            player.m_targetEnemy.GetComponent<Renderer>().material.color = Color.red;// 디버깅을 위한 다음 객체 체크
-        }
 
         else // 위 조건을 만족하는 객체가 없다면 battle state 종료
         {
+            Debug.Log("여기서 나간건가?");
             if (isInit)
                 player.isBattle = false;
         }

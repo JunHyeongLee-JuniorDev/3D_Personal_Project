@@ -9,6 +9,7 @@ public class Timer
     private float maxTime;
     public Coroutine coroutineCash { get; private set; }
     private MonoBehaviour controller;
+    private Action OnComplete;
 
     public bool isTickin { get; private set; }
 
@@ -17,7 +18,6 @@ public class Timer
         this.maxTime = maxTime;
         controller = monoBehaviour;
         isTickin = false;
-
     }
 
     public void UpdateMaxTime(float maxTime)
@@ -27,18 +27,25 @@ public class Timer
 
     public void StartTimer(Action onComplete)
     {
-        if(coroutineCash != null)
-            controller.StopCoroutine(coroutineCash);
         isTickin = true;
+        this.OnComplete = onComplete;
         coroutineCash = controller.StartCoroutine(StartTimer_co(onComplete));
     }
 
     private IEnumerator StartTimer_co(Action onComplete)
     {
-        Debug.Log("≈∏¿Ã∏” Ω√∞£ : " + maxTime);
         yield return new WaitForSeconds(maxTime);
-        Debug.Log("≈∏¿Ã∏” ≤®¡¸");
-        onComplete();
+        this.OnComplete?.Invoke();
         isTickin = false;
+    }
+
+    public void StopTimer()
+    {
+        if (coroutineCash != null)
+        {
+            isTickin = false;
+            this.OnComplete?.Invoke();
+            controller.StopCoroutine(coroutineCash);
+        }
     }
 }

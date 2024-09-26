@@ -8,7 +8,7 @@ public class PlayerLocoState : PlayerBaseState
 {
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine) 
     {
-        Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
+        //Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
     }
 
     public override void Enter()
@@ -64,7 +64,7 @@ public class PlayerLocoState : PlayerBaseState
 
     private void ShieldAni()
     {
-        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data == null) return;
+        //if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data == null) return;
 
         if (player.isRightClicked)
         {

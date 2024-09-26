@@ -1,6 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -13,7 +16,9 @@ public class MonsterController : MonoBehaviour
 
     //Monster Data
     [field : SerializeField] public MonsterSO monsterSO { get; private set; }
-    [SerializeField] public float PatrolStopDistance = 0.5f;
+    [field : SerializeField] public float PatrolStopDistance { get; private set; } = 0.5f;
+    [field : SerializeField] public float ChaseStopDistance { get; private set; } = 3.0f;
+    [field : SerializeField] public float attackDistance { get; private set; } = 2.0f;
     public MonsterAniDataBase aniDataBase { get; private set; }
 
     //State Machine
@@ -30,8 +35,10 @@ public class MonsterController : MonoBehaviour
     public Transform player { get; private set; }
 
     //State Conditions
-    [field:SerializeField] public bool isCanPatrol { get; private set; }
-    public bool isFoundPlayer = false;
+    [HideInInspector] public bool isFoundPlayer = false;
+    [HideInInspector] public bool isAttack = false;
+    [HideInInspector] public bool isInRotateRad = false;
+
     //Patrol Node
     [field : SerializeField] public List<Transform> nodeList { get; private set; }
 
@@ -39,7 +46,13 @@ public class MonsterController : MonoBehaviour
 
     //etc...
     [SerializeField] private float _rotLerp = 0.03f;
+
+
+    //Timer
+    [SerializeField] private float timeBetweenAttack = 1.0f;
     public Timer attackTimer { get; private set; }
+    public Timer outMapTimer { get; private set; }
+
     private void Start()
     {
         //GetComponent
@@ -50,20 +63,30 @@ public class MonsterController : MonoBehaviour
 
         //Inits
         nodeStack = new Stack<Transform>();
-        attackTimer = new Timer(2.0f, this);
+        attackTimer = new Timer(timeBetweenAttack, this);
+        outMapTimer = new Timer(5.0f, this);
         navAI.updateRotation = false;
 
         //Init States
         stateMachine = new MonsterStateMachine(this);
+
         var _locoState = new MonsterLocoState(stateMachine);
-        var _battleState = new MonsterBattleState(stateMachine);
-        stateMachine.AddTransition(_locoState, _battleState, new FuncPredicate(() => isFoundPlayer));
-        stateMachine.AddTransition(_battleState, _locoState, new FuncPredicate(() => !isFoundPlayer));
+        var _chaseState = new MonsterChaseState(stateMachine);
+        var _rotateState = new MonsterRotateState(stateMachine);
+        var _attackState = new MonsterAttackState(stateMachine);
+
+        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isFoundPlayer));
+        stateMachine.AddAnyTransition(_chaseState, new FuncPredicate(() => isFoundPlayer && !isInRotateRad && !isAttack));
+        stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack));
+        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack));
+        stateMachine.AddTransition(_attackState, _rotateState, new FuncPredicate(() => !isAttack));
+
         stateMachine.SetState(_locoState);
     }
 
     private void Update()
     {
+        PlayerOutOfMapCheck();
         stateMachine.Update();
         IsPlayerInView();
         transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, navAI.desiredVelocity, _rotLerp));
@@ -123,6 +146,44 @@ public class MonsterController : MonoBehaviour
     {
         float _rad = Mathf.Deg2Rad * degree;
         return new Vector3(Mathf.Sin(_rad),0.0f, Mathf.Cos(_rad));
+    }
+
+    public bool CheckPlayerDistance()
+    {
+        return !navAI.pathPending &&
+                                     navAI.remainingDistance <= navAI.stoppingDistance;
+    }
+
+    private void PlayerOutOfMapCheck()
+    {
+        if (!navAI.pathPending && navAI.pathStatus == NavMeshPathStatus.PathPartial &&
+            !outMapTimer.isTickin)
+        {
+            Debug.Log("플레이어 나간거 체크 되니???");
+            navAI.isStopped = true;
+            isFoundPlayer = false;
+            navAI.velocity = Vector3.zero;
+
+            animator.CrossFade(aniDataBase.monsterAniClips[EMonsterAni.LocoBlend], 0.2f);
+            animator.SetFloat(aniDataBase.monsterParams[EMonsterAni.LocoBlend], 0.0f);
+
+            outMapTimer.StartTimer(() =>
+            {
+                navAI.isStopped = false;
+                isAttack = false;
+                isFoundPlayer = false;
+                isInRotateRad = false;
+            });
+        }
+
+        else if(outMapTimer.isTickin && 
+            navAI.pathStatus == NavMeshPathStatus.PathComplete &&
+            !navAI.pathPending &&
+            isFoundPlayer)
+        {
+            navAI.isStopped = false;
+            outMapTimer.StopTimer();
+        }
     }
 
     private void OnDrawGizmos()

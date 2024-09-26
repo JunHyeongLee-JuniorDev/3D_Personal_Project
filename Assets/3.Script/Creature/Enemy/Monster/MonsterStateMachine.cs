@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class MonsterStateMachine : StateMachine
 {
@@ -10,5 +11,4 @@ public class MonsterStateMachine : StateMachine
     {
         this.monster = monster;
     }
-
 }

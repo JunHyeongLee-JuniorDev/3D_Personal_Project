@@ -17,22 +17,25 @@ public class MonsterSO : ScriptableObject
     [SerializeField] private float runSpeed;
     [Range(0.0f, 30.0f)]
     [SerializeField] private float rotateAroundSpeed;
+    [Range(0.0f, 5.0f)]
+    [SerializeField] private float rotateDistance;
 
     public EMonsterType MonsterType => monsterType;
     public MonsterSkill[] MonsterSkills => monsterSkills;
     public float PatrolSpeed => patrolSpeed;
     public float RunSpeed => runSpeed;
     public float RotateAroundSpeed => rotateAroundSpeed;
+    public float RotateDistance => rotateDistance;
 }
 
 [Serializable]
 public class MonsterSkill
 {
     [SerializeField]private float damage;
-    [SerializeField]private float stoppingDistance;
+    [SerializeField]private float attackDistance;
     [SerializeField]private float attackAniTime;
 
     public float Damage => damage;
-    public float StoppingDistance => stoppingDistance;
+    public float AttackDistance => attackDistance;
     public float AttackAniTime => attackAniTime;
 }

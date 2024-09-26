@@ -11,8 +11,6 @@ public class PlayerFollowRoot : MonoBehaviour
 
     private void Start()
     {
-        player = Managers.Instance.Game.playerInput.GetComponent<PlayerController>();
-
         transform.position = player.transform.position + defualtCamPos;
     }
 
@@ -22,5 +20,10 @@ public class PlayerFollowRoot : MonoBehaviour
 
         if (!player.isBattle)
             transform.forward = player.m_mainCam.transform.forward;
+    }
+
+    public void AssignPlayer(PlayerController player)
+    {
+        this.player = player;
     }
 }

@@ -30,10 +30,10 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        if (context.started && !player.isAttack)
-        {
-            player.isAttack = true;
-        }
+        //if (context.started && !player.isAttack)
+        //{
+        //    player.isAttack = true;
+        //}
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -91,6 +91,15 @@ public class PlayerinputSystem : MonoBehaviour
             player.isDrinkPotion = true;
             Managers.Instance.Inventory.PlayerData.DrinkPotion();
             Managers.Instance.Inventory.PlayerData.OnRefillStatus?.Invoke(); 
+        }
+    }
+
+    private void OnApplicationFocus(bool focus)
+    {
+        if (focus)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
         }
     }
 }

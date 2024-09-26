@@ -13,9 +13,11 @@ public enum EMonsterType
 
 public enum EMonsterAni
 {
-    Idle,
     LocoBlend,
-    Run,
+    RunBlend,
+    RotateBlend,
+    BlendX,
+    BlendY,
     Hit,
     WalkLeft,
     WalkRight
@@ -36,14 +38,17 @@ public class MonsterAniDataBase
 
         //Clips
         monsterAniClips.Add(EMonsterAni.LocoBlend, Animator.StringToHash("Base Layer.LocoBlend"));
-        monsterAniClips.Add(EMonsterAni.Idle, Animator.StringToHash("Base Layer.idle"));
-        monsterAniClips.Add(EMonsterAni.Run, Animator.StringToHash("Base Layer.Run"));
+        monsterAniClips.Add(EMonsterAni.RunBlend, Animator.StringToHash("Base Layer.Run Blend"));
+        monsterAniClips.Add(EMonsterAni.RotateBlend, Animator.StringToHash("Base Layer.Rotate Blend"));
         monsterAniClips.Add(EMonsterAni.Hit, Animator.StringToHash("Base Layer.Hit"));
         monsterAniClips.Add(EMonsterAni.WalkLeft, Animator.StringToHash("Base Layer.Walk Left"));
         monsterAniClips.Add(EMonsterAni.WalkRight, Animator.StringToHash("Base Layer.Walk Right"));
 
         //Params
         monsterParams.Add(EMonsterAni.LocoBlend, Animator.StringToHash("LocoBlend"));
+        monsterParams.Add(EMonsterAni.RunBlend, Animator.StringToHash("RunBlend"));
+        monsterParams.Add(EMonsterAni.BlendX, Animator.StringToHash("BlendX"));
+        monsterParams.Add(EMonsterAni.BlendY, Animator.StringToHash("BlendY"));
 
         //AttackDB
         minoAttackClips[0] = Animator.StringToHash("Base Layer.attack1");

@@ -1,9 +1,14 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MonsterLocoState : MonsterBaseState
 {
-    public MonsterLocoState(MonsterStateMachine stateMachine) : base(stateMachine) {}
+    public MonsterLocoState(MonsterStateMachine stateMachine) : base(stateMachine) 
+    {
+        nodeStack = stateMachine.monster.nodeStack;
+        nodeList = stateMachine.monster.nodeList;
+    }
 
     /*
     * 노드를 계속 따라가도록하자
@@ -14,21 +19,27 @@ public class MonsterLocoState : MonsterBaseState
     private bool isPush = true;
     private int nodeIndex = 0;
     private Coroutine waitCoCash;
+    private Stack<Transform> nodeStack;
+    private List<Transform> nodeList;
 
 
     public override void Enter()
     {
         base.Enter();
-        locoAniBlend = 0.0f;
-        monster.navAI.speed = monster.monsterSO.PatrolSpeed;
-        monster.navAI.stoppingDistance = 0.0f;
-        monster.animator.CrossFade(monster.aniDataBase.monsterAniClips[EMonsterAni.LocoBlend], 0.25f);
+        Debug.Log($"{monsterSO.name} Loco State");
+        isPush = true;
+        nodeStack.Clear();
+        nodeIndex = 0;
+        locoAniBlend = navAI.velocity.sqrMagnitude;
+        navAI.stoppingDistance = monster.PatrolStopDistance;
+        navAI.speed = monster.monsterSO.PatrolSpeed;
+        animator.CrossFade(monster.aniDataBase.monsterAniClips[EMonsterAni.LocoBlend], 0.25f);
+        AssignDestination();
     }
 
     public override void Update()
     {
         base.Update();
-        if (!monster.isCanPatrol) return;
         Patrol();
         AnimationBlend();
     }
@@ -44,22 +55,32 @@ public class MonsterLocoState : MonsterBaseState
 
     private void AnimationBlend()
     {
-        locoAniBlend = Mathf.Lerp(locoAniBlend, monster.navAI.speed, 0.01f);
-        monster.animator.SetFloat(monster.aniDataBase.monsterParams[EMonsterAni.LocoBlend], locoAniBlend);
+        locoAniBlend = Mathf.Lerp(locoAniBlend, navAI.velocity.sqrMagnitude, 0.01f);
+        animator.SetFloat(aniDB.monsterParams[EMonsterAni.LocoBlend], locoAniBlend);
     }
 
     private void Patrol()
     {
-        if (monster.navAI.remainingDistance < monster.PatrolStopDistance)
+        if (HasReachedDestination())
         {
-
+            Debug.Log("목적지 도착");
             if (isBreakNode())
             {
+                Debug.Log("쉬는 노드 확인 완료");
+                if (waitCoCash != null)
+                    monster.StopCoroutine(waitCoCash);
+
                 waitCoCash = monster.StartCoroutine(Patroldelay_co());
             }
 
             AssignDestination();
         }
+    }
+
+    private bool HasReachedDestination()
+    {
+        return !navAI.pathPending &&
+            navAI.remainingDistance <= navAI.stoppingDistance;
     }
 
     private IEnumerator Patroldelay_co()
@@ -71,23 +92,23 @@ public class MonsterLocoState : MonsterBaseState
 
     private void StopWalk()
     {
-        monster.navAI.isStopped = true;
-        monster.navAI.speed = 0.0f;
+        navAI.isStopped = true;
+        navAI.speed = 0.0f;
     }
 
     private void StartWalk()
     {
         monster.navAI.isStopped = false;
-        monster.navAI.speed = monster.monsterSO.PatrolSpeed;
+        navAI.speed = monsterSO.PatrolSpeed;
     }
 
     private bool isBreakNode()
     {
-        if (monster.nodeStack.Count == 0 ||
-            nodeIndex > monster.nodeList.Count - 1)
+        if (nodeStack.Count == 0 ||
+            nodeIndex > nodeList.Count - 1)
         {
             nodeIndex = 0;
-            isPush = monster.nodeStack.Count == 0;
+            isPush = nodeStack.Count == 0;
             return true;
         }
 
@@ -98,13 +119,14 @@ public class MonsterLocoState : MonsterBaseState
     {
         if (isPush)
         {
-            monster.navAI.SetDestination(monster.nodeList[nodeIndex].position);
-            monster.nodeStack.Push(monster.nodeList[nodeIndex++]);
+            navAI.SetDestination(monster.nodeList[nodeIndex].position);
+            Debug.Log("현재 노드 index :" + nodeIndex);
+            nodeStack.Push(monster.nodeList[nodeIndex++]);
         }
 
         else
         {
-            monster.navAI.SetDestination(monster.nodeStack.Pop().position);
+            navAI.SetDestination(nodeStack.Pop().position);
         }
     }
 }

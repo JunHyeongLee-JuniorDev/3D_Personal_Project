@@ -52,7 +52,7 @@ public class MonsterBattleState : MonsterBaseState
     private UnityEvent OnBehave;
     private Coroutine behaveCoCash;
 
-    public override void Enter()
+    /*public override void Enter()
     {
         base.Enter();
         RandomAttackState();
@@ -80,9 +80,9 @@ public class MonsterBattleState : MonsterBaseState
         isBehave = false;
         monster.navAI.isStopped = true;
         monster.navAI.ResetPath();
-    }
+    }*/
     
-    private void ChaseTarget()
+    /*private void ChaseTarget()
     {
         if (monster.navAI.remainingDistance <= monster.navAI.stoppingDistance)
         {
@@ -110,9 +110,9 @@ public class MonsterBattleState : MonsterBaseState
             }
             monster.navAI.SetDestination(monster.player.position);
         }
-    }
+    }*/
 
-    private IEnumerator RandomBehave_co()
+    /*private IEnumerator RandomBehave_co()
     {
         WaitForSeconds wfs = new WaitForSeconds(5f);
         isBehave = true;
@@ -168,22 +168,22 @@ public class MonsterBattleState : MonsterBaseState
 
             yield return wfs;
         }
-    }
+    }*/
 
-    private void RandomAttackState()
+    /*private void RandomAttackState()
     {
         attackIndex = Random.Range(0, monster.monsterSO.MonsterSkills.Length);
         monster.navAI.stoppingDistance = 
             monsterSO.MonsterSkills[attackIndex].StoppingDistance;
 
         Debug.Log("현재 공격 인덱스 :" + attackIndex);
-    }
+    }*/
 
-    private void CancelCondition()
+    /*private void CancelCondition()
     {
         if (monster.navAI.pathStatus == NavMeshPathStatus.PathPartial)
         {
             monster.isFoundPlayer = false;
         }
-    }
+    }*/
 }
