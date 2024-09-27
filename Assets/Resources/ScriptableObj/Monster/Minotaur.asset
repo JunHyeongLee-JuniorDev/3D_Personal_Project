@@ -13,6 +13,22 @@ MonoBehaviour:
   m_Name: Minotaur
   m_EditorClassIdentifier: 
   monsterType: 1
+  normalAttacks:
+  - damage: 0
+    attackDistance: 2
+    attackAniTime: 1.2
+  - damage: 0
+    attackDistance: 2
+    attackAniTime: 1.2
+  - damage: 0
+    attackDistance: 2
+    attackAniTime: 1.2
+  - damage: 0
+    attackDistance: 1.5
+    attackAniTime: 1.2
+  - damage: 0
+    attackDistance: 2
+    attackAniTime: 1.2
   monsterSkills:
   - damage: 0
     attackDistance: 2

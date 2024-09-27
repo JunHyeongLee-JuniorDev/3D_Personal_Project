@@ -18,7 +18,7 @@ public class PlayerBattleState : PlayerBaseState
 
     public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
     {
-        player.lockOnCanvas.SetActive(false);
+        player.lockOnUI.SetActive(false);
     }
 
     public override void Enter()
@@ -32,7 +32,7 @@ public class PlayerBattleState : PlayerBaseState
             dirToTarget = Vector2.zero;
             player.cinemachineAnimator.Play("TargetCamera");
             animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
-            player.lockOnCanvas.SetActive(true);
+            player.lockOnUI.SetActive(true);
             player.thirdPersonCam.enabled = false;
 
             battleAniX = 0.0f;
@@ -150,11 +150,11 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     private void LookAtTarget()
     {
-        player.lockOnCanvas.transform.position = player.m_targetEnemy.transform.position; // 캔버스의 위치를 타겟 위치로 바꿉니다.
+        player.lockOnUI.transform.position = player.m_targetEnemy.transform.position; // 캔버스의 위치를 타겟 위치로 바꿉니다.
         player.lockOnTarget.position = player.m_targetEnemy.transform.position;// 카메라의 look at을 타겟 위치로 옮깁니다.
-        player.lockOnCanvas.transform.localScale = Vector3.one * 
+        player.lockOnUI.transform.localScale = Vector3.one * 
                                                   (dirToTarget).magnitude * 
-                                                   player.lockOnCanvasScale; // 거리에 비례하여 타겟팅 UI의 크기를 키웁니다.
+                                                   player.lockOnUIScale; // 거리에 비례하여 타겟팅 UI의 크기를 키웁니다.
 
         //타겟의 y Position이 플레이어의 y포지션과 다르기에 맞춰줍니다.
 
@@ -356,7 +356,7 @@ public class PlayerBattleState : PlayerBaseState
             inputActions["Sprint"].Enable();
             Debug.Log("지금 나가는 중");
             player.cinemachineAnimator.Play("FollowCamera");
-            player.lockOnCanvas.SetActive(false);
+            player.lockOnUI.SetActive(false);
             player.m_targetEnemy = null;
             player.thirdPersonCam.enabled = true;
             inputActions["Skill"].started -= OnSkill;

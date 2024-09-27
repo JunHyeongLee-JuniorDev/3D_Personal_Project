@@ -46,6 +46,7 @@ public class PlayerController : MonoBehaviour
     public Timer itemGrabAniTimer { get; private set; }
     public Timer potionTimer { get; private set; }
     public Timer skillTimer { get; private set; }
+    public Timer buffTimer { get; private set; }
 
     //Player--------------------------------------------------------------------------------
     //Hide
@@ -77,8 +78,8 @@ public class PlayerController : MonoBehaviour
     //Player--------------------------------------------------------------------------------
 
     //Prefabs
-    public GameObject lockOnCanvas { get; private set; }
-    public float lockOnCanvasScale { get; private set; } = 0.1f;
+    public GameObject lockOnUI { get; private set; }
+    public float lockOnUIScale { get; private set; } = 0.01f;
     public Transform lockOnTarget { get; private set; }
     public Transform lockOnTargetRoot { get; private set; }
     public FakeSlider_UI hpSlider { get; private set; }
@@ -133,6 +134,7 @@ public class PlayerController : MonoBehaviour
         itemGrabAniTimer = new Timer(0.8f, this);
         potionTimer = new Timer(1.0f, this);
         skillTimer = new Timer(1.0f, this);
+        buffTimer = new Timer(10.0f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
 
@@ -147,10 +149,10 @@ public class PlayerController : MonoBehaviour
             lockOnTargetRoot.GetComponent<PlayerFollowRoot>().AssignPlayer(this);
         }
 
-        if (lockOnCanvas == null)
+        if (lockOnUI == null)
         {
-            lockOnCanvas = Instantiate(Resources.Load<GameObject>("Prefabs/Player/LockOnCanvas"));
-            lockOnCanvas.name = "LockOnCanvas";
+            lockOnUI = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Dot"));
+            lockOnUI.name = "LockOnUI";
         }
 
         foreach (var camera in stateDrivenCamera.ChildCameras)

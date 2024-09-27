@@ -21,6 +21,7 @@ public class MonsterSO : ScriptableObject
     [Range(0.0f, 5.0f)]
     [SerializeField] private float rotateDistance;
 
+    public GameObject skillPrefab;
     public EMonsterType MonsterType => monsterType;
     public MonsterSkill[] NormalAttacks => normalAttacks;
     public MonsterSkill[] MonsterSkills => monsterSkills;
@@ -33,9 +34,9 @@ public class MonsterSO : ScriptableObject
 [Serializable]
 public class MonsterSkill
 {
-    [SerializeField]private float damage;
-    [SerializeField]private float attackDistance;
-    [SerializeField]private float attackAniTime;
+    [SerializeField]private float damage = 20.0f;
+    [SerializeField]private float attackDistance = 1.5f;
+    [SerializeField]private float attackAniTime = 1.5f;
 
     public float Damage => damage;
     public float AttackDistance => attackDistance;

@@ -35,8 +35,9 @@ public class MonsterAttackState : MonsterBaseState
                 Debug.Log("Oak 없는 클립");
                 break;
 
-            case EMonsterType.Skelleton:
-                Debug.Log("Wizard 없는 클립");
+            case EMonsterType.Crab:
+                attackClips = aniDB.crabAttackClips;
+                skillClips = aniDB.crabSkillClips;
                 break;
         }
     }
@@ -64,6 +65,9 @@ public class MonsterAttackState : MonsterBaseState
             CheckAttackDistance();
             monster.CheckPlayerDistance();
         }
+
+        monster.transform.rotation = Quaternion.LookRotation(Vector3.Lerp(monster.transform.forward,
+                                (player.position - monster.transform.position).normalized, monster._rotLerp));
     }
 
     public override void Exit()

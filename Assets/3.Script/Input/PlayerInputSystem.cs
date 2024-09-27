@@ -14,9 +14,9 @@ public class PlayerinputSystem : MonoBehaviour
     public PlayerController player;
 
     private void Start()
-    {
-        player.m_playerInput.actions["T"].started -= OnPressT;
-        player.m_playerInput.actions["T"].started += OnPressT;
+    { 
+        GetComponent<PlayerInput>().actions["T"].started -= OnPressT;// for debug
+        GetComponent<PlayerInput>().actions["T"].started += OnPressT;// for debug
     }
 
     public void OnMove(InputAction.CallbackContext context)

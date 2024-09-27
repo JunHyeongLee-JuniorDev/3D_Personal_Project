@@ -33,6 +33,7 @@ public class DataManager : MonoBehaviour, IInitManager
     public void Init()
     {
         itemDataBase = new ItemDataBase();
+        itemDataBase.LoadDBFromJson();
         defaultSetting.masterVolume = 0.0f;
         defaultSetting.SFXVolume = 0.0f;
         defaultSetting.musicVolume = 0.0f;

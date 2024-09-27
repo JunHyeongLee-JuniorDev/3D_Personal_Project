@@ -10,15 +10,6 @@ public class ItemDataBase
     private readonly string itemJsonDBPath = "ItemDataBaseJson";
     private readonly string itemResourcesPath = "ResourcesList";
 
-    public ItemDataBase()
-    {
-        if (LoadDBFromJson())
-            Debug.Log("아이템 DB 불러오기 성공");
-
-        else
-            Debug.LogWarning("DB 불러오지 못함");
-    }
-
     public bool LoadDBFromJson()
     {
         TextAsset DBfile = Resources.Load<TextAsset>(itemJsonDBPath);

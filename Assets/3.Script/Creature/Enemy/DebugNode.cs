@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class DebugNode : MonoBehaviour
 {
+    [SerializeField] private Color nodeColor;
+
     private void OnDrawGizmos()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = nodeColor;
 
         Gizmos.DrawSphere(transform.position, transform.localScale.x);
     }

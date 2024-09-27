@@ -23,6 +23,8 @@ public class WeaponManager : MonoBehaviour
     private ParticleSystem swordSkillEff;
     private ParticleSystem magicSkillEff;
     private Collider magicSkillCollider;
+    private ItemDataBase weaponDB;
+    private PlayerData playerData;
 
     [SerializeField]private Transform rightHandRoot;
     [SerializeField]private Transform leftHandRoot;
@@ -47,28 +49,38 @@ public class WeaponManager : MonoBehaviour
         magicSkillCollider = magicSkillEff.GetComponent<Collider>();
         player = GetComponentInParent<PlayerController>();
 
-        bareHand = Managers.Instance.InstantiateResouce("Prefabs/Weapons/BareHand", "BareHand");
+        bareHand = Resources.Load<GameObject>("Prefabs/Weapons/BareHand");
+        bareHand.name = "BareHand";
         bareHand.SetActive(false);
-        GameObject _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("도끼"), rightHandRoot);
-        weaponModels.Add("도끼", _newModel);
-        _newModel.SetActive(false);
-        _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("검"), rightHandRoot);
-        weaponModels.Add("검", _newModel);
-        _newModel.SetActive(false);
-        _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("마법장갑"), rightHandRoot);
-        weaponModels.Add("마법장갑", _newModel);
-        _newModel.SetActive(false);
-        _newModel = Instantiate(Managers.Instance.Data.itemDataBase.GetModelPrefab("방패"), leftHandRoot);
-        weaponModels.Add("방패", _newModel);
-        _newModel.SetActive(false);
+        if (Managers.Instance == null)
+        {
+            weaponDB = new ItemDataBase();
+            weaponDB.LoadDBFromJson();
+        }
+        else
+        {
+            weaponDB = Managers.Instance.Data.itemDataBase;
+            playerData = Managers.Instance.Inventory.PlayerData;
+            playerData.OnWeaponChanged.AddListener(ActivateModel);
+        }
 
-        Managers.Instance.Inventory.PlayerData.OnWeaponChanged.AddListener(ActivateModel);
+            GameObject _newModel = Instantiate(weaponDB.GetModelPrefab("도끼"), rightHandRoot);
+            weaponModels.Add("도끼", _newModel);
+            _newModel.SetActive(false);
+            _newModel = Instantiate(weaponDB.GetModelPrefab("검"), rightHandRoot);
+            weaponModels.Add("검", _newModel);
+            _newModel.SetActive(false);
+            _newModel = Instantiate(weaponDB.GetModelPrefab("마법장갑"), rightHandRoot);
+            weaponModels.Add("마법장갑", _newModel);
+            _newModel.SetActive(false);
+            _newModel = Instantiate(weaponDB.GetModelPrefab("방패"), leftHandRoot);
+            weaponModels.Add("방패", _newModel);
+            _newModel.SetActive(false);
 
-        axeSkillEff.SetActive(false);
-        magicSkillCollider.enabled = false;
-
-        ActivateModel();
-    }
+            axeSkillEff.SetActive(false);
+            magicSkillCollider.enabled = false;
+            ActivateModel();
+        }
 
     /// <summary>
     /// 무기 변환시 불릴 메소드
@@ -76,19 +88,19 @@ public class WeaponManager : MonoBehaviour
     /// <param name="activeWeaponSlot">활성화되는 무기</param>
     private void ActivateModel()
     {//들고 있는 아이템의 모델 활성화
-        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].StackSize > 0)
+        if (playerData.equipments[(int)EEquipmentType.Shield].StackSize > 0)
         {
-            currentLeftHandModel = weaponModels[Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data.displayName];
+            currentLeftHandModel = weaponModels[playerData.equipments[(int)EEquipmentType.Shield].Data.displayName];
             currentLeftHandModel?.SetActive(true);
         }
         else
             currentLeftHandModel?.SetActive(false);
 
-        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
+        if (playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {
             currentRightHandModel?.SetActive(false);
-            currentRightHandModel = weaponModels[Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.displayName];
-            currentWeaponType = Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType;
+            currentRightHandModel = weaponModels[playerData.equipments[(int)EEquipmentType.Weapon].Data.displayName];
+            currentWeaponType = playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType;
             currentRightHandModel?.SetActive(true);
         }
 
@@ -154,7 +166,13 @@ public class WeaponManager : MonoBehaviour
 
     private void UseSwordSkill()
     {
-            swordSkillEff.Play(true);
+        if (playerData.currentMana - playerData.equipments[(int)EWeaponType.SWORD].Data.skillCost <= 0) return;
+        swordSkillEff.Play(true);
+
+        player.buffTimer.StartTimer(() =>
+        {
+            swordSkillEff.Stop(true);
+        });
     }
 
     private IEnumerator UseMagicSkill()
@@ -168,7 +186,6 @@ public class WeaponManager : MonoBehaviour
     {
         axeSkillEff.SetActive(false);
         magicSkillCollider.enabled = false;
-        swordSkillEff.Stop(true);
         magicSkillEff.Stop(true);
     }
 }

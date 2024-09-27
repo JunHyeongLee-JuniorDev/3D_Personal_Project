@@ -116,7 +116,8 @@ public class MonsterRotateState : MonsterBaseState
         blendY = Mathf.Lerp(blendY, targetY, 0.01f);
         animator.SetFloat(aniDB.monsterParams[EMonsterAni.BlendX], blendX);
         animator.SetFloat(aniDB.monsterParams[EMonsterAni.BlendY], blendY);
-        monster.transform.rotation = Quaternion.LookRotation(Vector3.Lerp(monster.transform.forward, player.position, monster._rotLerp));
+        monster.transform.rotation = Quaternion.LookRotation(Vector3.Lerp(monster.transform.forward, 
+                                (player.position - monster.transform.position).normalized, monster._rotLerp));
         monster.transform.Translate(blendY * Vector3.forward * monsterSO.PatrolSpeed * Time.deltaTime * 0.5f);
         monster.transform.RotateAround(player.position,Vector3.down * blendX , monsterSO.RotateAroundSpeed * Time.deltaTime);
     }

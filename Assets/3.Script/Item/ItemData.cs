@@ -29,6 +29,7 @@ public class ItemData
     public bool isCanSale;
     public bool isCanDrop;
     public float stat;
+    public float skillCost;
     public int updatableStack;
     public EWeaponType weaponType;
     public int level;

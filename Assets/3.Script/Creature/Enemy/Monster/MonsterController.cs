@@ -48,7 +48,6 @@ public class MonsterController : MonoBehaviour
 
 
     //Timer
-    [SerializeField] private float timeBetweenAttack = 1.0f;
     public Timer attackTimer { get; private set; }
     public Timer outMapTimer { get; private set; }
 
@@ -62,7 +61,7 @@ public class MonsterController : MonoBehaviour
 
         //Inits
         nodeStack = new Stack<Transform>();
-        attackTimer = new Timer(timeBetweenAttack, this);
+        attackTimer = new Timer(0.0f, this);
         outMapTimer = new Timer(5.0f, this);
         navAI.updateRotation = false;
 
