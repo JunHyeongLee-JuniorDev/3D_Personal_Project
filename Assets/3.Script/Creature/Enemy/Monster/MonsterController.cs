@@ -160,19 +160,13 @@ public class MonsterController : MonoBehaviour
             !outMapTimer.isTickin)
         {
             Debug.Log("플레이어 나간거 체크 되니???");
-            navAI.isStopped = true;
+            TurnOffNav();
             isFoundPlayer = false;
-            navAI.velocity = Vector3.zero;
-
-            animator.CrossFade(aniDataBase.monsterAniClips[EMonsterAni.LocoBlend], 0.2f);
-            animator.SetFloat(aniDataBase.monsterParams[EMonsterAni.LocoBlend], 0.0f);
+            animator.CrossFade(aniDataBase.monsterAniClips[EMonsterAni.Idle], 0.2f);
 
             outMapTimer.StartTimer(() =>
             {
-                navAI.isStopped = false;
-                isAttack = false;
-                isFoundPlayer = false;
-                isInRotateRad = false;
+                TurnOnNav();
             });
         }
 
@@ -184,6 +178,22 @@ public class MonsterController : MonoBehaviour
             navAI.isStopped = false;
             outMapTimer.StopTimer();
         }
+    }
+
+    public void TurnOnNav()
+    {
+        navAI.ResetPath();
+        navAI.isStopped = false;
+        navAI.updatePosition = true;
+        navAI.updateRotation = true;
+    }
+
+    public void TurnOffNav()
+    {
+        navAI.isStopped = true;
+        navAI.updatePosition = false;
+        navAI.updateRotation = false;
+        navAI.velocity = Vector3.zero;
     }
 
     private void OnDrawGizmos()

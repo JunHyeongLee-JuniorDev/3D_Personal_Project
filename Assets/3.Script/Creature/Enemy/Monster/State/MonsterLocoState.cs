@@ -27,10 +27,11 @@ public class MonsterLocoState : MonsterBaseState
     {
         base.Enter();
         Debug.Log($"{monsterSO.name} Loco State");
+        monster.TurnOnNav();
         isPush = true;
         nodeStack.Clear();
         nodeIndex = 0;
-        locoAniBlend = navAI.velocity.sqrMagnitude;
+        locoAniBlend = 0.2f;
         navAI.stoppingDistance = monster.PatrolStopDistance;
         navAI.speed = monster.monsterSO.PatrolSpeed;
         animator.CrossFade(monster.aniDataBase.monsterAniClips[EMonsterAni.LocoBlend], 0.25f);

@@ -22,7 +22,7 @@ public class MonsterAttackState : MonsterBaseState
                 break;
 
             case EMonsterType.Wizard:
-                Debug.Log("Wizard 없는 클립");
+                attackClips = aniDB.NecAttackClips;
                 break;
 
             case EMonsterType.Oak:
@@ -71,7 +71,7 @@ public class MonsterAttackState : MonsterBaseState
 
     private void RandomAttackState()
     {
-        if (Random.Range(0,3) == 0)
+        if (Random.Range(0,5) == 0)
         {
             int newIndex = Random.Range(0, attackClips.Length);
 
@@ -93,17 +93,11 @@ public class MonsterAttackState : MonsterBaseState
         animator.CrossFade(attackClips[attackIndex], 0.2f);
         monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkills[attackIndex].AttackAniTime);
         Debug.Log("공격 애니 시작");
-        navAI.isStopped = true;
-        navAI.updatePosition = false;
-        navAI.updateRotation = false;
-        navAI.velocity = Vector3.zero;
+        monster.TurnOffNav();
         monster.attackTimer.StartTimer(() => 
         {
             Debug.Log("공격 끝남");
-            navAI.ResetPath();
-            navAI.isStopped = false;
-            navAI.updatePosition = true;
-            navAI.updateRotation = true;
+            monster.TurnOnNav();
             animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RunBlend], 0.2f);
             CheckAttackDistance();
         });
