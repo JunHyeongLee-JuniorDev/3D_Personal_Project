@@ -10,6 +10,7 @@ using UnityEngine;
 public class MonsterSO : ScriptableObject
 {
     [SerializeField] private EMonsterType monsterType;
+    [SerializeField] private MonsterSkill[] normalAttacks;
     [SerializeField] private MonsterSkill[] monsterSkills;
     [Range(0.0f, 5.0f)]
     [SerializeField] private float patrolSpeed;
@@ -21,6 +22,7 @@ public class MonsterSO : ScriptableObject
     [SerializeField] private float rotateDistance;
 
     public EMonsterType MonsterType => monsterType;
+    public MonsterSkill[] NormalAttacks => normalAttacks;
     public MonsterSkill[] MonsterSkills => monsterSkills;
     public float PatrolSpeed => patrolSpeed;
     public float RunSpeed => runSpeed;

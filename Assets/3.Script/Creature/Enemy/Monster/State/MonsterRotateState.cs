@@ -46,7 +46,7 @@ public class MonsterRotateState : MonsterBaseState
         if (coroutineCash != null ) monster.StopCoroutine(coroutineCash);
         coroutineCash = monster.StartCoroutine(SwtichBehave());
 
-        animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RotateBlend], 0.2f);
+        animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RotateBlend], 0.25f);
     }
 
     public override void Update()
@@ -68,7 +68,7 @@ public class MonsterRotateState : MonsterBaseState
     {
         while (true)
         {
-            if (Random.Range(0, 4) == 0)
+            if (Random.Range(0, 2) == 0)
             {
                 switch (Random.Range((int)Behaves.Left, (int)Behaves.Length))
                 {
@@ -109,14 +109,14 @@ public class MonsterRotateState : MonsterBaseState
 
     private void MoveAroundPlayer()
     {
-        if (distanceWithPlayer < 3.0f)
+        if (distanceWithPlayer < 3.0f && targetY > 0.0f)
             targetY = -1.0f;
 
-        blendX = Mathf.Lerp(blendX, targetX, 0.05f);
-        blendY = Mathf.Lerp(blendY, targetY, 0.05f);
+        blendX = Mathf.Lerp(blendX, targetX, 0.01f);
+        blendY = Mathf.Lerp(blendY, targetY, 0.01f);
         animator.SetFloat(aniDB.monsterParams[EMonsterAni.BlendX], blendX);
         animator.SetFloat(aniDB.monsterParams[EMonsterAni.BlendY], blendY);
-        monster.transform.LookAt(new Vector3(player.position.x, monster.transform.position.y, player.position.z));
+        monster.transform.rotation = Quaternion.LookRotation(Vector3.Lerp(monster.transform.forward, player.position, monster._rotLerp));
         monster.transform.Translate(blendY * Vector3.forward * monsterSO.PatrolSpeed * Time.deltaTime * 0.5f);
         monster.transform.RotateAround(player.position,Vector3.down * blendX , monsterSO.RotateAroundSpeed * Time.deltaTime);
     }

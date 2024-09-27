@@ -27,7 +27,10 @@ public class MonsterLocoState : MonsterBaseState
     {
         base.Enter();
         Debug.Log($"{monsterSO.name} Loco State");
+
+        if(!monster.outMapTimer.isTickin)
         monster.TurnOnNav();
+
         isPush = true;
         nodeStack.Clear();
         nodeIndex = 0;

@@ -18,7 +18,6 @@ public class MonsterController : MonoBehaviour
     [field : SerializeField] public MonsterSO monsterSO { get; private set; }
     [field : SerializeField] public float PatrolStopDistance { get; private set; } = 0.5f;
     [field : SerializeField] public float ChaseStopDistance { get; private set; } = 3.0f;
-    [field : SerializeField] public float attackDistance { get; private set; } = 2.0f;
     public MonsterAniDataBase aniDataBase { get; private set; }
 
     //State Machine
@@ -45,7 +44,7 @@ public class MonsterController : MonoBehaviour
     public Stack<Transform> nodeStack { get; private set; }
 
     //etc...
-    [SerializeField] private float _rotLerp = 0.03f;
+    [field: SerializeField] public float _rotLerp { get; private set; } = 0.03f;
 
 
     //Timer
@@ -150,8 +149,7 @@ public class MonsterController : MonoBehaviour
 
     public bool CheckPlayerDistance()
     {
-        return !navAI.pathPending &&
-                                     navAI.remainingDistance <= navAI.stoppingDistance;
+        return !navAI.pathPending && (navAI.remainingDistance <= navAI.stoppingDistance);
     }
 
     private void PlayerOutOfMapCheck()
@@ -166,6 +164,7 @@ public class MonsterController : MonoBehaviour
 
             outMapTimer.StartTimer(() =>
             {
+                Debug.Log("아마 타이머가 바로 끝나는게 아닐까?");
                 TurnOnNav();
             });
         }
@@ -185,14 +184,12 @@ public class MonsterController : MonoBehaviour
         navAI.ResetPath();
         navAI.isStopped = false;
         navAI.updatePosition = true;
-        navAI.updateRotation = true;
     }
 
     public void TurnOffNav()
     {
         navAI.isStopped = true;
         navAI.updatePosition = false;
-        navAI.updateRotation = false;
         navAI.velocity = Vector3.zero;
     }
 

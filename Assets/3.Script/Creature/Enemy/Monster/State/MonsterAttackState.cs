@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -7,8 +8,11 @@ public class MonsterAttackState : MonsterBaseState
 {
     private Transform player;
     private int[] attackClips;
+    private int[] skillClips;
     private int attackIndex;
+    private float attackDistance;
 
+    private bool isSkill;
     public MonsterAttackState(MonsterStateMachine stateMachine) : base(stateMachine)
     {
         switch (monsterSO.MonsterType)
@@ -19,10 +23,12 @@ public class MonsterAttackState : MonsterBaseState
 
             case EMonsterType.Minotaur:
                 attackClips = aniDB.minoAttackClips;
+                skillClips = null;
                 break;
 
-            case EMonsterType.Wizard:
-                attackClips = aniDB.NecAttackClips;
+            case EMonsterType.Head:
+                attackClips = aniDB.headAttackClips;
+                skillClips = aniDB.headSkillClips;
                 break;
 
             case EMonsterType.Oak:
@@ -40,12 +46,11 @@ public class MonsterAttackState : MonsterBaseState
         Debug.Log($"{monsterSO.name} Attack State");
         base.Enter();
         player = monster.player;
-        navAI.SetDestination(player.transform.position);
-        navAI.isStopped = false;
-        navAI.stoppingDistance = monster.attackDistance;
+        RandomAttackState();
+        navAI.stoppingDistance = attackDistance;
+        monster.TurnOnNav();
         animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RunBlend], 0.2f);
         animator.SetFloat(aniDB.monsterParams[EMonsterAni.RunBlend], 1.0f);
-        attackIndex = 0;
     }
 
     public override void Update()
@@ -53,61 +58,88 @@ public class MonsterAttackState : MonsterBaseState
         base.Update();
 
         navAI.SetDestination(player.position);
-        if(monster.CheckPlayerDistance() && !monster.attackTimer.isTickin)
-            RandomAttackState();
 
         if (!monster.attackTimer.isTickin)
+        {
             CheckAttackDistance();
+            monster.CheckPlayerDistance();
+        }
     }
 
     public override void Exit()
     {
         base.Exit();
-        navAI.isStopped = false;
-        navAI.updatePosition = true;
-        navAI.updateRotation = true;
+        monster.TurnOnNav();
         monster.attackTimer.StopTimer();
     }
 
     private void RandomAttackState()
     {
-        if (Random.Range(0,5) == 0)
+        if (skillClips != null)
         {
-            int newIndex = Random.Range(0, attackClips.Length);
+            if (Random.Range(0, 1) == 5)
+            {
+                attackIndex = Random.Range(0, skillClips.Length);
+                Debug.Log("스킬 선택됨 : " + skillClips[attackIndex]);
+                isSkill = true;
+                attackDistance = monsterSO.MonsterSkills[attackIndex].AttackDistance;
+            }
 
-            if (newIndex == attackIndex) newIndex = newIndex == 0 ? attackClips.Length - 1 : newIndex - 1;
-            attackIndex = newIndex;
-            navAI.stoppingDistance = monsterSO.MonsterSkills[attackIndex].AttackDistance;
-            Attack();
+            else
+            {
+                attackIndex = Random.Range(0, attackClips.Length);
+                Debug.Log("기본 공격 선택됨");
+                isSkill = false;
+                attackDistance = monsterSO.NormalAttacks[attackIndex].AttackDistance;
+            }
         }
 
         else
         {
-            Debug.Log("공격인데 일부러 나감");
-            monster.isAttack = false;
+            attackIndex = Random.Range(0, attackClips.Length);
+            Debug.Log("기본 공격 선택됨");
+            isSkill = false;
+            attackDistance = monsterSO.NormalAttacks[attackIndex].AttackDistance;
         }
     }
 
     private void Attack()
     {
-        animator.CrossFade(attackClips[attackIndex], 0.2f);
-        monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkills[attackIndex].AttackAniTime);
-        Debug.Log("공격 애니 시작");
         monster.TurnOffNav();
-        monster.attackTimer.StartTimer(() => 
+        monster.attackTimer.StartTimer(() =>
         {
-            Debug.Log("공격 끝남");
+            monster.isAttack = false;
             monster.TurnOnNav();
-            animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RunBlend], 0.2f);
-            CheckAttackDistance();
         });
     }
 
+    private void UseSkill()
+    {
+        animator.CrossFade(skillClips[attackIndex], 0.2f);
+        monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkills[attackIndex].AttackAniTime);
+        Attack();
+    }
+
+    private void UseNormalAttack()
+    {
+        animator.CrossFade(attackClips[attackIndex], 0.2f);
+        monster.attackTimer.UpdateMaxTime(monsterSO.NormalAttacks[attackIndex].AttackAniTime);
+        Attack();
+    }
+
+
     private void CheckAttackDistance()
     {
-        if (!navAI.pathPending &&
-            Vector3.Distance(monster.transform.position, player.position)
-            > monsterSO.RotateDistance)
+        if (!navAI.pathPending && navAI.remainingDistance > monsterSO.RotateDistance)
             monster.isAttack = false;
+
+        else if (!navAI.pathPending && navAI.remainingDistance <= navAI.stoppingDistance)
+        {
+            if(isSkill)
+                UseSkill();
+
+            else
+                UseNormalAttack();
+        }
     }
 }
