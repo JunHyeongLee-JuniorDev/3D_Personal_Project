@@ -476,7 +476,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1102097334718282604}
-    m_Position: {x: 420, y: -132, z: 0}
+    m_Position: {x: 420, y: -130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 1102891070992909798}
     m_Position: {x: 420, y: -84, z: 0}
@@ -558,7 +558,7 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: LocoBlend
+  m_BlendParameter: RunBlend
   m_BlendParameterY: Blend
   m_MinThreshold: 0
   m_MaxThreshold: 1

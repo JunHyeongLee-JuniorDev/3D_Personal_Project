@@ -73,19 +73,16 @@ public class MonsterRotateState : MonsterBaseState
                 switch (Random.Range((int)Behaves.Left, (int)Behaves.Length))
                 {
                     case (int)Behaves.Left:
-                        Debug.Log("왼쪽");
                         targetX = -1.0f;
                         targetY = 0.0f;
                         break;
 
                     case (int)Behaves.Right:
-                        Debug.Log("오른쪽");
                         targetX = 1.0f;
                         targetY = 0.0f;
                         break; 
 
                     case (int)Behaves.Forward:
-                        Debug.Log("앞");
                         targetX = 0.0f;
                         targetY = 1.0f;
                         break;
@@ -100,7 +97,6 @@ public class MonsterRotateState : MonsterBaseState
 
             else
             {
-                Debug.Log("공격 State 진입 조건 성공!");
                 monster.isAttack = true;
                 yield break;
             }

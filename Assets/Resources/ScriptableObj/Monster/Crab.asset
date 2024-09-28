@@ -12,25 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4164f09ada15ca48945a4ac1ee4ebc7, type: 3}
   m_Name: Crab
   m_EditorClassIdentifier: 
-  monsterType: 0
+  monsterType: 3
   normalAttacks:
   - damage: 0
-    attackDistance: 1.5
-    attackAniTime: 1.5
+    attackDistance: 3
+    attackAniTime: 1.2
   - damage: 0
-    attackDistance: 1.5
-    attackAniTime: 1.5
+    attackDistance: 3
+    attackAniTime: 1.2
   - damage: 0
-    attackDistance: 1.5
-    attackAniTime: 1.5
+    attackDistance: 3
+    attackAniTime: 1.2
   - damage: 0
-    attackDistance: 1.5
-    attackAniTime: 1.5
+    attackDistance: 3
+    attackAniTime: 1
   - damage: 0
-    attackDistance: 1.5
-    attackAniTime: 1.5
-  monsterSkills: []
+    attackDistance: 3
+    attackAniTime: 1.2
+  monsterSkills:
+  - damage: 0
+    attackDistance: 5
+    attackAniTime: 6
   patrolSpeed: 2
   runSpeed: 5
-  rotateAroundSpeed: 4
-  rotateDistance: 5
+  rotateAroundSpeed: 10
+  rotateDistance: 8

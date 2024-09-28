@@ -15,7 +15,7 @@ MonoBehaviour:
   monsterType: 2
   normalAttacks:
   - damage: 0
-    attackDistance: 1.5
+    attackDistance: 1.2
     attackAniTime: 1.4
   - damage: 0
     attackDistance: 1.2

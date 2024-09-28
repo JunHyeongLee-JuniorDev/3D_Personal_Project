@@ -91,7 +91,7 @@ public class MonsterAniDataBase
         //Head
         headSkillClips[0] = Animator.StringToHash("Base Layer.Scream");
         //Crab
-        crabSkillClips[0] = Animator.StringToHash("Base Layer.Magic ball");
+        crabSkillClips[0] = Animator.StringToHash("Base Layer.Magic Balls");
         //SkillDB===========================================================================
     }
 }

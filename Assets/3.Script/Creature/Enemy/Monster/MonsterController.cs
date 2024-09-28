@@ -6,6 +6,7 @@ using Unity.VisualScripting;
 using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class MonsterController : MonoBehaviour
@@ -19,6 +20,10 @@ public class MonsterController : MonoBehaviour
     [field : SerializeField] public float PatrolStopDistance { get; private set; } = 0.5f;
     [field : SerializeField] public float ChaseStopDistance { get; private set; } = 3.0f;
     public MonsterAniDataBase aniDataBase { get; private set; }
+
+    //Events
+    public UnityAction OnmagicBall;
+    public UnityAction<Transform> OnPlayerFound;
 
     //State Machine
     private MonsterStateMachine stateMachine;
@@ -132,6 +137,7 @@ public class MonsterController : MonoBehaviour
                     Vector3.Distance(transform.position, _target.transform.position),obstacles))
                 {
                     player = _target.transform;
+                    OnPlayerFound?.Invoke(player);
                     isFoundPlayer = true;
                     return;
                 }

@@ -81,7 +81,7 @@ public class MonsterAttackState : MonsterBaseState
     {
         if (skillClips != null)
         {
-            if (Random.Range(0, 1) == 5)
+            if (Random.Range(0, 5) == 0)
             {
                 attackIndex = Random.Range(0, skillClips.Length);
                 Debug.Log("Ω∫≈≥ º±≈√µ  : " + skillClips[attackIndex]);
@@ -120,6 +120,7 @@ public class MonsterAttackState : MonsterBaseState
     private void UseSkill()
     {
         animator.CrossFade(skillClips[attackIndex], 0.2f);
+        monster.OnmagicBall?.Invoke();
         monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkills[attackIndex].AttackAniTime);
         Attack();
     }

@@ -137,9 +137,10 @@ public class PlayerController : MonoBehaviour
         buffTimer = new Timer(10.0f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
+        m_Controller.isTrigger = false;
 
         //프리펩 생성
-        if(lockOnTarget == null)
+        if (lockOnTarget == null)
         lockOnTarget = new GameObject("EnemyTarget_Locator").transform;
 
         if (lockOnTargetRoot == null)
@@ -226,5 +227,14 @@ public class PlayerController : MonoBehaviour
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawWireSphere(transform.position, radiusOfView);
+    }
+    public void TurnOffTrigger()
+    {
+        m_Controller.isTrigger = false;
+    }
+
+    public void TurnOnTrigger()
+    {
+        m_Controller.isTrigger = true;
     }
 }

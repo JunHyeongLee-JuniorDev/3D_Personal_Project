@@ -195,7 +195,6 @@ public class PlayerBattleState : PlayerBaseState
         if (enemys.Length == 0 ||
             isInit && player.m_targetEnemy != null) return;
 
-        Debug.Log($"근데 여긴 들어가는데... : {enemys.Length}");
         float nearlistEnemyDist = -1.0f; // 무조건 거리는 양수이므로 처음에는 음수를 지정해줍니다.
 
         // For Cashing
@@ -207,7 +206,6 @@ public class PlayerBattleState : PlayerBaseState
 
         foreach (Collider enemy in enemys)
         {
-            Debug.Log("foreach는 들어가고");
             _enemyPos = enemy.transform.position;
             if (isInCam(_enemyPos, out Vector3 _enemyViewPos)) // 적이 카메라 내에 있다면
             {
@@ -240,7 +238,6 @@ public class PlayerBattleState : PlayerBaseState
 
         else // 위 조건을 만족하는 객체가 없다면 battle state 종료
         {
-            Debug.Log("여기서 나간건가?");
             if (isInit)
                 player.isBattle = false;
         }
@@ -354,7 +351,6 @@ public class PlayerBattleState : PlayerBaseState
         if (!player.isBattle)
         {
             inputActions["Sprint"].Enable();
-            Debug.Log("지금 나가는 중");
             player.cinemachineAnimator.Play("FollowCamera");
             player.lockOnUI.SetActive(false);
             player.m_targetEnemy = null;

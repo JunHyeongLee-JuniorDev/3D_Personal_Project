@@ -18,10 +18,9 @@ public class MonsterSO : ScriptableObject
     [SerializeField] private float runSpeed;
     [Range(0.0f, 30.0f)]
     [SerializeField] private float rotateAroundSpeed;
-    [Range(0.0f, 5.0f)]
+    [Range(0.0f, 8.0f)]
     [SerializeField] private float rotateDistance;
 
-    public GameObject skillPrefab;
     public EMonsterType MonsterType => monsterType;
     public MonsterSkill[] NormalAttacks => normalAttacks;
     public MonsterSkill[] MonsterSkills => monsterSkills;
