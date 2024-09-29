@@ -20,10 +20,10 @@ MonoBehaviour:
   - damage: 0
     attackDistance: 1.2
     attackAniTime: 1.4
-  monsterSkills:
-  - damage: 0
-    attackDistance: 5
-    attackAniTime: 2.2
+  monsterSkill:
+    damage: 0
+    attackDistance: 1.5
+    attackAniTime: 1.5
   patrolSpeed: 1
   runSpeed: 2.5
   rotateAroundSpeed: 15

@@ -4,11 +4,19 @@ using UnityEngine;
 
 public class playerWeaponEvent : MonoBehaviour
 {
+    private float damage;
+
+    public void UpdateDamage(float damage)
+    {
+        this.damage = damage;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("에너미 피다는 로직 실행");
+            other.GetComponent<MonsterController>().reduceHealth(damage);
         }
     }
 }

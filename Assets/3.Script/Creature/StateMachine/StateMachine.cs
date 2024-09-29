@@ -58,6 +58,11 @@ public abstract class StateMachine
         current.state?.Enter();
     }
 
+    public void OnHurt()
+    {
+        current.state?.OnHurt();
+    }
+
     public void ChangeState(IState state)
     {
         if (current.state.Equals(state)) return;

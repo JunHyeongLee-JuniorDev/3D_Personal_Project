@@ -166,7 +166,7 @@ public class PlayerData
     /// max를 넘는 값이 들어오면 나머지 값은 버림
     /// </summary>
     /// <param name="addValue"></param>
-    public void healHealth(float addValue)
+    private void healHealth(float addValue)
     {
         if(currentHealth + addValue >= maxHealth)
             currentHealth = maxHealth;
@@ -174,7 +174,7 @@ public class PlayerData
         else
             currentHealth += addValue;
     }
-    public void healMana(float addValue)
+    private void healMana(float addValue)
     {
         if (currentMana + addValue >= maxHealth)
             currentMana = maxHealth;

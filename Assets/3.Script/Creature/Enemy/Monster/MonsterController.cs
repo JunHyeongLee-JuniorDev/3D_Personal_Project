@@ -1,9 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Xml;
-using Unity.VisualScripting;
-using UnityEditorInternal;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Events;
@@ -12,36 +9,42 @@ using UnityEngine.Events;
 public class MonsterController : MonoBehaviour
 {
     //UnityComponents
-    public NavMeshAgent navAI {  get; private set; }
-    public Animator animator {  get; private set; }
+    public NavMeshAgent navAI {  get; protected set; }
+    public Animator animator {  get; protected set; }
+    public MonsterWeaponTrigger weaponTrigger { get; protected set; }
+    protected Collider hitBox;
 
     //Monster Data
-    [field : SerializeField] public MonsterSO monsterSO { get; private set; }
-    [field : SerializeField] public float PatrolStopDistance { get; private set; } = 0.5f;
-    [field : SerializeField] public float ChaseStopDistance { get; private set; } = 3.0f;
-    public MonsterAniDataBase aniDataBase { get; private set; }
+    [field : SerializeField] public MonsterSO monsterSO { get; protected set; }
+    [field : SerializeField] public float PatrolStopDistance { get; protected set; } = 0.5f;
+    [field : SerializeField] public float ChaseStopDistance { get; protected set; } = 3.0f;
+
+    public float currentHealth { get; protected set; }
+    public float maxHealth { get; protected set; }
+    public MonsterAniDataBase aniDataBase { get; protected set; }
 
     //Events
-    public UnityAction OnmagicBall;
+    public UnityAction OnSkill;
     public UnityAction<Transform> OnPlayerFound;
 
     //State Machine
-    private MonsterStateMachine stateMachine;
+    public MonsterStateMachine stateMachine { get; protected set; }
 
     [Header("Monster View")]
     //Monster View
-    [SerializeField] private float sphereRad;
-    [SerializeField] private float viewDegree;
-    [SerializeField] private LayerMask targetMask;
-    [SerializeField] private LayerMask obstacles;
+    [SerializeField] protected float sphereRad;
+    [SerializeField] protected float viewDegree;
+    [SerializeField] protected LayerMask targetMask;
+    [SerializeField] protected LayerMask obstacles;
 
     //Player
-    public Transform player { get; private set; }
+    public Transform player;
 
     //State Conditions
     [HideInInspector] public bool isFoundPlayer = false;
     [HideInInspector] public bool isAttack = false;
     [HideInInspector] public bool isInRotateRad = false;
+    [HideInInspector] public bool isDead = false;
 
     //Patrol Node
     [field : SerializeField] public List<Transform> nodeList { get; private set; }
@@ -49,18 +52,25 @@ public class MonsterController : MonoBehaviour
     public Stack<Transform> nodeStack { get; private set; }
 
     //etc...
-    [field: SerializeField] public float _rotLerp { get; private set; } = 0.03f;
+    [field: SerializeField] public float _rotLerp { get; protected set; } = 0.03f;
 
+    //UI
+    [SerializeField] protected FakeSlider_UI hpPrefabs;
+    public FakeSlider_UI hpSlider { get; protected set; }
 
     //Timer
-    public Timer attackTimer { get; private set; }
-    public Timer outMapTimer { get; private set; }
+    public Timer attackTimer { get; protected set; }
+    public Timer outMapTimer { get; protected set; }
+    public Timer hurtTimer { get; protected set; }
+    public Timer deathTimer { get; protected set; }
 
-    private void Start()
+    protected virtual void Start()
     {
         //GetComponent
         navAI = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        weaponTrigger = GetComponentInChildren<MonsterWeaponTrigger>();
+        hitBox = GetComponent<Collider>();
         aniDataBase = new MonsterAniDataBase();
         aniDataBase.init();
 
@@ -68,6 +78,12 @@ public class MonsterController : MonoBehaviour
         nodeStack = new Stack<Transform>();
         attackTimer = new Timer(0.0f, this);
         outMapTimer = new Timer(5.0f, this);
+        hurtTimer = new Timer(2.0f, this);
+        deathTimer = new Timer(3.0f, this);
+        //hpSlider = Instantiate(hpPrefabs);
+        //SethpSliderPos();
+        maxHealth = monsterSO.MaxHealth;
+        currentHealth = maxHealth;
         navAI.updateRotation = false;
 
         //Init States
@@ -81,13 +97,13 @@ public class MonsterController : MonoBehaviour
         stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isFoundPlayer));
         stateMachine.AddAnyTransition(_chaseState, new FuncPredicate(() => isFoundPlayer && !isInRotateRad && !isAttack));
         stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack));
-        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack));
+        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin));
         stateMachine.AddTransition(_attackState, _rotateState, new FuncPredicate(() => !isAttack));
 
         stateMachine.SetState(_locoState);
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         PlayerOutOfMapCheck();
         stateMachine.Update();
@@ -184,6 +200,16 @@ public class MonsterController : MonoBehaviour
         }
     }
 
+    protected virtual void SethpSliderPos()
+    {
+        hpSlider.transform.SetParent(transform);
+
+        Vector3 UIoffSet = hpSlider.transform.localPosition;
+        UIoffSet.x = hitBox.bounds.size.x * 1.5f;
+        UIoffSet.y = hitBox.bounds.size.y * 1.5f;
+        hpSlider.transform.localPosition = UIoffSet;
+    }
+
     public void TurnOnNav()
     {
         navAI.ResetPath();
@@ -196,6 +222,21 @@ public class MonsterController : MonoBehaviour
         navAI.isStopped = true;
         navAI.updatePosition = false;
         navAI.velocity = Vector3.zero;
+    }
+
+    public void activefalseForDeath()
+    {
+        deathTimer.StartTimer(() =>
+        {
+            gameObject.SetActive(false);
+        });
+    }
+
+    public void reduceHealth(float damage)
+    {
+        currentHealth -= damage;
+        stateMachine?.OnHurt();
+        hpSlider.ChangeSliderWithFake(currentHealth, maxHealth);
     }
 
     private void OnDrawGizmos()

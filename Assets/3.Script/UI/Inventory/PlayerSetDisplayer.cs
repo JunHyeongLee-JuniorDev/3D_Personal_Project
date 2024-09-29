@@ -22,8 +22,7 @@ public class PlayerSetDisplayer : MonoBehaviour
         PlayerHud_UI = GetComponentInParent<PlayerHud_UI>();
         AssignSlot();
         OnWheelChaged();
-        Managers.Instance.Inventory.PlayerData.OnRefillStatus.AddListener(UpdateSlots);
-        Managers.Instance.Inventory.PlayerData.OnReduceStatus.AddListener(UpdateSlots);
+
         Managers.Instance.Inventory.PlayerData.OnWeaponChanged.AddListener(UpdateSlots);
         Managers.Instance.Inventory.PlayerData.OnChangeHealPotion.AddListener(OnWheelChaged);
     }

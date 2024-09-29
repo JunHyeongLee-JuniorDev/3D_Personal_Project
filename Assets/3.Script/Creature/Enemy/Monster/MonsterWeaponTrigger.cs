@@ -12,7 +12,7 @@ public class MonsterWeaponTrigger : MonoBehaviour
         rb = GetComponent<Rigidbody>();
     }
 
-    public void AssignDamage(float damage)
+    public void UpdateDamage(float damage)
     {
         this.damage = damage;
     }
@@ -20,7 +20,15 @@ public class MonsterWeaponTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (!other.CompareTag("Player")) return;
+        Debug.Log("플레이어 맞음 데미지 : " + damage);
 
-        Debug.Log("플레이어 맞음 씨발");
+        if (Managers.Instance != null)
+        {
+            PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+
+            _playerData.currentHealth -= damage;
+            _playerData.OnReduceStatus?.Invoke();
+            Managers.Instance.Game.playerController.m_StateMachine.OnHurt();
+        }
     }
 }

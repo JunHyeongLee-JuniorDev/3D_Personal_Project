@@ -12,6 +12,7 @@ public class FakeSlider_UI : MonoBehaviour
     private Tween realTweenCash;
     private Tween fakeTweenCash;
     private Coroutine coroutineCash;
+    public Canvas canvas { get; private set; }
 
     private float duration = 1.0f;
 
@@ -24,6 +25,11 @@ public class FakeSlider_UI : MonoBehaviour
     //    
     //    m_slider.GetComponent<RectTransform>().sizeDelta = rectSize;
     //}
+
+    public void AssignCanvas(Canvas canvas)
+    {
+        this.canvas = canvas;
+    }
 
     public void ChangeWithoutTween(float endValue, float maxValue)
     {

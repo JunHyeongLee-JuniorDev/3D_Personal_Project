@@ -36,7 +36,19 @@ public class MonsterBaseState : IState
 
     public virtual void OnHurt()
     {
-        
+        if (monster.currentHealth > 0)
+        {
+            animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.1f);
+            monster.hurtTimer.StartTimer(() => { });
+        }
+
+        else
+        {
+            animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Death], 0.1f);
+            monster.TurnOffNav();
+            monster.isDead = true;
+            monster.activefalseForDeath();
+        }
     }
 
     public virtual void PhysicsUpdate()

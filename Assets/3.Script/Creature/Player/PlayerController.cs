@@ -15,6 +15,9 @@ public class PlayerController : MonoBehaviour
     private string playerDataPath = "ScriptableObj/PlayerData";
     public PlayerAnimationDataBase m_aniData { get; private set; }
 
+    //Events
+    public UnityAction OnPlayerDead;
+
     //Unity Components
     [field: HideInInspector]
     public CharacterController m_Controller;
@@ -27,17 +30,19 @@ public class PlayerController : MonoBehaviour
     public ThirdPersonCam thirdPersonCam { get; private set; }
     public Animator cinemachineAnimator;
     public WeaponManager weaponManager { get; private set; }
+    public Collider hitBox { get; private set; }
 
     //State Bool
-    public bool isSprint;
-    public bool isBattle;
-    public bool isAttack;
-    public bool isGrouded;
-    public bool isFall;
-    public bool isJump;
-    public bool isRightClicked;
-    public bool isDrinkPotion;
-    public bool isSpellCast;
+    [HideInInspector] public bool isSprint;
+    [HideInInspector] public bool isBattle;
+    [HideInInspector] public bool isAttack;
+    [HideInInspector] public bool isGrouded;
+    [HideInInspector] public bool isFall;
+    [HideInInspector] public bool isJump;
+    [HideInInspector] public bool isRightClicked;
+    [HideInInspector] public bool isDrinkPotion;
+    [HideInInspector] public bool isSpellCast;
+    [HideInInspector] public bool isDead;
 
     //Timer
     public Timer targetBtnTimer { get; private set; }
@@ -123,6 +128,8 @@ public class PlayerController : MonoBehaviour
         m_playerInput = GetComponent<PlayerInput>();
         thirdPersonCam = GetComponent<ThirdPersonCam>();
         weaponManager = GetComponentInChildren<WeaponManager>();
+        hitBox = GetComponentInChildren<Collider>();
+        OnPlayerDead += OnDeathState;
         //컴포넌트 캐싱
 
         //스테이트 & 타이머 초기화
@@ -138,6 +145,7 @@ public class PlayerController : MonoBehaviour
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
         m_Controller.isTrigger = false;
+        hitBox.enabled = true;
 
         //프리펩 생성
         if (lockOnTarget == null)
@@ -230,11 +238,18 @@ public class PlayerController : MonoBehaviour
     }
     public void TurnOffTrigger()
     {
-        m_Controller.isTrigger = false;
+        hitBox.enabled = false;
     }
 
     public void TurnOnTrigger()
     {
-        m_Controller.isTrigger = true;
+        hitBox.enabled = true;
+    }
+
+    private void OnDeathState()
+    {
+        m_Controller.enabled = false;
+        hitBox.enabled = false;
+        Destroy(gameObject, 3.0f);
     }
 }

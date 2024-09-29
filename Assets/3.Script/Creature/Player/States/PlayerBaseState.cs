@@ -172,7 +172,16 @@ public class PlayerBaseState : IState
 
     public virtual void OnHurt()
     {
-        throw new System.NotImplementedException();
+        if (Managers.Instance.Inventory.PlayerData.currentHealth > 0)
+            animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
+
+        else
+        {
+            player.isDead = true;
+            player.m_playerInput.enabled = false;
+            player.OnPlayerDead?.Invoke();
+            animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
+        }
     }
 
     public virtual void SetAniBool()

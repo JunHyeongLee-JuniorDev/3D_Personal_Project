@@ -86,7 +86,7 @@ public class MonsterAttackState : MonsterBaseState
                 attackIndex = Random.Range(0, skillClips.Length);
                 Debug.Log("Ω∫≈≥ º±≈√µ  : " + skillClips[attackIndex]);
                 isSkill = true;
-                attackDistance = monsterSO.MonsterSkills[attackIndex].AttackDistance;
+                attackDistance = monsterSO.MonsterSkill.AttackDistance;
             }
 
             else
@@ -120,14 +120,15 @@ public class MonsterAttackState : MonsterBaseState
     private void UseSkill()
     {
         animator.CrossFade(skillClips[attackIndex], 0.2f);
-        monster.OnmagicBall?.Invoke();
-        monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkills[attackIndex].AttackAniTime);
+        monster.OnSkill?.Invoke();
+        monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkill.AttackAniTime);
         Attack();
     }
 
     private void UseNormalAttack()
     {
         animator.CrossFade(attackClips[attackIndex], 0.2f);
+        monster.weaponTrigger.UpdateDamage(monsterSO.NormalAttacks[attackIndex].Damage);
         monster.attackTimer.UpdateMaxTime(monsterSO.NormalAttacks[attackIndex].AttackAniTime);
         Attack();
     }

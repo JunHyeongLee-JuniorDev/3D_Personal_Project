@@ -21,7 +21,8 @@ public enum EMonsterAni
     BlendY,
     Hit,
     WalkLeft,
-    WalkRight
+    WalkRight,
+    Death
 };
 
 public class MonsterAniDataBase
@@ -55,9 +56,10 @@ public class MonsterAniDataBase
         monsterAniClips.Add(EMonsterAni.LocoBlend, Animator.StringToHash("Base Layer.LocoBlend"));
         monsterAniClips.Add(EMonsterAni.RunBlend, Animator.StringToHash("Base Layer.RunBlend"));
         monsterAniClips.Add(EMonsterAni.RotateBlend, Animator.StringToHash("Base Layer.RotateBlend"));
-        monsterAniClips.Add(EMonsterAni.Hit, Animator.StringToHash("Base Layer.Hit"));
         monsterAniClips.Add(EMonsterAni.WalkLeft, Animator.StringToHash("Base Layer.Walk Left"));
         monsterAniClips.Add(EMonsterAni.WalkRight, Animator.StringToHash("Base Layer.Walk Right"));
+        monsterAniClips.Add(EMonsterAni.Hit, Animator.StringToHash("Base Layer.Hit"));
+        monsterAniClips.Add(EMonsterAni.Death, Animator.StringToHash("Base Layer.Death"));
         //Clips---------------------------------------------------------------------------------------
 
         //Params----------------------------------------------------------------------------
