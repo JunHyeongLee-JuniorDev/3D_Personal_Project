@@ -82,8 +82,9 @@ public class MonsterController : MonoBehaviour
         deathTimer = new Timer(3.0f, this);
         //hpSlider = Instantiate(hpPrefabs);
         //SethpSliderPos();
+
         maxHealth = monsterSO.MaxHealth;
-        currentHealth = maxHealth;
+        RefillHealth();
         navAI.updateRotation = false;
 
         //Init States
@@ -232,14 +233,20 @@ public class MonsterController : MonoBehaviour
         });
     }
 
-    public void reduceHealth(float damage)
+    public void ReduceHealth(float damage)
     {
         currentHealth -= damage;
         stateMachine?.OnHurt();
         hpSlider.ChangeSliderWithFake(currentHealth, maxHealth);
     }
 
-    private void OnDrawGizmos()
+    public void RefillHealth()
+    {
+        currentHealth = maxHealth;
+    }
+
+
+    protected virtual void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, sphereRad);

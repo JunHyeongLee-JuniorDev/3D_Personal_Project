@@ -16,7 +16,7 @@ public class playerWeaponEvent : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("에너미 피다는 로직 실행");
-            other.GetComponent<MonsterController>().reduceHealth(damage);
+            other.GetComponent<MonsterController>().ReduceHealth(damage);
         }
     }
 }

@@ -29,10 +29,11 @@ public class Timer
     {
         isTickin = true;
         this.OnComplete = onComplete;
-        coroutineCash = controller.StartCoroutine(StartTimer_co(onComplete));
+        CancelTimer();
+        coroutineCash = controller.StartCoroutine(StartTimer_co());
     }
 
-    private IEnumerator StartTimer_co(Action onComplete)
+    private IEnumerator StartTimer_co()
     {
         yield return new WaitForSeconds(maxTime);
         this.OnComplete?.Invoke();
@@ -48,4 +49,14 @@ public class Timer
             controller.StopCoroutine(coroutineCash);
         }
     }
+
+    private void CancelTimer()
+    {
+        if (coroutineCash != null)
+        {
+            isTickin = false;
+            controller.StopCoroutine(coroutineCash);
+        }
+    }
+
 }

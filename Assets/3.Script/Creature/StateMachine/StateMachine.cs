@@ -77,11 +77,7 @@ public abstract class StateMachine
 
     public ITransition GetTransition()
     {
-        foreach(var transition in anyTransitions)
-            if (transition.Condition.Evaluate())
-                return transition;
-
-        foreach(var transition in current.transitions)
+        foreach (var transition in anyTransitions)
             if (transition.Condition.Evaluate())
                 return transition;
 
