@@ -41,6 +41,8 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Wall_03_Main_Snow
   m_Shader: {fileID: 4800000, guid: d226ffe19e7968b42a093d463d9b41c5, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
@@ -70,6 +72,7 @@ Material:
   - TransparentBackface
   - RayTracingPrepass
   - MOTIONVECTORS
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -546,6 +549,7 @@ Material:
     - _BaseUsePlanarUV: 0
     - _Blend: 0
     - _BlendMode: 0
+    - _BlendModePreserveSpecular: 0
     - _BumpScale: 1
     - _COAT_IOR: 1.4
     - _COAT_ROUGHNESS: 0
@@ -889,7 +893,8 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - Color_9038becb6e614b229ea1aa0f2e0ea888: {r: 0.4012993, g: 0.40363804, b: 0.509434, a: 1}
+    - Color_9038becb6e614b229ea1aa0f2e0ea888: {r: 0.4012993, g: 0.40363804, b: 0.509434,
+        a: 1}
     - Vector4_606b2bd599b74c8eb765aa838d8005ef: {r: 3, g: 3, b: 0, a: 0}
     - _BASE_COLOR: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _Base2Color: {r: 1, g: 1, b: 1, a: 0}
