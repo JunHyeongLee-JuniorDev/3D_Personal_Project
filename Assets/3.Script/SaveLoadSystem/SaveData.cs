@@ -23,6 +23,10 @@ public class GameSaveData
         missionInvData = new InventorySystem(missionInvSize);
 
         monsterSaveDatas = new List<monsterSaveData>();
+        bornFireDatas = new List<BornFireData>();
+        
+        bornFireDatas.Add(new BornFireData("BrigeFire"));
+        bornFireDatas.Add(new BornFireData("HallWayFire"));
     }
 
 
@@ -30,6 +34,9 @@ public class GameSaveData
 
     //모든 몬스터의 데이터를 담을 무언가가 필요 리스트로 저장 전 클리어 후 다시 add
     public List<monsterSaveData> monsterSaveDatas;
+
+    //화톳불 데이터 리스트 : 데이터의 이름으로 값을 찾음 foreach
+    public List<BornFireData> bornFireDatas;
 
     public InventorySystem consumeInvData;
     public InventorySystem equipmentInvData;
@@ -198,6 +205,8 @@ public class PlayerData
     [Serializable]
 public class monsterSaveData
 {
+    public int monsterID;
+
     //Physics
     public Vector3 monsterPosition;
     public Quaternion monsterRotation;
@@ -205,4 +214,19 @@ public class monsterSaveData
     //Health
     public float currentHealth;
     public float maxHealth;
+
+    public bool isBoss;
+    public bool isDead;
+}
+[Serializable]
+public class BornFireData
+{
+    public string fireName;
+    public bool isOn;
+
+    public BornFireData(string fireName)
+    {
+        this.fireName = fireName;
+        isOn = false;
+    }
 }

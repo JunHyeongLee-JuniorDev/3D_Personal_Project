@@ -13,8 +13,9 @@ public class ItemPickUp : MonoBehaviour
     private string assignName;
     public float pickUpRadius = 1f; // Pick Up 반경
     public InventorySlot itemSlot;
+    private InGamePopUp popUp;
+
     private SphereCollider myCollider;
-    private Tween tweenCash;
 
     private void Start()
     {
@@ -26,6 +27,8 @@ public class ItemPickUp : MonoBehaviour
         {
             itemSlot = new InventorySlot(Managers.Instance.Data.itemDataBase.GetItemData(assignName),1);
         }
+
+        popUp = Managers.Instance.Game.itemCanvas.GetComponent<InGamePopUp>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,21 +36,16 @@ public class ItemPickUp : MonoBehaviour
         if (!other.CompareTag("Player")) return; // 플레이어가 아니라면 return
 
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(true);
-        Managers.Instance.Game.itemCanvas.transform.GetChild(0).GetComponent<Image>().sprite = 
-            Managers.Instance.Data.itemDataBase.GetSprite(itemSlot.Data.displayName);
-        Managers.Instance.Game.playerInput.actions["Interaction"].started += PickUp;
 
-        tweenCash?.Kill();
-        tweenCash = Managers.Instance.Game.itemCanvas.DOFade(0.8f, 1.0f).SetLoops(-1,LoopType.Yoyo).SetEase(Ease.Linear);
+        popUp.ChangeIcon(Managers.Instance.Data.itemDataBase.GetSprite(itemSlot.Data.displayName));
+
+        Managers.Instance.Game.playerInput.actions["Interaction"].started += PickUp;
     }
 
     private void OnTriggerExit(Collider other)
     {
         if (!other.CompareTag("Player")) return; // 플레이어가 아니라면 return
-        CanvasGroup interactionCanvas = Managers.Instance.Game.itemCanvas.GetComponentInChildren<CanvasGroup>();
-        tweenCash?.Kill();
-        interactionCanvas.alpha = 1.0f;
-        interactionCanvas.gameObject.SetActive(false);
+        popUp.gameObject.SetActive(false);
         Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
     }
 
@@ -58,39 +56,30 @@ public class ItemPickUp : MonoBehaviour
             case EItemType.GEAR:
                 if (Managers.Instance.Inventory.InvSys_Gear.AddToInventory(itemSlot.Data, itemSlot.StackSize))// 아이템이 들어갈 자리가 있다면
                 {
-                    CanvasGroup interactionCanvas = Managers.Instance.Game.itemCanvas.GetComponentInChildren<CanvasGroup>();
-                    tweenCash?.Kill();
-                    interactionCanvas.alpha = 1.0f;
-                    interactionCanvas.gameObject.SetActive(false);
+                    popUp.gameObject.SetActive(false);
                     Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
-                    Destroy(gameObject); // 들어갔다면 Destroy
+                    gameObject.SetActive(false);// 들어갔다면 false
                 }
                 break;
 
             case EItemType.CONSUME: 
                 if (Managers.Instance.Inventory.InvSys_Consume.AddToInventory(itemSlot.Data, itemSlot.StackSize))// 아이템이 들어갈 자리가 있다면
                 {
-                    CanvasGroup interactionCanvas = Managers.Instance.Game.itemCanvas.GetComponentInChildren<CanvasGroup>();
-                    tweenCash?.Kill();
-                    interactionCanvas.alpha = 1.0f;
-                    interactionCanvas.gameObject.SetActive(false);
+                    popUp.gameObject.SetActive(false);
                     Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
-                    Destroy(gameObject); // 들어갔다면 Destroy
+                    gameObject.SetActive(false);// 들어갔다면 false
                 }
                 break;
 
             case EItemType.MISSION:
                 if (Managers.Instance.Inventory.InvSys_mission.AddToInventory(itemSlot.Data, itemSlot.StackSize))// 아이템이 들어갈 자리가 있다면
                 {
-                    CanvasGroup interactionCanvas = Managers.Instance.Game.itemCanvas.GetComponentInChildren<CanvasGroup>();
-                    tweenCash?.Kill();
-                    interactionCanvas.alpha = 1.0f;
-                    interactionCanvas.gameObject.SetActive(false);
+                    popUp.gameObject.SetActive(false);
                     Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
-                    Destroy(gameObject); // 들어갔다면 Destroy
+                    gameObject.SetActive(false);// 들어갔다면 false
                 }
                 break;
 
@@ -98,5 +87,15 @@ public class ItemPickUp : MonoBehaviour
                 Debug.LogError("아이템 type이 정해지지 않음");
                 break;
         }
+    }
+
+    private void OnDisable()
+    {
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
+    }
+
+    private void OnDestroy()
+    {
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
     }
 }

@@ -77,6 +77,9 @@ public class DataManager : MonoBehaviour, IInitManager
         if (!Directory.Exists(_dir))
             Directory.CreateDirectory(_dir);
 
+        if (Managers.Instance.Scene.currentScene.sceneType == EScene.GAME)
+            SavePlayerPosition(saveFileIndex);
+
         string _json = JsonUtility.ToJson(currentSaveData[saveFileIndex], prettyPrint : true);
         /*
          * 
@@ -93,6 +96,30 @@ public class DataManager : MonoBehaviour, IInitManager
         //씬 로드 같은 경우 등등 save에 이상이 갈 사항이 있다면 체크하여 false를 반환하자.
         
         return true;
+    }
+
+    /// <summary>
+    /// ID로 찾음 없으면 각 인스턴스에서 새로 만듬
+    /// </summary>
+    /// <param name="ID"></param>
+    /// <returns></returns>
+    public monsterSaveData LoadMonsterData(int ID, monsterSaveData newMonster)
+    {
+        foreach (monsterSaveData monster in currentSaveData[currentSaveIndex].monsterSaveDatas)
+        {
+            if (monster.monsterID == ID)
+                return monster;
+        }
+
+        currentSaveData[currentSaveIndex].monsterSaveDatas.Add(newMonster);
+
+        return newMonster;
+    }
+
+    private void SavePlayerPosition(int saveFileIndex)
+    {
+        currentSaveData[saveFileIndex].savePlayerData.playerPosition = Managers.Instance.Game.playerController.transform.position;
+        currentSaveData[saveFileIndex].savePlayerData.playerRotation = Managers.Instance.Game.playerController.transform.rotation;
     }
 
     public void CreateNewGame(int saveFileIndex, string userName)
@@ -148,6 +175,20 @@ public class DataManager : MonoBehaviour, IInitManager
             currentSaveData[fileIndex] = null;
         }
     }
+
+    public BornFireData AssignBornFireData(string fireName)
+    {
+        foreach (BornFireData data in currentSaveData[currentSaveIndex].bornFireDatas)
+        {
+            if(data.fireName == fireName)
+                return data;
+        }
+
+        Debug.LogWarning("화톳불 데이터 불러오기 실패");
+        return null;
+    }
+
+
     /// <summary>
     /// 세팅 파일을 디렉토리에서 부름
     /// </summary>

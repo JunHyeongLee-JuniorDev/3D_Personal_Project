@@ -36,7 +36,7 @@ public class MonsterBaseState : IState
 
     public virtual void OnHurt()
     {
-        if (monster.currentHealth > 0)
+        if (monster.statData.currentHealth > 0)
         {
             animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.1f);
             monster.hurtTimer.StartTimer(() => { });

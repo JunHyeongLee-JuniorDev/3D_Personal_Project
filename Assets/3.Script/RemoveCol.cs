@@ -3,7 +3,7 @@ using UnityEditor;
 
 public class RemoveCol : MonoBehaviour
 {
-    [MenuItem("Tools/Remove All Mesh Colliders")]
+    [MenuItem("Tools/Remove All Colliders")]
     public static void RemoveAllMeshColliders()
     {
         // 하이러키의 모든 오브젝트 탐색
@@ -15,6 +15,6 @@ public class RemoveCol : MonoBehaviour
             DestroyImmediate(meshCollider);
         }
 
-        Debug.Log(meshColliders.Length + " 개의 MeshCollider가 제거되었습니다.");
+        Debug.Log(meshColliders.Length + " 개의 Collider가 제거되었습니다.");
     }
 }

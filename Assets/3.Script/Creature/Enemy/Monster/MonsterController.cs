@@ -16,11 +16,10 @@ public class MonsterController : MonoBehaviour
 
     //Monster Data
     [field : SerializeField] public MonsterSO monsterSO { get; protected set; }
+    [field : SerializeField] public monsterSaveData statData { get; protected set; }
     [field : SerializeField] public float PatrolStopDistance { get; protected set; } = 0.5f;
     [field : SerializeField] public float ChaseStopDistance { get; protected set; } = 3.0f;
 
-    public float currentHealth { get; protected set; }
-    public float maxHealth { get; protected set; }
     public MonsterAniDataBase aniDataBase { get; protected set; }
 
     //Events
@@ -73,6 +72,9 @@ public class MonsterController : MonoBehaviour
         hitBox = GetComponent<Collider>();
         aniDataBase = new MonsterAniDataBase();
         aniDataBase.init();
+        InitStatData();
+
+        statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
 
         //Inits
         nodeStack = new Stack<Transform>();
@@ -83,7 +85,6 @@ public class MonsterController : MonoBehaviour
         //hpSlider = Instantiate(hpPrefabs);
         //SethpSliderPos();
 
-        maxHealth = monsterSO.MaxHealth;
         RefillHealth();
         navAI.updateRotation = false;
 
@@ -201,6 +202,16 @@ public class MonsterController : MonoBehaviour
         }
     }
 
+    protected virtual void InitStatData()
+    {
+        statData.monsterPosition = transform.position;
+        statData.monsterRotation = transform.rotation;
+        statData.currentHealth = monsterSO.MaxHealth;
+        statData.maxHealth = monsterSO.MaxHealth;
+        statData.isDead = false;
+        statData.isBoss = false;
+    }
+
     protected virtual void SethpSliderPos()
     {
         hpSlider.transform.SetParent(transform);
@@ -235,14 +246,14 @@ public class MonsterController : MonoBehaviour
 
     public void ReduceHealth(float damage)
     {
-        currentHealth -= damage;
+        statData.currentHealth -= damage;
         stateMachine?.OnHurt();
-        hpSlider.ChangeSliderWithFake(currentHealth, maxHealth);
+        hpSlider.ChangeSliderWithFake(statData.currentHealth, statData.maxHealth);
     }
 
     public void RefillHealth()
     {
-        currentHealth = maxHealth;
+        statData.currentHealth = statData.maxHealth;
     }
 
 

@@ -46,9 +46,10 @@ public class BossController : MonsterController
         player = FindObjectOfType<PlayerController>().transform; //메니저에서 할당하는 것으로 바꾸자
 
         //hpSlider = Instantiate(hpPrefabs;
-        maxHealth = 2000.0f;
+        InitStatData();
+        statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
+
         currentGroggy = maxGroggy;
-        currentHealth = maxHealth;
         navAI.updateRotation = false;
 
         //Init States
@@ -84,6 +85,16 @@ public class BossController : MonsterController
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position + wallCheckOffset, sphereRad);
+    }
+
+    protected override void InitStatData()
+    {
+        statData.monsterPosition = transform.position;
+        statData.monsterRotation = transform.rotation;
+        statData.currentHealth = 2000.0f;
+        statData.maxHealth = 2000.0f;
+        statData.isDead = false;
+        statData.isBoss = true;
     }
 }
 

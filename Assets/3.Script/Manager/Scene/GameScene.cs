@@ -25,6 +25,7 @@ public class GameScene : BaseScene
         Managers.Instance.Inventory.PlayerData.OnChangeHealPotion?.RemoveAllListeners();
         Managers.Instance.Inventory.PlayerData.OnRefillStatus?.RemoveAllListeners();
         Managers.Instance.Inventory.PlayerData.OnReduceStatus?.RemoveAllListeners();
+
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(false);
         Managers.Instance.Game.playerInput = FindObjectOfType<PlayerInput>();
         Managers.Instance.Game.playerController = Managers.Instance.Game.playerInput.GetComponent<PlayerController>();
