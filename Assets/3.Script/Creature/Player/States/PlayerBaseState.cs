@@ -18,6 +18,7 @@ public class PlayerBaseState : IState
     protected Dictionary<EPlayerAni, int> DTAniClipID;
     protected Dictionary<EPlayerAniParam, int> DTAniParamID;
     protected InputActionAsset inputActions;
+    protected Vector3 targetDir;
 
     public PlayerBaseState(PlayerStateMachine playerStateMachine)
     {
@@ -44,7 +45,7 @@ public class PlayerBaseState : IState
 
     public virtual void PhysicsUpdate()
     {
-
+        
     }
 
     public virtual void Update()
@@ -106,13 +107,12 @@ public class PlayerBaseState : IState
             // 카메라 포지션을 기준으로 전방 회전
             player.transform.rotation = Quaternion.Euler(0f, _rotation, 0f);
         }
+    }
 
-
-
-        Vector3 _targetDirection = Quaternion.Euler(0f, player.m_targetRotation, 0f) * Vector3.forward;
-
-        player.m_Controller.Move(_targetDirection.normalized * player.m_speed * Time.deltaTime +
-                            new Vector3(0.0f, player.m_verticalVelocity, 0.0f) * Time.deltaTime);
+    public void moveInFixedUpdate()
+    {
+        player.m_Controller.Move(targetDir.normalized * player.m_speed * Time.fixedDeltaTime +
+                            new Vector3(0.0f, player.m_verticalVelocity, 0.0f) * Time.fixedDeltaTime);
     }
 
     public virtual void Jump()

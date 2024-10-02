@@ -60,6 +60,7 @@ public class PlayerLocoState : PlayerBaseState
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        moveInFixedUpdate();
     }
 
     private void ShieldAni()

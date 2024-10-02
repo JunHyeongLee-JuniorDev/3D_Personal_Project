@@ -122,7 +122,6 @@ public class BossAttackState : BossBaseState
         while (Vector3.Angle(monster.transform.forward, _direction) > 1.0f)
         {
             _direction = monster.player.position - monster.transform.position;
-            Debug.Log("°¢µµ : " + _direction);
             monster.transform.rotation = Quaternion.LookRotation(Vector3.Lerp(monster.transform.forward, _direction.normalized, 0.1f));
             yield return null;
         }
