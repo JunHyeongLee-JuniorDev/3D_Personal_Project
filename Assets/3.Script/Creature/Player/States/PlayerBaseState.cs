@@ -165,7 +165,16 @@ public class PlayerBaseState : IState
 
             else
             {
-                player.isFall = true;
+
+                if (player.m_fallTimeOutDelta >= 0.0f)
+                {
+                    player.m_fallTimeOutDelta -= Time.deltaTime;
+                }
+
+                else
+                {
+                    player.isFall = true;
+                }
             }
         }
     }

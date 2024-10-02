@@ -28,3 +28,4 @@ MonoBehaviour:
   runSpeed: 2.5
   rotateAroundSpeed: 15
   rotateDistance: 5
+  maxHealth: 200

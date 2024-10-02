@@ -8,7 +8,7 @@ public class PlayerLocoState : PlayerBaseState
 {
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine) 
     {
-        //Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
+        Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
     }
 
     public override void Enter()

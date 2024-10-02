@@ -32,6 +32,7 @@ public class MonsterLocoState : MonsterBaseState
         monster.TurnOnNav();
 
         isPush = true;
+        navAI.autoBraking = false;
         nodeStack.Clear();
         nodeIndex = 0;
         locoAniBlend = 0.2f;
@@ -50,7 +51,9 @@ public class MonsterLocoState : MonsterBaseState
 
     public override void Exit()
     {
-        if(waitCoCash != null)
+        navAI.autoBraking = false; 
+
+        if (waitCoCash != null)
             monster.StopCoroutine(waitCoCash);
 
         StartWalk();
@@ -59,13 +62,13 @@ public class MonsterLocoState : MonsterBaseState
 
     private void AnimationBlend()
     {
-        locoAniBlend = Mathf.Lerp(locoAniBlend, navAI.velocity.sqrMagnitude, 0.01f);
+        locoAniBlend = Mathf.Lerp(locoAniBlend, navAI.desiredVelocity.sqrMagnitude, 0.1f);
         animator.SetFloat(aniDB.monsterParams[EMonsterAni.LocoBlend], locoAniBlend);
     }
 
     private void Patrol()
     {
-        if (HasReachedDestination())
+        if (HasReachedDestination() && monster.nodeList.Count != 1)
         {
             Debug.Log("목적지 도착");
             if (isBreakNode())

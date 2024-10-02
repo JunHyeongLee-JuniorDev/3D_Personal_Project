@@ -34,4 +34,10 @@ public class PlayerGroundData
 
     [field: Header("Targetting Smooth Time")]
     public float lookTargetSmoothTime { get; private set; } = 0.12f;
+
+    [field: SerializeField]
+    public Vector3 defaultSpawnPosition { get; private set; }
+
+    [field: SerializeField]
+    public Quaternion defaultSpawnRotation { get; private set; }
 }

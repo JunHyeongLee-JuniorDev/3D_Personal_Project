@@ -167,7 +167,7 @@ BlendTree:
     m_DirectBlendParameter: LocoBlend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: 98b8b6a4bf9d868458f27176f5a3d267, type: 2}
+    m_Motion: {fileID: 7400000, guid: 9f92bd85fd4254c4a9e44ba8410bcaf5, type: 2}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -429,7 +429,7 @@ BlendTree:
     m_DirectBlendParameter: LocoBlend
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: 7400000, guid: f12315b21b6ae894b870dc9ef90019c0, type: 2}
+    m_Motion: {fileID: 7400000, guid: 9f92bd85fd4254c4a9e44ba8410bcaf5, type: 2}
     m_Threshold: 0.5
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1

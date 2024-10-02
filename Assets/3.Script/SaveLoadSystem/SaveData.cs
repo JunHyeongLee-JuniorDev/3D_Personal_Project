@@ -69,6 +69,7 @@ public class PlayerData
     public string name;
 
     //Physics
+    public Vector3 spawnPosition;
     public Vector3 playerPosition;
     public Quaternion playerRotation;
 

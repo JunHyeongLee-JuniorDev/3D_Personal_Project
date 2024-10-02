@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using System.IO;
 using UnityEngine.Audio;
+using Unity.VisualScripting;
 
 public class DataManager : MonoBehaviour, IInitManager
 {
@@ -146,6 +147,9 @@ public class DataManager : MonoBehaviour, IInitManager
         _newGamedata.savePlayerData.magicDamage = 20f;
         _newGamedata.savePlayerData.weaponDamage = 25f;
         _newGamedata.savePlayerData.wallet = 0;
+        _newGamedata.savePlayerData.playerPosition = Resources.Load<PlayerSO>("ScriptableObj/Player/PlayerData").GroundedData.defaultSpawnPosition;
+        _newGamedata.savePlayerData.playerRotation = Resources.Load<PlayerSO>("ScriptableObj/Player/PlayerData").GroundedData.defaultSpawnRotation;
+        _newGamedata.savePlayerData.spawnPosition = _newGamedata.savePlayerData.playerPosition;
         
         currentSaveData[saveFileIndex] = _newGamedata;
         SaveGame(saveFileIndex);

@@ -4,7 +4,13 @@ using UnityEngine;
 
 public class playerWeaponEvent : MonoBehaviour
 {
+    private PlayerController player;
     private float damage;
+
+    private void Start()
+    {
+        player = GetComponentInParent<PlayerController>();
+    }
 
     public void UpdateDamage(float damage)
     {
@@ -16,7 +22,10 @@ public class playerWeaponEvent : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Debug.Log("에너미 피다는 로직 실행");
-            other.GetComponent<MonsterController>().ReduceHealth(damage);
+            MonsterController thisMonster = other.GetComponentInParent<MonsterController>();
+            thisMonster.ReduceHealth(damage);
+            thisMonster.isFoundPlayer = true;
+            thisMonster.player = player.transform;
         }
     }
 }

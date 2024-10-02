@@ -74,7 +74,8 @@ public class MonsterController : MonoBehaviour
         aniDataBase.init();
         InitStatData();
 
-        statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
+        Debug.Log("메니저에서 몬스터 데이터 초기화 작업 필요");
+        //statData = Managers.Instance?.Data.LoadMonsterData(statData.monsterID, statData);
 
         //Inits
         nodeStack = new Stack<Transform>();
@@ -110,7 +111,12 @@ public class MonsterController : MonoBehaviour
         PlayerOutOfMapCheck();
         stateMachine.Update();
         IsPlayerInView();
-        transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, navAI.desiredVelocity, _rotLerp));
+
+        if (navAI.desiredVelocity != Vector3.zero)
+        {
+            Quaternion direction = Quaternion.LookRotation(navAI.desiredVelocity);
+            transform.rotation = Quaternion.Slerp(transform.rotation, direction, _rotLerp * Time.deltaTime);
+        }
     }
 
     private void FixedUpdate()
@@ -204,6 +210,8 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void InitStatData()
     {
+        statData = new monsterSaveData();
+
         statData.monsterPosition = transform.position;
         statData.monsterRotation = transform.rotation;
         statData.currentHealth = monsterSO.MaxHealth;

@@ -36,6 +36,10 @@ public class PlayerSetDisplayer : MonoBehaviour
         equipments = new Dictionary<InventorySlot, InventorySlot_UI>();
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
 
+        Debug.Log("메니저의 플레이어 데이터 : " +  _playerData);
+        Debug.Log("메니저의 플레이어 데이터의 장비 : " +  _playerData.equipments);
+        Debug.Log("UI 슬롯 : " + slots_UI);
+
         slots_UI[0].Init(_playerData.equipments[(int)EEquipmentType.Weapon]);
         equipments.Add(_playerData.equipments[(int)EEquipmentType.Weapon], slots_UI[0]);
 

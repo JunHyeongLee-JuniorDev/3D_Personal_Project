@@ -10633,8 +10633,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 595569994}
         m_TargetAssemblyTypeName: Title_UIManager, Assembly-CSharp
-        m_MethodName: OnClickNextScene
-        m_Mode: 3
+        m_MethodName: OnClickPlay
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
