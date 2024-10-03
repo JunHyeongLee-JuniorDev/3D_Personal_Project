@@ -8,11 +8,14 @@ public class PlayerLocoState : PlayerBaseState
 {
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine) 
     {
+        if(!player.isDebugMode)
         Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
     }
 
     public override void Enter()
     {
+        Debug.Log($"{this}");
+
         base.Enter();
         inputActions["Skill"].started -= OnSkill;
         inputActions["Skill"].started += OnSkill;
@@ -41,9 +44,9 @@ public class PlayerLocoState : PlayerBaseState
             }
         }
         
-        Move();
+        
         Jump();
-        Gravity();
+        Move();
         ShieldAni();
 
         if (player.isGrouded)
@@ -56,11 +59,16 @@ public class PlayerLocoState : PlayerBaseState
         inputActions["Skill"].started -= OnSkill;
     }
 
-    
-    public override void PhysicsUpdate()
+    public override void OnHurt()
     {
-        base.PhysicsUpdate();
-        moveInFixedUpdate();
+        base.OnHurt();
+        if(Managers.Instance.Inventory.PlayerData.currentHealth > 0)
+        {
+            player.hurtTimer.StartTimer(() =>
+            {
+                animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+            });
+        }
     }
 
     private void ShieldAni()

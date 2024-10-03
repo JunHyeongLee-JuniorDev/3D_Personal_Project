@@ -28,7 +28,7 @@ public class ItemPickUp : MonoBehaviour
             itemSlot = new InventorySlot(Managers.Instance.Data.itemDataBase.GetItemData(assignName),1);
         }
 
-        popUp = Managers.Instance.Game.itemCanvas.GetComponent<InGamePopUp>();
+        popUp = Managers.Instance.Game.itemCanvas;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,6 +39,7 @@ public class ItemPickUp : MonoBehaviour
 
         popUp.ChangeIcon(Managers.Instance.Data.itemDataBase.GetSprite(itemSlot.Data.displayName));
 
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
         Managers.Instance.Game.playerInput.actions["Interaction"].started += PickUp;
     }
 
@@ -87,15 +88,5 @@ public class ItemPickUp : MonoBehaviour
                 Debug.LogError("아이템 type이 정해지지 않음");
                 break;
         }
-    }
-
-    private void OnDisable()
-    {
-        Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
-    }
-
-    private void OnDestroy()
-    {
-        Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
     }
 }

@@ -22,12 +22,12 @@ MonoBehaviour:
     <defaultSpawnRotation>k__BackingField: {x: 0, y: -0.70710677, z: 0, w: 0.70710677}
   <AirData>k__BackingField:
     <groundedOffset>k__BackingField: 0
-    <groundedRadius>k__BackingField: 0.2
+    <groundedRadius>k__BackingField: 0.5
     <groundLayers>k__BackingField:
       serializedVersion: 2
       m_Bits: 2176
-    JumpTimeout: 0.8
-    FallTimeout: 1.5
+    JumpTimeout: 0.5
+    FallTimeout: 0.15
     JumpHeight: 1.8
     Gravity: -9.8
     GravityOffset: 0.1

@@ -17,7 +17,7 @@ public class WeaponManager : MonoBehaviour
      * 인벤토리에 있는 모든 장비 아이템의 모델들 생성해 놓기
      * 무기의 콜라이더 스크립트 참조하기
      */
-    private Dictionary<string, GameObject> weaponModels = new Dictionary<string, GameObject>();
+    private Dictionary<string, playerWeaponEvent> weaponModels = new Dictionary<string, playerWeaponEvent>();
     private GameObject axeSkillEff;
     private ParticleSystem axeSkilllparticle;
     private ParticleSystem swordSkillEff;
@@ -26,14 +26,17 @@ public class WeaponManager : MonoBehaviour
     private ItemDataBase weaponDB;
     private PlayerData playerData;
 
+    //Normal Attack Collider
+    private playerWeaponEvent weaponEvent;
+
     [SerializeField]private Transform rightHandRoot;
     [SerializeField]private Transform leftHandRoot;
 
     private PlayerController player;
     private GameObject currentLeftHandModel;
-    private GameObject currentRightHandModel;
+    private playerWeaponEvent currentRightHandModel;
     private static EWeaponType currentWeaponType = EWeaponType.AXE;
-    private GameObject bareHand;
+    private playerWeaponEvent bareHand;
 
     private Coroutine skillcorountineCash;
 
@@ -49,9 +52,10 @@ public class WeaponManager : MonoBehaviour
         magicSkillCollider = magicSkillEff.GetComponent<Collider>();
         player = GetComponentInParent<PlayerController>();
 
-        bareHand = Resources.Load<GameObject>("Prefabs/Weapons/BareHand");
-        bareHand.name = "BareHand";
-        bareHand.SetActive(false);
+        bareHand = Managers.Instance.InstantiateResouce("Prefabs/Weapons/BareHand", "BareHand").GetComponent<playerWeaponEvent>();
+        bareHand.transform.SetParent(rightHandRoot);
+        bareHand.gameObject.SetActive(false);
+
         if (Managers.Instance == null)
         {
             weaponDB = new ItemDataBase();
@@ -65,16 +69,16 @@ public class WeaponManager : MonoBehaviour
         }
 
             GameObject _newModel = Instantiate(weaponDB.GetModelPrefab("도끼"), rightHandRoot);
-            weaponModels.Add("도끼", _newModel);
+            weaponModels.Add("도끼", _newModel.GetComponent<playerWeaponEvent>());
             _newModel.SetActive(false);
             _newModel = Instantiate(weaponDB.GetModelPrefab("검"), rightHandRoot);
-            weaponModels.Add("검", _newModel);
+            weaponModels.Add("검", _newModel.GetComponent<playerWeaponEvent>());
             _newModel.SetActive(false);
             _newModel = Instantiate(weaponDB.GetModelPrefab("마법장갑"), rightHandRoot);
-            weaponModels.Add("마법장갑", _newModel);
+            weaponModels.Add("마법장갑", _newModel.GetComponent<playerWeaponEvent>());
             _newModel.SetActive(false);
             _newModel = Instantiate(weaponDB.GetModelPrefab("방패"), leftHandRoot);
-            weaponModels.Add("방패", _newModel);
+            weaponModels.Add("방패", _newModel.GetComponent<playerWeaponEvent>());
             _newModel.SetActive(false);
 
             axeSkillEff.SetActive(false);
@@ -90,7 +94,7 @@ public class WeaponManager : MonoBehaviour
     {//들고 있는 아이템의 모델 활성화
         if (playerData.equipments[(int)EEquipmentType.Shield].StackSize > 0)
         {
-            currentLeftHandModel = weaponModels[playerData.equipments[(int)EEquipmentType.Shield].Data.displayName];
+            currentLeftHandModel = weaponModels[playerData.equipments[(int)EEquipmentType.Shield].Data.displayName].gameObject;
             currentLeftHandModel?.SetActive(true);
         }
         else
@@ -98,19 +102,46 @@ public class WeaponManager : MonoBehaviour
 
         if (playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {
-            currentRightHandModel?.SetActive(false);
+            currentRightHandModel?.gameObject.SetActive(false);
             currentRightHandModel = weaponModels[playerData.equipments[(int)EEquipmentType.Weapon].Data.displayName];
             currentWeaponType = playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType;
-            currentRightHandModel?.SetActive(true);
+            currentRightHandModel?.gameObject.SetActive(true);
         }
 
         else
         {
             currentWeaponType = EWeaponType.None;
             currentLeftHandModel?.SetActive(false);
-            bareHand?.SetActive(true);
+            bareHand.gameObject.SetActive(true);
         }
     }
+
+    public void OnNormalCol()
+    {
+        if (currentWeaponType == EWeaponType.None)
+        {
+            bareHand.Col.enabled = true;
+        }
+
+        else
+        {
+            currentRightHandModel.Col.enabled = true;
+        }
+    }
+
+    public void OffNormalCol()
+    {
+        if (currentWeaponType == EWeaponType.None)
+        {
+            bareHand.Col.enabled = false;
+        }
+
+        else
+        {
+            currentRightHandModel.Col.enabled = false;
+        }
+    }
+
 
     public void actiaveSkill()
     {

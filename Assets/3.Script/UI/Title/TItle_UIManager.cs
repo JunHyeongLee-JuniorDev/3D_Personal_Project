@@ -130,7 +130,7 @@ public class Title_UIManager : MonoBehaviour
     public void OnClickNextScene(int fileIndex)
     {
         Managers.Instance.Data.currentSaveIndex = fileIndex;
-        Managers.Instance.Scene.ChangeScene(EScene.GAME);// for debug
+        Managers.Instance.Scene.ChangeScene(EScene.LOADING);// for debug
     }
 
     public void OnEnterUserName()

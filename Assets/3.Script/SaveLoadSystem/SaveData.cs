@@ -41,6 +41,9 @@ public class GameSaveData
     public InventorySystem consumeInvData;
     public InventorySystem equipmentInvData;
     public InventorySystem missionInvData;
+    public bool isFirstDoorOpened;
+    public bool isSecondDoorOpened;
+    public bool isBossDoorOpened;
 
     private readonly int consumeInvSize = 20;
     private readonly int equipmentInvSize = 20;
@@ -90,6 +93,10 @@ public class PlayerData
     public int staminaStat;// 스테미나(도끼, 활)
     public int manaStat;//(마법)
     public int wallet;//지갑~
+
+    //dropped money
+    public int droppedMoney;
+    public Vector3 droppedMoneyPos;
 
     //Gears
     public readonly int eqiupmentLength = 4;
@@ -207,10 +214,6 @@ public class PlayerData
 public class monsterSaveData
 {
     public int monsterID;
-
-    //Physics
-    public Vector3 monsterPosition;
-    public Quaternion monsterRotation;
 
     //Health
     public float currentHealth;

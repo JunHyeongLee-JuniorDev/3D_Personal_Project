@@ -26,7 +26,6 @@ public class MonsterLocoState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log($"{monsterSO.name} Loco State");
 
         if(!monster.outMapTimer.isTickin)
         monster.TurnOnNav();
@@ -70,10 +69,8 @@ public class MonsterLocoState : MonsterBaseState
     {
         if (HasReachedDestination() && monster.nodeList.Count != 1)
         {
-            Debug.Log("목적지 도착");
             if (isBreakNode())
             {
-                Debug.Log("쉬는 노드 확인 완료");
                 if (waitCoCash != null)
                     monster.StopCoroutine(waitCoCash);
 
@@ -127,7 +124,6 @@ public class MonsterLocoState : MonsterBaseState
         if (isPush)
         {
             navAI.SetDestination(monster.nodeList[nodeIndex].position);
-            Debug.Log("현재 노드 index :" + nodeIndex);
             nodeStack.Push(monster.nodeList[nodeIndex++]);
         }
 

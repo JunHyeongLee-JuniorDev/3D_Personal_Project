@@ -19379,6 +19379,7 @@ GameObject:
   - component: {fileID: 4335282639064450}
   - component: {fileID: 198993423900235080}
   - component: {fileID: 199087449348766326}
+  - component: {fileID: 3222480571719154736}
   m_Layer: 0
   m_Name: MagicGloves
   m_TagString: Untagged
@@ -24214,3 +24215,15 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3222480571719154736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1975959190090480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e24ccbbe285a3464dab927857ba578b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

@@ -14,13 +14,13 @@ public class FadeInOut_UI : MonoBehaviour
     private CanvasGroup group;
     private Tween tween;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         group = GetComponent<CanvasGroup>();
         group.alpha = 0.0f;
     }
 
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         tween?.Kill();
 

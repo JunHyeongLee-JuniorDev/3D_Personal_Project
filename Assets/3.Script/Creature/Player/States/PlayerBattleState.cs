@@ -24,7 +24,7 @@ public class PlayerBattleState : PlayerBaseState
     public override void Enter()
     {
         nearlistEnemy = null;
-
+        Debug.Log($"{this}");
         AssignTarget(true, true);
 
         if (player.m_targetEnemy != null)
@@ -61,9 +61,9 @@ public class PlayerBattleState : PlayerBaseState
         animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEX], battleAniX);
         animator.SetFloat(DTAniParamID[EPlayerAniParam.BATTLEY], battleAniY);
 
-        Move();
         LookAtTarget();
-        Gravity();
+        Move();
+        Jump();
     }
 
     public override void LateUpdate()
@@ -165,20 +165,6 @@ public class PlayerBattleState : PlayerBaseState
 
         if(!isRolling)
         player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 0.05f);
-    }
-    protected override void Gravity()
-    {
-        if (player.isGrouded) { player.m_verticalVelocity = -2f; return; }
-
-        else
-        {
-            player.isFall = true;
-            player.isBattle = false;
-            player.m_targetEnemy = null;
-            player.isJump = false;
-        }
-
-        base.Gravity();
     }
     /// <summary>
     /// 일정 범위의 OverlapShpere와 카메라의 시야각 내의 객체를 타겟팅하여 PlayerController에 저장합니다.

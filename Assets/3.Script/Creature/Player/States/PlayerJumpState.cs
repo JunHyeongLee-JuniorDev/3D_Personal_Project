@@ -9,6 +9,7 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void Enter()
     {
+        Debug.Log($"{this}");
         base.Enter();
 
         if (player.isSprint)
@@ -21,9 +22,9 @@ public class PlayerJumpState : PlayerBaseState
     public override void Update()
     {
         base.Update();
-        Move();
+
         Jump();
-        Gravity();
+        Move();
     }
 
     public override void Exit()

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -20,6 +21,7 @@ public class BossController : MonsterController
     [field: SerializeField] public float chargeSpeed { get; private set; } = 30.0f;
     [field: SerializeField] public float rotateSpeed { get; private set; } = 30.0f;
     public bool isChargeState;
+    public bool isPlayerEnter = false;
 
     [field : SerializeField]public LayerMask wallLayer { get; private set; }
 
@@ -35,6 +37,7 @@ public class BossController : MonsterController
         navAI = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         weaponTrigger = GetComponentInChildren<MonsterWeaponTrigger>();
+        bloodEFF = transform.GetChild(5).GetComponent<ParticleSystem>();
         hitBox = GetComponent<Collider>();
 
         //Inits
@@ -42,30 +45,33 @@ public class BossController : MonsterController
         attackTimer = new Timer(0.0f, this);
         hurtTimer = new Timer(3.0f, this);
         deathTimer = new Timer(3.0f, this);
-
+        isPlayerEnter = false;
         player = FindObjectOfType<PlayerController>().transform; //메니저에서 할당하는 것으로 바꾸자
 
         //hpSlider = Instantiate(hpPrefabs;
         InitStatData();
         statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
+        Managers.Instance.Game.playerController.OnPlayerDead -= OnPlayerDead;
+        Managers.Instance.Game.playerController.OnPlayerDead += OnPlayerDead;
 
         currentGroggy = maxGroggy;
         navAI.updateRotation = false;
 
         //Init States
         stateMachine = new MonsterStateMachine(this);
-
+        var _restState = new BossRestState(stateMachine);
         var _locoState = new BossLocoState(stateMachine);
         var _chargeState = new BossChargeState(stateMachine);
         var _rotateState = new BossRotateState(stateMachine);
         var _attackState = new BossAttackState(stateMachine);
 
-        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isInRotateRad && !isChargeState));
+        stateMachine.AddAnyTransition(_restState, new FuncPredicate(() => !isPlayerEnter));
+        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isInRotateRad && !isChargeState && isPlayerEnter));
         stateMachine.AddAnyTransition(_chargeState, new FuncPredicate(() => isChargeState));
         stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack && !isChargeState));
         stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin));
 
-        stateMachine.SetState(_locoState);
+        stateMachine.SetState(_restState);
     }
 
     protected override void Update()
@@ -89,8 +95,6 @@ public class BossController : MonsterController
 
     protected override void InitStatData()
     {
-        statData.monsterPosition = transform.position;
-        statData.monsterRotation = transform.rotation;
         statData.currentHealth = 2000.0f;
         statData.maxHealth = 2000.0f;
         statData.isDead = false;

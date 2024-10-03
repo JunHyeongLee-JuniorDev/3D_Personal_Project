@@ -11,14 +11,14 @@ public class GameScene : BaseScene
 
         sceneType = EScene.GAME;
         Managers.Instance.Inventory.LoadInventory();
-        GameObject _itemCanvas = GameObject.Find("ItemCanvas");
+        InGamePopUp _itemCanvas = FindObjectOfType<InGamePopUp>();
 
         if( _itemCanvas != null )
-        Managers.Instance.Game.itemCanvas = _itemCanvas.GetComponent<CanvasGroup>();
+        Managers.Instance.Game.itemCanvas = _itemCanvas;
 
         else
             Managers.Instance.Game.itemCanvas = 
-                Managers.Instance.InstantiateResouce("Prefabs/UI/ItemCanvas", "ItemCanvas").GetComponent<CanvasGroup>();
+                Managers.Instance.InstantiateResouce("Prefabs/UI/ItemCanvas", "ItemCanvas").GetComponent<InGamePopUp>();
 
         Managers.Instance.Inventory.OnDynamicInventoryChanged?.RemoveAllListeners();
         Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.RemoveAllListeners();
@@ -40,6 +40,10 @@ public class GameScene : BaseScene
         Managers.Instance.Game.playerInput = Managers.Instance.Game.playerController.GetComponent<PlayerInput>();
         Managers.Instance.Game.PlayerHud_UI = FindObjectOfType<PlayerHud_UI>();
         Managers.Instance.Game.CursorLock(true);
+        Managers.Instance.Game.CreateDiedPopUp();
+
+        Managers.Instance.Game.playerController.OnPlayerDead -= Managers.Instance.Game.OnDiedPopUp;
+        Managers.Instance.Game.playerController.OnPlayerDead += Managers.Instance.Game.OnDiedPopUp;
     }
 
     public override void Clear()

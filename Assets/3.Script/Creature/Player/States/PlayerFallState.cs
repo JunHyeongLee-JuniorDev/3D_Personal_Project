@@ -12,9 +12,11 @@ public class PlayerFallState : PlayerBaseState
 
     public override void Enter()
     {
+        Debug.Log($"{this}");
         base.Enter();
         lastMoveDirection = player.m_input.move;
         lastCamYAngle = player.m_mainCam.transform.eulerAngles.y;
+        animator.SetBool(DTAniParamID[EPlayerAniParam.ISFALL], true);
         inputActions["Move"].Disable();
         inputActions["Fire"].Disable();
     }
@@ -30,11 +32,9 @@ public class PlayerFallState : PlayerBaseState
 
         else if (player.m_targetSpeed > 0.0f)
             player.m_targetSpeed -= 2.3f * Time.deltaTime;
-
-
-        Move();
+        
         Jump();
-        Gravity();
+        Move();
     }
 
     public override void Move()
@@ -82,19 +82,20 @@ public class PlayerFallState : PlayerBaseState
                                      groundData.rotationSmoothTime);
 
             // 카메라 포지션을 기준으로 전방 회전
-            player.transform.rotation = Quaternion.Euler(0f, _rotation, 0f);
+            player.targetRot = Quaternion.Euler(0f, _rotation, 0f);
         }
 
+        player.targetDir = Quaternion.Euler(0f, player.m_targetRotation, 0f) * Vector3.forward;
 
+        player.transform.rotation = player.targetRot;
 
-        Vector3 _targetDirection = Quaternion.Euler(0f, player.m_targetRotation, 0f) * Vector3.forward;
-
-        player.m_Controller.Move(_targetDirection.normalized * player.m_speed * Time.deltaTime +
-                            new Vector3(0.0f, player.m_verticalVelocity, 0.0f) * Time.deltaTime);
+        player.m_Controller.Move(player.targetDir.normalized * player.m_targetSpeed * Time.deltaTime +
+                                        new Vector3(0.0f, player.m_verticalVelocity, 0.0f) * Time.deltaTime);
     }
 
     public override void Exit()
     {
+        animator.SetBool(DTAniParamID[EPlayerAniParam.ISFALL], false);
         base.Exit();
         inputActions["Move"].Enable();
         inputActions["Fire"].Enable();

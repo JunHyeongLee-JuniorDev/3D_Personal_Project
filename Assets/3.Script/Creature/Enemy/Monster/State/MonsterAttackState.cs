@@ -44,7 +44,6 @@ public class MonsterAttackState : MonsterBaseState
 
     public override void Enter()
     {
-        Debug.Log($"{monsterSO.name} Attack State");
         base.Enter();
         player = monster.player;
         RandomAttackState();
@@ -65,9 +64,11 @@ public class MonsterAttackState : MonsterBaseState
             CheckAttackDistance();
             monster.CheckPlayerDistance();
         }
+        Vector3 targetPos = player.position;
+        targetPos.y = monster.transform.position.y;
 
         monster.transform.rotation = Quaternion.LookRotation(Vector3.Lerp(monster.transform.forward,
-                                (player.position - monster.transform.position).normalized, monster._rotLerp));
+                                (targetPos - monster.transform.position).normalized, monster._rotLerp));
     }
 
     public override void Exit()
@@ -127,8 +128,8 @@ public class MonsterAttackState : MonsterBaseState
 
     private void UseNormalAttack()
     {
-        animator.CrossFade(attackClips[attackIndex], 0.2f);
         monster.weaponTrigger.UpdateDamage(monsterSO.NormalAttacks[attackIndex].Damage);
+        animator.CrossFade(attackClips[attackIndex], 0.2f);
         monster.attackTimer.UpdateMaxTime(monsterSO.NormalAttacks[attackIndex].AttackAniTime);
         Attack();
     }

@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class SceneManagerEX : MonoBehaviour, IInitManager
 {
     public BaseScene currentScene { get { return FindObjectOfType<BaseScene>(); } }
+
     public void Init()
     {
 
@@ -33,5 +34,6 @@ public enum EScene
 {
     UNKNOWN,
     TITLE,
-    GAME
+    GAME,
+    LOADING
 };

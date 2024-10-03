@@ -30,16 +30,19 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        //if (context.started && !player.isAttack)
-        //{
-        //    player.isAttack = true;
-        //}
+        if (context.started && !player.isAttack)
+        {
+            player.isAttack = true;
+        }
     }
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.started && !player.isBattle)
-        player.isJump = true;
+        if (context.started && !player.isBattle)
+        {
+            player.isJump = true;
+            Debug.Log("점프 눌림");
+        }
     }
 
 
@@ -77,7 +80,6 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log("내가 바뀐다. 난 짱멋있다!");
             Managers.Instance.Inventory.PlayerData.ChangePotion();
             Managers.Instance.Inventory.PlayerData.OnChangeHealPotion?.Invoke();
         }
@@ -87,7 +89,6 @@ public class PlayerinputSystem : MonoBehaviour
     {
         if (context.started)
         {
-            Debug.Log("T눌림");
             player.isDrinkPotion = true;
             Managers.Instance.Inventory.PlayerData.DrinkPotion();
             Managers.Instance.Inventory.PlayerData.OnRefillStatus?.Invoke(); 

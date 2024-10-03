@@ -12,6 +12,8 @@ public class PlayerFollowRoot : MonoBehaviour
     private void Start()
     {
         transform.position = player.transform.position + defualtCamPos;
+        player.OnPlayerDead -= targetRootOff;
+        player.OnPlayerDead += targetRootOff;
     }
 
     private void LateUpdate()
@@ -25,5 +27,10 @@ public class PlayerFollowRoot : MonoBehaviour
     public void AssignPlayer(PlayerController player)
     {
         this.player = player;
+    }
+
+    private void targetRootOff()
+    {
+        gameObject.SetActive(false);
     }
 }

@@ -36,7 +36,8 @@ public class BornFire : MonoBehaviour
 
         if (Managers.Instance != null)
         {
-            popUp = Managers.Instance.Game.itemCanvas.GetComponent<InGamePopUp>();
+            popUp = Managers.Instance.Game.itemCanvas;
+            Debug.Log("∆Àæ˜ ∏ﬁ¥∫ null check : " + popUp.name);
             data = Managers.Instance.Data.AssignBornFireData(fireName);
         }
 
@@ -74,16 +75,18 @@ public class BornFire : MonoBehaviour
 
         if (data.isOn)
         {
+            Debug.Log("»≠≈Í∫“ »∞º∫»≠ ∂ﬂ±‚");
             popUp.ChangeText("»≠≈Í∫“ »∞º∫»≠");
-            Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
-            Managers.Instance.Game.playerInput.actions["Interaction"].started += SetOnFireAction;
+            Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
+            Managers.Instance.Game.playerInput.actions["Interaction"].started += RestAction;
         }
 
         else
         {
+            Debug.Log("»≠≈Í∫“ Ω¨±‚ ∂ﬂ±‚");
             popUp.ChangeText("»≠≈Í∫“ø°º≠ Ω¨±‚");
-            Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
-            Managers.Instance.Game.playerInput.actions["Interaction"].started += RestAction;
+            Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
+            Managers.Instance.Game.playerInput.actions["Interaction"].started += SetOnFireAction;
         }
     }
 
@@ -108,5 +111,9 @@ public class BornFire : MonoBehaviour
     private void SetOnFireAction(InputAction.CallbackContext context)
     {
         data.isOn = true;
+        Managers.Instance.Game.OnFirePopUp();
+        Managers.Instance.Inventory.PlayerData.playerPosition = transform.position;
+        Managers.Instance.Inventory.PlayerData.spawnPosition = transform.position;
+        Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
     }
 }

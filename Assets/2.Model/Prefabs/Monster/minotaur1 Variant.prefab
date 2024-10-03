@@ -1498,12 +1498,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b87290a28c3d584e9f614c188ad4b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitBox: {fileID: 6622294261613229938}
   <monsterSO>k__BackingField: {fileID: 11400000, guid: b96ac7b0db3ea4b4d84c60e32f8ff646,
     type: 2}
   <statData>k__BackingField:
     monsterID: 0
-    monsterPosition: {x: 0, y: 0, z: 0}
-    monsterRotation: {x: 0, y: 0, z: 0, w: 0}
     currentHealth: 0
     maxHealth: 0
     isBoss: 0
@@ -1529,7 +1528,8 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   <_rotLerp>k__BackingField: 5
-  hpPrefabs: {fileID: 0}
+  hpPrefabs: {fileID: 889455503191322609, guid: f4f18ac7ae517af4eb370373fa187dc0,
+    type: 3}
 --- !u!195 &7715151995192420320
 NavMeshAgent:
   m_ObjectHideFlags: 0

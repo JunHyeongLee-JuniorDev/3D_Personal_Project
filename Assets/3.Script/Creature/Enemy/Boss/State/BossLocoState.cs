@@ -51,3 +51,18 @@ public class BossLocoState : BossBaseState
         animator.CrossFade(aniDB.aniHashs[EPriestAni.WalkBlend], 0.2f);
     }
 }
+
+public class BossRestState : BossBaseState
+{
+    public BossRestState(MonsterStateMachine stateMachine) : base(stateMachine) { }
+
+    public override void Enter()
+    {
+        base.Enter();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+    }
+}

@@ -13,7 +13,6 @@ public class MonsterChaseState : MonsterBaseState
 
     public override void Enter()
     {
-        Debug.Log($"{monsterSO.name} Chase State");
         base.Enter();
 
         player = monster.player;

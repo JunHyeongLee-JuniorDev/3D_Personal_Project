@@ -12,7 +12,8 @@ public class MonsterController : MonoBehaviour
     public NavMeshAgent navAI {  get; protected set; }
     public Animator animator {  get; protected set; }
     public MonsterWeaponTrigger weaponTrigger { get; protected set; }
-    protected Collider hitBox;
+    protected ParticleSystem bloodEFF;
+    [SerializeField] protected Collider hitBox;
 
     //Monster Data
     [field : SerializeField] public MonsterSO monsterSO { get; protected set; }
@@ -54,8 +55,8 @@ public class MonsterController : MonoBehaviour
     [field: SerializeField] public float _rotLerp { get; protected set; } = 0.03f;
 
     //UI
-    [SerializeField] protected FakeSlider_UI hpPrefabs;
-    public FakeSlider_UI hpSlider { get; protected set; }
+    [SerializeField] protected MonsterSlider hpPrefabs;
+    public MonsterSlider hpSlider { get; protected set; }
 
     //Timer
     public Timer attackTimer { get; protected set; }
@@ -69,13 +70,14 @@ public class MonsterController : MonoBehaviour
         navAI = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         weaponTrigger = GetComponentInChildren<MonsterWeaponTrigger>();
-        hitBox = GetComponent<Collider>();
+        bloodEFF = GetComponentInChildren<ParticleSystem>();
         aniDataBase = new MonsterAniDataBase();
         aniDataBase.init();
-        InitStatData();
 
-        Debug.Log("메니저에서 몬스터 데이터 초기화 작업 필요");
-        //statData = Managers.Instance?.Data.LoadMonsterData(statData.monsterID, statData);
+        InitStatData();
+        statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
+        Managers.Instance.Game.playerController.OnPlayerDead -= OnPlayerDead;
+        Managers.Instance.Game.playerController.OnPlayerDead += OnPlayerDead;
 
         //Inits
         nodeStack = new Stack<Transform>();
@@ -83,8 +85,8 @@ public class MonsterController : MonoBehaviour
         outMapTimer = new Timer(5.0f, this);
         hurtTimer = new Timer(2.0f, this);
         deathTimer = new Timer(3.0f, this);
-        //hpSlider = Instantiate(hpPrefabs);
-        //SethpSliderPos();
+        hpSlider = Instantiate(hpPrefabs);
+        SethpSliderPos();
 
         RefillHealth();
         navAI.updateRotation = false;
@@ -186,14 +188,12 @@ public class MonsterController : MonoBehaviour
         if (!navAI.pathPending && navAI.pathStatus == NavMeshPathStatus.PathPartial &&
             !outMapTimer.isTickin)
         {
-            Debug.Log("플레이어 나간거 체크 되니???");
             TurnOffNav();
             isFoundPlayer = false;
             animator.CrossFade(aniDataBase.monsterAniClips[EMonsterAni.Idle], 0.2f);
 
             outMapTimer.StartTimer(() =>
             {
-                Debug.Log("아마 타이머가 바로 끝나는게 아닐까?");
                 TurnOnNav();
             });
         }
@@ -210,10 +210,6 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void InitStatData()
     {
-        statData = new monsterSaveData();
-
-        statData.monsterPosition = transform.position;
-        statData.monsterRotation = transform.rotation;
         statData.currentHealth = monsterSO.MaxHealth;
         statData.maxHealth = monsterSO.MaxHealth;
         statData.isDead = false;
@@ -244,6 +240,12 @@ public class MonsterController : MonoBehaviour
         navAI.velocity = Vector3.zero;
     }
 
+    protected void OnPlayerDead()
+    {
+        TurnOffNav();
+        isFoundPlayer = false;
+    }
+
     public void activefalseForDeath()
     {
         deathTimer.StartTimer(() =>
@@ -262,6 +264,32 @@ public class MonsterController : MonoBehaviour
     public void RefillHealth()
     {
         statData.currentHealth = statData.maxHealth;
+    }
+
+    public void ShowHealthUI()
+    {
+        hpSlider.gameObject.SetActive(true);
+    }
+
+    private void OnReset()
+    {
+        /*
+         * 피를 채워야하고
+         * 포지션도 설정한 포지션으로 저장하고
+         * bool 값 다 true로 하고
+         */
+
+        RefillHealth();
+        statData.isDead = false;
+    }
+
+    public void SprayBlood()
+    {
+        Vector3 targetPos = Managers.Instance.Game.playerController.transform.position;
+        targetPos.y = transform.position.y;
+
+        bloodEFF.transform.LookAt(targetPos);
+        bloodEFF.Play();
     }
 
 

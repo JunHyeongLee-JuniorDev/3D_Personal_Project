@@ -6,7 +6,7 @@ using UnityEngine.UIElements;
 
 public class Timer 
 {
-    private float maxTime;
+    public float maxTime { get; private set; }
     public Coroutine coroutineCash { get; private set; }
     private MonoBehaviour controller;
     private Action OnComplete;
@@ -27,9 +27,9 @@ public class Timer
 
     public void StartTimer(Action onComplete)
     {
-        isTickin = true;
-        this.OnComplete = onComplete;
         CancelTimer();
+        this.OnComplete = onComplete;
+        isTickin = true;
         coroutineCash = controller.StartCoroutine(StartTimer_co());
     }
 

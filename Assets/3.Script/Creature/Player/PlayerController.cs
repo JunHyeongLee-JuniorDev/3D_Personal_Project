@@ -33,16 +33,17 @@ public class PlayerController : MonoBehaviour
     public Collider hitBox { get; private set; }
 
     //State Bool
-    [HideInInspector] public bool isSprint;
-    [HideInInspector] public bool isBattle;
-    [HideInInspector] public bool isAttack;
-    [HideInInspector] public bool isGrouded;
-    [HideInInspector] public bool isFall;
-    [HideInInspector] public bool isJump;
-    [HideInInspector] public bool isRightClicked;
-    [HideInInspector] public bool isDrinkPotion;
-    [HideInInspector] public bool isSpellCast;
-    [HideInInspector] public bool isDead;
+    [field: SerializeField] public bool isDebugMode { get; private set; }
+    public bool isSprint;
+    public bool isBattle;
+    public bool isAttack;
+    public bool isGrouded;
+    public bool isFall;
+    public bool isJump;
+    public bool isRightClicked;
+    public bool isDrinkPotion;
+    public bool isSpellCast;
+    public bool isDead;
 
     //Timer
     public Timer targetBtnTimer { get; private set; }
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
     public Timer potionTimer { get; private set; }
     public Timer skillTimer { get; private set; }
     public Timer buffTimer { get; private set; }
+    public Timer hurtTimer { get; private set; }
 
     //Player--------------------------------------------------------------------------------
     //Hide
@@ -76,6 +78,9 @@ public class PlayerController : MonoBehaviour
     [HideInInspector]
     [Range(0.0f, 1.0f)]
     public float m_blockWeight;
+
+    public Vector3 targetDir;
+    public Quaternion targetRot;
 
     //SerializeField
     [Range(0.0f, 25.0f)]
@@ -142,6 +147,7 @@ public class PlayerController : MonoBehaviour
         potionTimer = new Timer(1.0f, this);
         skillTimer = new Timer(1.0f, this);
         buffTimer = new Timer(10.0f, this);
+        hurtTimer = new Timer(0.7f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
         m_Controller.isTrigger = false;
@@ -188,7 +194,7 @@ public class PlayerController : MonoBehaviour
 
         //AnyTransition
         m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack));
-        m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => !isGrouded && !isBattle && !isFall));
+        m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => isJump && !isBattle && !isFall));
         m_StateMachine.AddAnyTransition(_fallState, new FuncPredicate(() => !isGrouded && isFall));
         m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack));
         m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));
@@ -244,6 +250,16 @@ public class PlayerController : MonoBehaviour
     public void TurnOnTrigger()
     {
         hitBox.enabled = true;
+    }
+
+    public void OnNormalAttackCol()
+    {
+        weaponManager.OnNormalCol();
+    }
+
+    public void OffNormalAttackCol()
+    {
+        weaponManager.OffNormalCol();
     }
 
     private void OnDeathState()

@@ -7,7 +7,7 @@ public class PlayerAttackState : PlayerBaseState
 {
     public PlayerAttackState(PlayerStateMachine playerStateMachine) : base(playerStateMachine)
     {
-        //equipments = Managers.Instance.Inventory.PlayerData.equipments;
+        equipments = Managers.Instance.Inventory.PlayerData.equipments;
     }
 
     private int[] attackAniClips;
@@ -19,6 +19,7 @@ public class PlayerAttackState : PlayerBaseState
     public override void Enter()
     {
         base.Enter();
+        Debug.Log($"{this}");
         if (equipments[(int)EEquipmentType.Weapon].StackSize < 0)
         {
             attackAniClips = player.m_aniData.meleeAttackClips;
@@ -115,13 +116,10 @@ public class PlayerAttackState : PlayerBaseState
 
     public void OnFire(InputAction.CallbackContext context)
     {
-        Debug.Log("АјАн index : " + attackIndex);
-
         if (!player.attackBtnTimer.isTickin)
         {
             if (attackIndex >= attackAniClips.Length)
                 attackIndex = 0;
-
             animator.CrossFade(attackAniClips[attackIndex++], attackFadeDuration);
             player.attackBtnTimer.StartTimer(() => { });
         }
