@@ -36,7 +36,7 @@ public class Loading_UI : MonoBehaviour
 
         while (!sceneOP.isDone)
         {
-            if (m_slider.value < 0.9f)
+            if (m_slider.value < 0.99f)
             {
                 realTimer += Time.unscaledDeltaTime * 0.1f;
                 m_slider.value = Mathf.Lerp(m_slider.value, sceneOP.progress, realTimer);
@@ -46,18 +46,18 @@ public class Loading_UI : MonoBehaviour
             {
                 fakeTimer += Time.unscaledDeltaTime;
                 m_slider.value = Mathf.Lerp(m_slider.value, 1.0f, fakeTimer);
-
-                if (m_slider.value >= 0.99f)
-                {
-                    sceneOP.allowSceneActivation = true;
-                    yield break;
-                }
             }
 
-            Debug.Log("코루틴 돌아가는 중");
+            if (m_slider.value < 1.0f)
+            {
+                sceneOP.allowSceneActivation = true;
+                yield break;
+            }
+
 
             yield return null;
         }
+
     }
 
     private string GetSceneName(EScene sceneType)

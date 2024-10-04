@@ -207,6 +207,11 @@ public class PlayerBaseState : IState
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
 
+        if (_playerData.currentMana - player.skillCost <= 0.0f) return;
+
+        _playerData.currentMana -= player.skillCost;
+        _playerData.OnReduceStatus?.Invoke();
+
         if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {
             switch (_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)

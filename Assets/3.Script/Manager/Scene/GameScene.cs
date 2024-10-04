@@ -33,8 +33,6 @@ public class GameScene : BaseScene
         {
             Managers.Instance.Game.playerController =
             Managers.Instance.InstantiateResouce("Prefabs/Player/Player", "Player").GetComponent<PlayerController>();
-            Managers.Instance.Game.playerController.transform.position = Managers.Instance.Inventory.PlayerData.playerPosition;
-            Managers.Instance.Game.playerController.transform.rotation = Managers.Instance.Inventory.PlayerData.playerRotation;
         }
 
         Managers.Instance.Game.playerInput = Managers.Instance.Game.playerController.GetComponent<PlayerInput>();

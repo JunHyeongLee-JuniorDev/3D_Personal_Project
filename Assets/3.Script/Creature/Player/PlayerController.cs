@@ -3,6 +3,7 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
+using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -14,6 +15,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private string playerDataPath = "ScriptableObj/PlayerData";
     public PlayerAnimationDataBase m_aniData { get; private set; }
+
+    private readonly float attackCost = 20.0f;
+    public readonly float skillCost = 20.0f;
 
     //Events
     public UnityAction OnPlayerDead;
@@ -134,6 +138,7 @@ public class PlayerController : MonoBehaviour
         thirdPersonCam = GetComponent<ThirdPersonCam>();
         weaponManager = GetComponentInChildren<WeaponManager>();
         hitBox = GetComponentInChildren<Collider>();
+        OnPlayerDead -= OnDeathState;
         OnPlayerDead += OnDeathState;
         //컴포넌트 캐싱
 
@@ -152,6 +157,11 @@ public class PlayerController : MonoBehaviour
         m_aniData.Initialize();// 데이터 초기화
         m_Controller.isTrigger = false;
         hitBox.enabled = true;
+
+        m_Controller.enabled = false;
+        gameObject.transform.position = Managers.Instance.Inventory.PlayerData.playerPosition;
+        gameObject.transform.rotation = Managers.Instance.Inventory.PlayerData.playerRotation;
+        m_Controller.enabled = true;
 
         //프리펩 생성
         if (lockOnTarget == null)

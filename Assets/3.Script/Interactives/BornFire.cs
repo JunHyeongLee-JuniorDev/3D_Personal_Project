@@ -55,6 +55,7 @@ public class BornFire : MonoBehaviour
             particle.gameObject.SetActive(true);
             particle.Play();
         }
+            fireLight.gameObject.SetActive(true);
     }
 
     private void OffFire()
@@ -64,6 +65,7 @@ public class BornFire : MonoBehaviour
             particle.Stop();
             particle.gameObject.SetActive(false);
         }
+            fireLight.gameObject.SetActive(false);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -75,16 +77,14 @@ public class BornFire : MonoBehaviour
 
         if (data.isOn)
         {
-            Debug.Log("»≠≈Í∫“ »∞º∫»≠ ∂ﬂ±‚");
-            popUp.ChangeText("»≠≈Í∫“ »∞º∫»≠");
+            popUp.ChangeText("»≠≈Í∫“ø°º≠ Ω¨±‚");
             Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
             Managers.Instance.Game.playerInput.actions["Interaction"].started += RestAction;
         }
 
         else
         {
-            Debug.Log("»≠≈Í∫“ Ω¨±‚ ∂ﬂ±‚");
-            popUp.ChangeText("»≠≈Í∫“ø°º≠ Ω¨±‚");
+            popUp.ChangeText("»≠≈Í∫“ »∞º∫»≠");
             Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
             Managers.Instance.Game.playerInput.actions["Interaction"].started += SetOnFireAction;
         }
@@ -97,10 +97,10 @@ public class BornFire : MonoBehaviour
         popUp.gameObject.SetActive(false);
 
         if (data.isOn)
-            Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
+            Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
 
         else
-            Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
+            Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
     }
 
     private void RestAction(InputAction.CallbackContext context)
@@ -111,9 +111,8 @@ public class BornFire : MonoBehaviour
     private void SetOnFireAction(InputAction.CallbackContext context)
     {
         data.isOn = true;
+        LightFire();
         Managers.Instance.Game.OnFirePopUp();
-        Managers.Instance.Inventory.PlayerData.playerPosition = transform.position;
-        Managers.Instance.Inventory.PlayerData.spawnPosition = transform.position;
         Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
     }
 }

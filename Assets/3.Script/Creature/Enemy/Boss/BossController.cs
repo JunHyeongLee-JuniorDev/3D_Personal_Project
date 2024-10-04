@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -46,7 +44,7 @@ public class BossController : MonsterController
         hurtTimer = new Timer(3.0f, this);
         deathTimer = new Timer(3.0f, this);
         isPlayerEnter = false;
-        player = FindObjectOfType<PlayerController>().transform; //메니저에서 할당하는 것으로 바꾸자
+        player = Managers.Instance.Game.playerController.transform; //메니저에서 할당하는 것으로 바꾸자
 
         //hpSlider = Instantiate(hpPrefabs;
         InitStatData();

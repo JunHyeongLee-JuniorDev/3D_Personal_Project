@@ -120,7 +120,7 @@ public class WeaponManager : MonoBehaviour
     {
         if (currentWeaponType == EWeaponType.None)
         {
-            currentRightHandModel.UpdateDamage(20.0f);
+            bareHand.UpdateDamage(20.0f);
             bareHand.Col.enabled = true;
         }
 

@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour, IInitManager
     private TimeOutPopUp_UI diePopUp;
     private TimeOutPopUp_UI bornFirePopUp;
 
+    private Timer resetTimer;
+
     /*
      * Current Tast
      * 1. 화톳불 UI 만들고 Game Manager에서 켜고 끄기
@@ -33,7 +35,7 @@ public class GameManager : MonoBehaviour, IInitManager
 
     public void Init()
     {
-
+        resetTimer = new Timer(3.0f, this);
     }
 
     public void OnClickExit_UIGroup(InputAction.CallbackContext context)
@@ -61,6 +63,12 @@ public class GameManager : MonoBehaviour, IInitManager
         Debug.Log("게임 초기화 로직 추가 필요");
         SaveMoneyLocation();
         OnResetGame?.Invoke();
+        Debug.Log("리셋 타이머 시간 :" + resetTimer.maxTime);
+        resetTimer.StartTimer(() =>
+        {
+            Debug.Log("타이머 종료");
+            Managers.Instance.Scene.ChangeScene(EScene.LOADING);
+        });
     }
 
     /// <summary>

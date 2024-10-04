@@ -6,8 +6,8 @@ using DG.Tweening;
 
 public class FakeSlider_UI : MonoBehaviour
 {
-    [SerializeField] private Slider m_slider;
-    [SerializeField] private Image m_fakeImage;
+    [SerializeField] protected Slider m_slider;
+    [SerializeField] protected Image m_fakeImage;
 
     private Tween realTweenCash;
     private Tween fakeTweenCash;

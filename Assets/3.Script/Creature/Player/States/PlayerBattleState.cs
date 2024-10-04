@@ -41,6 +41,8 @@ public class PlayerBattleState : PlayerBaseState
             player.m_Controller.Move(Vector3.zero);
             inputActions["Look"].started -= OnLook;
             inputActions["Look"].started += OnLook;
+            inputActions["OnRoll"].started -= OnRoll;
+            inputActions["OnRoll"].started += OnRoll;
             inputActions["Skill"].started -= OnSkill;
             inputActions["Skill"].started += OnSkill;
             inputActions["Sprint"].Disable();
@@ -162,7 +164,7 @@ public class PlayerBattleState : PlayerBaseState
         Quaternion targetAngle = Quaternion.LookRotation(targetVec);
 
         if(!isRolling)
-        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 0.05f);
+        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 70.0f * Time.deltaTime);
     }
     /// <summary>
     /// 일정 범위의 OverlapShpere와 카메라의 시야각 내의 객체를 타겟팅하여 PlayerController에 저장합니다.
@@ -171,8 +173,6 @@ public class PlayerBattleState : PlayerBaseState
     /// <param name="isRight">초기화가 아닐 시 화면의 오른쪽 객체 혹은 왼쪽에 있는 객체를 담습니다.</param>
     private void AssignTarget(bool isInit, bool isRight)
     {
-        Debug.Log(player.enemyLayer);
-
         Collider[] enemys = Physics.OverlapSphere(player.transform.position, player.radiusOfView, player.enemyLayer, QueryTriggerInteraction.Ignore);
         // 범위 안에 적이 있다면 배열에 담습니다.
 
@@ -369,7 +369,7 @@ public class PlayerBattleState : PlayerBaseState
             {
                 isRolling = false;
                 inputActions["Fire"].Enable();
-                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);
+                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.3f);
             });
             PerformRoll();
         }
@@ -378,6 +378,11 @@ public class PlayerBattleState : PlayerBaseState
     protected override void UseSkill()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+
+        if (_playerData.currentMana - player.skillCost <= 0.0f) return;
+
+        _playerData.currentMana -= player.skillCost;
+        _playerData.OnReduceStatus?.Invoke();
 
         if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {

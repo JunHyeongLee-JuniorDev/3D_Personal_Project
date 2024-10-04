@@ -38,6 +38,7 @@ public class ItemPickUp : MonoBehaviour
         Managers.Instance.Game.itemCanvas.gameObject.SetActive(true);
 
         popUp.ChangeIcon(Managers.Instance.Data.itemDataBase.GetSprite(itemSlot.Data.displayName));
+        popUp.ChangeText("ащ╠Б");
 
         Managers.Instance.Game.playerInput.actions["Interaction"].started -= PickUp;
         Managers.Instance.Game.playerInput.actions["Interaction"].started += PickUp;
