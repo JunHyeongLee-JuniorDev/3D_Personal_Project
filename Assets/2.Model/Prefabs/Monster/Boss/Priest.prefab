@@ -258,6 +258,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 7552070757102934026}
+    - targetCorrespondingSourceObject: {fileID: 6824710841311164530, guid: 9d840a6b1c071694babd6bc01ccceea3,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6997019201836144916}
   m_SourcePrefab: {fileID: 100100000, guid: 9d840a6b1c071694babd6bc01ccceea3, type: 3}
 --- !u!4 &2679249961989873072 stripped
 Transform:
@@ -305,11 +309,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b94949ae8c14334ebe0544d6d9e4acf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  hitBox: {fileID: 0}
   <monsterSO>k__BackingField: {fileID: 0}
   <statData>k__BackingField:
     monsterID: 0
-    monsterPosition: {x: 0, y: 0, z: 0}
-    monsterRotation: {x: 0, y: 0, z: 0, w: 0}
     currentHealth: 0
     maxHealth: 0
     isBoss: 0
@@ -336,6 +339,7 @@ MonoBehaviour:
   <chargeSpeed>k__BackingField: 10
   <rotateSpeed>k__BackingField: 35
   isChargeState: 0
+  isPlayerEnter: 0
   <wallLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 512
@@ -376,6 +380,27 @@ CapsuleCollider:
   m_Height: 2.2
   m_Direction: 1
   m_Center: {x: 0, y: -0.3, z: 0}
+--- !u!65 &6997019201836144916
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8940239553768456745}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.01, y: 0.01, z: 0.01}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &4016880507100948538
 PrefabInstance:
   m_ObjectHideFlags: 0

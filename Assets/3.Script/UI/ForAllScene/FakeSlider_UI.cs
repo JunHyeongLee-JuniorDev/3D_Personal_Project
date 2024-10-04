@@ -72,7 +72,7 @@ public class FakeSlider_UI : MonoBehaviour
 
     private IEnumerator ChangeSlider_co(float currentValue)
     {
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(1.0f);
 
         realTweenCash?.Kill();
         realTweenCash = m_slider.DOValue(currentValue, duration).SetEase(Ease.OutExpo);

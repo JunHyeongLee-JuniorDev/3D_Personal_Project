@@ -14,7 +14,7 @@ public class MonsterSlider : FakeSlider_UI
 
     private void LateUpdate()
     {
-        rectTransform.localScale = (transform.position - Camera.main.transform.position) * 0.1f;
+        rectTransform.localScale = Vector3.one * (transform.position - Camera.main.transform.position).magnitude * 0.5f;
         transform.LookAt(Camera.main.transform.position);
     }
 }

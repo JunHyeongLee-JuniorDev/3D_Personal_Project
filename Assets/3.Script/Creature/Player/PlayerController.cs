@@ -188,13 +188,13 @@ public class PlayerController : MonoBehaviour
         var _locoState = new PlayerLocoState(m_StateMachine);
         var _attackState = new PlayerAttackState(m_StateMachine);
         var _battleState = new PlayerBattleState(m_StateMachine);
-        var _jumpState = new PlayerJumpState(m_StateMachine);
+        //var _jumpState = new PlayerJumpState(m_StateMachine);
         var _fallState = new PlayerFallState(m_StateMachine);
         //transition from to by condition
 
         //AnyTransition
+        //m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => isJump && !isBattle && !isFall));
         m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack));
-        m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => isJump && !isBattle && !isFall));
         m_StateMachine.AddAnyTransition(_fallState, new FuncPredicate(() => !isGrouded && isFall));
         m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack));
         m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));

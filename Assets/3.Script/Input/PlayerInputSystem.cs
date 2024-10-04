@@ -36,16 +36,6 @@ public class PlayerinputSystem : MonoBehaviour
         }
     }
 
-    public void OnJump(InputAction.CallbackContext context)
-    {
-        if (context.started && !player.isBattle)
-        {
-            player.isJump = true;
-            Debug.Log("점프 눌림");
-        }
-    }
-
-
     public void OnSprint(InputAction.CallbackContext context)
     {
         if (context.started)

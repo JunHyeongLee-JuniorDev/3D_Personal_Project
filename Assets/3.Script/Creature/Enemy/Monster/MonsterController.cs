@@ -87,8 +87,8 @@ public class MonsterController : MonoBehaviour
         deathTimer = new Timer(3.0f, this);
         hpSlider = Instantiate(hpPrefabs);
         SethpSliderPos();
-
         RefillHealth();
+        hpSlider.gameObject.SetActive(false);
         navAI.updateRotation = false;
 
         //Init States
@@ -219,10 +219,9 @@ public class MonsterController : MonoBehaviour
     protected virtual void SethpSliderPos()
     {
         hpSlider.transform.SetParent(transform);
-
+        hpSlider.transform.localPosition = Vector3.zero;
         Vector3 UIoffSet = hpSlider.transform.localPosition;
-        UIoffSet.x = hitBox.bounds.size.x * 1.5f;
-        UIoffSet.y = hitBox.bounds.size.y * 1.5f;
+        UIoffSet.y = hitBox.bounds.size.y * 1.1f;
         hpSlider.transform.localPosition = UIoffSet;
     }
 

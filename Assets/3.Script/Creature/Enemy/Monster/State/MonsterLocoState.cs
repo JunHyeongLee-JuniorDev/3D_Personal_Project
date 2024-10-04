@@ -29,7 +29,7 @@ public class MonsterLocoState : MonsterBaseState
 
         if(!monster.outMapTimer.isTickin)
         monster.TurnOnNav();
-
+        monster.hpSlider.gameObject.SetActive(false);
         isPush = true;
         navAI.autoBraking = false;
         nodeStack.Clear();
@@ -51,6 +51,7 @@ public class MonsterLocoState : MonsterBaseState
     public override void Exit()
     {
         navAI.autoBraking = false; 
+        monster.hpSlider.gameObject.SetActive(true);
 
         if (waitCoCash != null)
             monster.StopCoroutine(waitCoCash);

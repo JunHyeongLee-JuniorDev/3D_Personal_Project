@@ -14,7 +14,6 @@ public class MonsterChaseState : MonsterBaseState
     public override void Enter()
     {
         base.Enter();
-
         player = monster.player;
         navAI.stoppingDistance = monster.ChaseStopDistance;
         runAniBlend = 0f;
@@ -29,6 +28,11 @@ public class MonsterChaseState : MonsterBaseState
         navAI.SetDestination(player.position);
         CheckPlayerDistance();
         AnimationBlend();
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
     }
 
     private void AnimationBlend()

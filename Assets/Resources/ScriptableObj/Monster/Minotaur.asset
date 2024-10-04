@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   monsterType: 1
   normalAttacks:
-  - damage: 20
+  - damage: 50
     attackDistance: 1.5
     attackAniTime: 1.2
-  - damage: 20
+  - damage: 50
     attackDistance: 1.5
     attackAniTime: 1.2
-  - damage: 20
+  - damage: 50
     attackDistance: 1.5
     attackAniTime: 1.2
-  - damage: 15
+  - damage: 50
     attackDistance: 1.5
     attackAniTime: 1.2
-  - damage: 15
+  - damage: 50
     attackDistance: 2
     attackAniTime: 1.2
   monsterSkill:

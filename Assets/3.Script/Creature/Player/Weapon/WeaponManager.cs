@@ -120,11 +120,13 @@ public class WeaponManager : MonoBehaviour
     {
         if (currentWeaponType == EWeaponType.None)
         {
+            currentRightHandModel.UpdateDamage(20.0f);
             bareHand.Col.enabled = true;
         }
 
         else
         {
+            currentRightHandModel.UpdateDamage(playerData.equipments[(int)EEquipmentType.Weapon].Data.stat);
             currentRightHandModel.Col.enabled = true;
         }
     }

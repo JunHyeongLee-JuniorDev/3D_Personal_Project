@@ -41,8 +41,6 @@ public class PlayerBattleState : PlayerBaseState
             player.m_Controller.Move(Vector3.zero);
             inputActions["Look"].started -= OnLook;
             inputActions["Look"].started += OnLook;
-            inputActions["Jump"].started -= OnRoll;
-            inputActions["Jump"].started += OnRoll;
             inputActions["Skill"].started -= OnSkill;
             inputActions["Skill"].started += OnSkill;
             inputActions["Sprint"].Disable();
@@ -345,7 +343,6 @@ public class PlayerBattleState : PlayerBaseState
         }
 
         inputActions["Look"].started -= OnLook;
-        inputActions["Jump"].started -= OnRoll;
         isRolling = false;
     }
     /// <summary>

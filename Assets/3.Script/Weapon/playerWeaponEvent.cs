@@ -14,6 +14,7 @@ public class playerWeaponEvent : MonoBehaviour
 
     public void UpdateDamage(float damage)
     {
+        Debug.Log("플레이어 데미지 : " + damage);
         this.damage = damage;
     }
 

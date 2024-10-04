@@ -42,15 +42,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "f4ff84f6-ccc4-4f46-8536-c22d8080a8bb",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Battle",
                     "type": "Button",
                     "id": "351a75c9-aa2d-46c9-aa6e-771ba145e727",
@@ -191,17 +182,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse",
                     "action": "Fire",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c046ae8e-bdf6-45ab-a242-0cd2c4a4491e",
-                    "path": "<Keyboard>/space",
-                    "interactions": "Tap",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse",
-                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

@@ -64,15 +64,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""f4ff84f6-ccc4-4f46-8536-c22d8080a8bb"",
-                    ""expectedControlType"": ""Button"",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                },
-                {
                     ""name"": ""Battle"",
                     ""type"": ""Button"",
                     ""id"": ""351a75c9-aa2d-46c9-aa6e-771ba145e727"",
@@ -218,17 +209,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""c046ae8e-bdf6-45ab-a242-0cd2c4a4491e"",
-                    ""path"": ""<Keyboard>/space"",
-                    ""interactions"": ""Tap"",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard&Mouse"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""13b67ef1-beed-47d8-8e3e-eaf1d583099e"",
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": ""Tap"",
@@ -332,7 +312,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         m_Player_Look = m_Player.FindAction("Look", throwIfNotFound: true);
         m_Player_Fire = m_Player.FindAction("Fire", throwIfNotFound: true);
         m_Player_Sprint = m_Player.FindAction("Sprint", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
         m_Player_Battle = m_Player.FindAction("Battle", throwIfNotFound: true);
         m_Player_Block = m_Player.FindAction("Block", throwIfNotFound: true);
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
@@ -404,7 +383,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Look;
     private readonly InputAction m_Player_Fire;
     private readonly InputAction m_Player_Sprint;
-    private readonly InputAction m_Player_Jump;
     private readonly InputAction m_Player_Battle;
     private readonly InputAction m_Player_Block;
     private readonly InputAction m_Player_Interaction;
@@ -419,7 +397,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         public InputAction @Look => m_Wrapper.m_Player_Look;
         public InputAction @Fire => m_Wrapper.m_Player_Fire;
         public InputAction @Sprint => m_Wrapper.m_Player_Sprint;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
         public InputAction @Battle => m_Wrapper.m_Player_Battle;
         public InputAction @Block => m_Wrapper.m_Player_Block;
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
@@ -447,9 +424,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
-            @Jump.started += instance.OnJump;
-            @Jump.performed += instance.OnJump;
-            @Jump.canceled += instance.OnJump;
             @Battle.started += instance.OnBattle;
             @Battle.performed += instance.OnBattle;
             @Battle.canceled += instance.OnBattle;
@@ -484,9 +458,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
-            @Jump.started -= instance.OnJump;
-            @Jump.performed -= instance.OnJump;
-            @Jump.canceled -= instance.OnJump;
             @Battle.started -= instance.OnBattle;
             @Battle.performed -= instance.OnBattle;
             @Battle.canceled -= instance.OnBattle;
@@ -537,7 +508,6 @@ public partial class @PlayerInputAction: IInputActionCollection2, IDisposable
         void OnLook(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
         void OnBattle(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);

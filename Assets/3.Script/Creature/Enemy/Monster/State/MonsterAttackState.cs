@@ -85,7 +85,6 @@ public class MonsterAttackState : MonsterBaseState
             if (Random.Range(0, 5) == 0)
             {
                 attackIndex = Random.Range(0, skillClips.Length);
-                Debug.Log("스킬 선택됨 : " + skillClips[attackIndex]);
                 isSkill = true;
                 attackDistance = monsterSO.MonsterSkill.AttackDistance;
             }
@@ -93,7 +92,6 @@ public class MonsterAttackState : MonsterBaseState
             else
             {
                 attackIndex = Random.Range(0, attackClips.Length);
-                Debug.Log("기본 공격 선택됨");
                 isSkill = false;
                 attackDistance = monsterSO.NormalAttacks[attackIndex].AttackDistance;
             }
@@ -102,7 +100,6 @@ public class MonsterAttackState : MonsterBaseState
         else
         {
             attackIndex = Random.Range(0, attackClips.Length);
-            Debug.Log("기본 공격 선택됨");
             isSkill = false;
             attackDistance = monsterSO.NormalAttacks[attackIndex].AttackDistance;
         }

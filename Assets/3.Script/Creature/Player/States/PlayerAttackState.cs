@@ -124,4 +124,11 @@ public class PlayerAttackState : PlayerBaseState
             player.attackBtnTimer.StartTimer(() => { });
         }
     }
+
+    public override void OnHurt()
+    {
+        base.OnHurt();
+        player.attackBtnTimer.StopTimer();
+        player.isAttack = false;
+    }
 }
