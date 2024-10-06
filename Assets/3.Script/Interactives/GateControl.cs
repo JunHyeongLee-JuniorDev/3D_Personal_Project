@@ -18,6 +18,7 @@ public class GateControl : MonoBehaviour
 
     private void Awake()
     {
+        m_cam.gameObject.SetActive(false);
         animator = GetComponent<Animator>();
         col = GetComponent<BoxCollider>();
         openTimer = new Timer(4.0f, this);
@@ -79,11 +80,14 @@ public class GateControl : MonoBehaviour
     {
         animator.Play("Main Gate Open");
         popUp.gameObject.SetActive(false);
+        m_cam.gameObject.SetActive(true);
+        Managers.Instance.Game.playerInput.enabled = false;
         m_cam.m_Priority = 11;
-
         openTimer.StartTimer(() =>
         {
             m_cam.m_Priority = -1;
+            m_cam.gameObject.SetActive(false);
+            Managers.Instance.Game.playerInput.enabled = true;
         });
 
         switch (gateNumber)
