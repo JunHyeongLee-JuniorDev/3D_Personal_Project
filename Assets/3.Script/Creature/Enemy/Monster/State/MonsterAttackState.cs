@@ -56,6 +56,11 @@ public class MonsterAttackState : MonsterBaseState
     public override void Update()
     {
         base.Update();
+        if (player == null)
+        {
+            monster.isAttack = false;
+            return;
+        }
 
         navAI.SetDestination(player.position);
 
@@ -134,7 +139,7 @@ public class MonsterAttackState : MonsterBaseState
 
     private void CheckAttackDistance()
     {
-        if (!navAI.pathPending && navAI.remainingDistance > monsterSO.RotateDistance)
+        if (!navAI.pathPending && navAI.remainingDistance > monsterSO.RotateDistance || player == null)
             monster.isAttack = false;
 
         else if (!navAI.pathPending && navAI.remainingDistance <= navAI.stoppingDistance)
@@ -144,6 +149,23 @@ public class MonsterAttackState : MonsterBaseState
 
             else
                 UseNormalAttack();
+        }
+    }
+
+    public override void OnHurt()
+    {
+        if (monster.statData.currentHealth > 0)
+        {
+            animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.01f);
+            monster.hurtTimer.StartTimer(() =>
+            {
+                monster.isAttack = false;
+            });
+        }
+
+        else
+        {
+            monster.isDead = true;
         }
     }
 }

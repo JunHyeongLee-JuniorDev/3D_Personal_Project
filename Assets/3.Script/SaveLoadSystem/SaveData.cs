@@ -157,14 +157,18 @@ public class PlayerData
             return;
         }
     }
+
     public void refillPotion()
     {
-        ItemData _itemData = equipments[(int)EEquipmentType.Heal].Data;
-        equipments[(int)EEquipmentType.Heal].AddToStack(_itemData.updatableStack);
+        InventorySlot _item = equipments[(int)EEquipmentType.Heal];
+        _item.RemoveFromStack(_item.StackSize);
+        _item.AddToStack(_item.Data.updatableStack);
 
-        _itemData = equipments[(int)EEquipmentType.Mana].Data;
-        equipments[(int)EEquipmentType.Mana].AddToStack(_itemData.updatableStack);
+        _item = equipments[(int)EEquipmentType.Mana];
+        _item.RemoveFromStack(_item.StackSize);
+        _item.AddToStack(_item.Data.updatableStack);
     }
+
     public void DrinkPotion()
     {
         if (currentPotion.StackSize > 0)
@@ -221,6 +225,8 @@ public class monsterSaveData
 
     public bool isBoss;
     public bool isDead;
+
+    public Vector3 defaultSpawnPos;
 }
 [Serializable]
 public class BornFireData

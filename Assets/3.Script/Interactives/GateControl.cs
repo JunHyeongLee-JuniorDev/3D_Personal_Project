@@ -1,3 +1,4 @@
+using Cinemachine;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,17 +7,20 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(BoxCollider))]
 public class GateControl : MonoBehaviour
 {
+    [SerializeField] private CinemachineVirtualCamera m_cam;
     [SerializeField] private int gateNumber;
     private Animator animator;
     private GameSaveData saveData;
     private BoxCollider col;
     private InGamePopUp popUp;
+    private Timer openTimer;
     private bool isGateOpen;
 
     private void Awake()
     {
         animator = GetComponent<Animator>();
         col = GetComponent<BoxCollider>();
+        openTimer = new Timer(4.0f, this);
         col.enabled = true;
         col.isTrigger = true;
     }
@@ -75,6 +79,12 @@ public class GateControl : MonoBehaviour
     {
         animator.Play("Main Gate Open");
         popUp.gameObject.SetActive(false);
+        m_cam.m_Priority = 11;
+
+        openTimer.StartTimer(() =>
+        {
+            m_cam.m_Priority = -1;
+        });
 
         switch (gateNumber)
         {

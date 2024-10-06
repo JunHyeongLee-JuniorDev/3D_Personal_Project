@@ -34,7 +34,7 @@ public class PlayerController : MonoBehaviour
     public ThirdPersonCam thirdPersonCam { get; private set; }
     public Animator cinemachineAnimator;
     public WeaponManager weaponManager { get; private set; }
-    public Collider hitBox { get; private set; }
+    [SerializeField] private Collider hitBox;
 
     //State Bool
     [field: SerializeField] public bool isDebugMode { get; private set; }
@@ -116,7 +116,8 @@ public class PlayerController : MonoBehaviour
     {
         if (m_mainCam == null)
         {
-            m_mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+            m_mainCam = Instantiate(Resources.Load<GameObject>("Prefabs/Player/Main Camera")).GetComponent<Camera>();
+            m_mainCam.transform.position = transform.position;
         }
 
         if (m_PhysicsData == null)
@@ -137,7 +138,6 @@ public class PlayerController : MonoBehaviour
         m_playerInput = GetComponent<PlayerInput>();
         thirdPersonCam = GetComponent<ThirdPersonCam>();
         weaponManager = GetComponentInChildren<WeaponManager>();
-        hitBox = GetComponentInChildren<Collider>();
         OnPlayerDead -= OnDeathState;
         OnPlayerDead += OnDeathState;
         //컴포넌트 캐싱
@@ -146,7 +146,7 @@ public class PlayerController : MonoBehaviour
         m_input.player = this; // input에서 player의 상태 bool값 변경
         m_StateMachine = new PlayerStateMachine(this);
         targetBtnTimer = new Timer(0.5f, this);
-        rollBtnTimer = new Timer(1.0f, this);
+        rollBtnTimer = new Timer(1.3f, this);
         attackBtnTimer = new Timer(0.5f, this);
         itemGrabAniTimer = new Timer(0.8f, this);
         potionTimer = new Timer(1.0f, this);
@@ -192,6 +192,7 @@ public class PlayerController : MonoBehaviour
                 camera.Follow = transform.GetChild(0);
             }
         }
+        Managers.Instance.Game.AssignCamNoise();
         //프리펩 생성
 
         //각 State 생성
@@ -200,14 +201,16 @@ public class PlayerController : MonoBehaviour
         var _battleState = new PlayerBattleState(m_StateMachine);
         //var _jumpState = new PlayerJumpState(m_StateMachine);
         var _fallState = new PlayerFallState(m_StateMachine);
+        var _deadState = new PlayerDeadState(m_StateMachine);
         //transition from to by condition
 
         //AnyTransition
         //m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => isJump && !isBattle && !isFall));
-        m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack));
+        m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack && !isDead));
         m_StateMachine.AddAnyTransition(_fallState, new FuncPredicate(() => !isGrouded && isFall));
         m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack));
         m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));
+        m_StateMachine.AddAnyTransition(_deadState, new FuncPredicate(() => isDead));
         m_StateMachine.SetState(_locoState);
     }
 
@@ -252,12 +255,12 @@ public class PlayerController : MonoBehaviour
 
         Gizmos.DrawWireSphere(transform.position, radiusOfView);
     }
-    public void TurnOffTrigger()
+    public void OffPlayerHitBox()
     {
         hitBox.enabled = false;
     }
 
-    public void TurnOnTrigger()
+    public void OnPlayerHitBox()
     {
         hitBox.enabled = true;
     }
@@ -274,7 +277,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnDeathState()
     {
-        m_Controller.enabled = false;
+        isAttack = false;
+        isSprint = false;
+        isBattle = false;
+        m_input.enabled = false;
+        m_playerInput.enabled = false;
         hitBox.enabled = false;
         Destroy(gameObject, 3.0f);
     }

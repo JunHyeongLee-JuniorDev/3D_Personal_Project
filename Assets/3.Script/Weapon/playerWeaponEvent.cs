@@ -5,7 +5,7 @@ using UnityEngine;
 public class playerWeaponEvent : MonoBehaviour
 {
     public Collider Col { get; private set; }
-    private float damage;
+    [SerializeField] private float damage;
 
     private void Start()
     {
@@ -25,6 +25,7 @@ public class playerWeaponEvent : MonoBehaviour
             Debug.Log("에너미 피다는 로직 실행");
             MonsterController thisMonster = other.GetComponentInParent<MonsterController>();
             thisMonster.ReduceHealth(damage);
+            if (thisMonster.statData.currentHealth <= 0.0f) other.enabled = false;
             thisMonster.isFoundPlayer = true;
             thisMonster.player = Managers.Instance.Game.playerController.transform;
             thisMonster.stateMachine.OnHurt();

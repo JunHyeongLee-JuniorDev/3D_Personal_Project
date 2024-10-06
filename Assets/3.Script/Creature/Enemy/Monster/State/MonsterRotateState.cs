@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.AI;
+using Unity.IO.LowLevel.Unsafe;
+using System.Runtime.InteropServices.WindowsRuntime;
 
 public class MonsterRotateState : MonsterBaseState
 {
@@ -50,6 +52,7 @@ public class MonsterRotateState : MonsterBaseState
 
     public override void Update()
     {
+        if (monster.hurtTimer.isTickin) return;
         base.Update();
         monster.isInRotateRad = CanelCondition();
         MoveAroundPlayer();
@@ -131,7 +134,38 @@ public class MonsterRotateState : MonsterBaseState
 
     private bool CanelCondition()
     {
+        if(player == null) return false;
         distanceWithPlayer = Vector3.Distance(monster.transform.position, player.position);
         return distanceWithPlayer < monster.ChaseStopDistance + 1f;
+    }
+
+    public override void OnHurt()
+    {
+        if (monster.statData.currentHealth > 0)
+        {
+            animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.01f);
+            monster.hurtTimer.StartTimer(() =>
+            {
+                animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RotateBlend], 0.2f);
+            });
+        }
+
+        else
+        {
+            monster.isDead = true;
+        }
+    }
+}
+
+public class MonsterDeathState : MonsterBaseState
+{
+    public MonsterDeathState(MonsterStateMachine stateMachine) : base(stateMachine) {}
+
+    public override void Enter()
+    {
+        base.Enter();
+        animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Death], 0.1f);
+        monster.TurnOffNav();
+        monster.activefalseForDeath();
     }
 }

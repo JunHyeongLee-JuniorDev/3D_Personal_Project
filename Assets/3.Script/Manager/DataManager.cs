@@ -78,12 +78,6 @@ public class DataManager : MonoBehaviour, IInitManager
         if (!Directory.Exists(_dir))
             Directory.CreateDirectory(_dir);
 
-        if (Managers.Instance.Scene.currentScene.sceneType == EScene.GAME)
-        {
-            Debug.Log("저장될 때 플레이어 위치 저장되니?");
-            SavePlayerPosition(saveFileIndex);
-        }
-
         string _json = JsonUtility.ToJson(currentSaveData[saveFileIndex], prettyPrint : true);
         /*
          * 
@@ -120,10 +114,13 @@ public class DataManager : MonoBehaviour, IInitManager
         return newMonster;
     }
 
-    private void SavePlayerPosition(int saveFileIndex)
+    public void SavePlayerPosition()
     {
-        currentSaveData[saveFileIndex].savePlayerData.playerPosition = Managers.Instance.Game.playerController.transform.position;
-        currentSaveData[saveFileIndex].savePlayerData.playerRotation = Managers.Instance.Game.playerController.transform.rotation;
+        currentSaveData[currentSaveIndex].savePlayerData.playerPosition = 
+            Managers.Instance.Game.playerController.transform.position;
+
+        currentSaveData[currentSaveIndex].savePlayerData.playerRotation = 
+            Managers.Instance.Game.playerController.transform.rotation;
     }
 
     public void CreateNewGame(int saveFileIndex, string userName)

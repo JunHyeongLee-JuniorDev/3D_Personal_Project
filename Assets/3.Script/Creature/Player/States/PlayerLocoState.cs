@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 public class PlayerLocoState : PlayerBaseState
 {
-    public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine) 
+    public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         if(!player.isDebugMode)
         Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
@@ -14,12 +14,13 @@ public class PlayerLocoState : PlayerBaseState
 
     public override void Enter()
     {
-        Debug.Log($"{this}");
-
+        Debug.Log($"player : {this}");
         base.Enter();
         inputActions["Skill"].started -= OnSkill;
         inputActions["Skill"].started += OnSkill;
-        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.3f);
+
+        if(!player.hurtTimer.isTickin)
+        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
     }
 
     public override void Update()

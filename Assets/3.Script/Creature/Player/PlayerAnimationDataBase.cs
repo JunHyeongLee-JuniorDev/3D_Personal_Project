@@ -50,8 +50,8 @@ public class PlayerAnimationDataBase
     public int[] magicAttackClips { get; private set; }
 
     public readonly float meleeComboCool = 0.5f;
-    public readonly float swordComboCool = 0.8f;
-    public readonly float axeComboCool   = 0.4f;
+    public readonly float swordComboCool = 0.5f;
+    public readonly float axeComboCool   = 0.5f;
     public readonly float magicComboCool = 0.8f;
 
     public readonly float meleeFadeDuration = 0.2f;

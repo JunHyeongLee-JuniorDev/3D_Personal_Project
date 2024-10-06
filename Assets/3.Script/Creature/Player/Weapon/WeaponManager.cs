@@ -34,7 +34,7 @@ public class WeaponManager : MonoBehaviour
 
     private PlayerController player;
     private GameObject currentLeftHandModel;
-    private playerWeaponEvent currentRightHandModel;
+    [SerializeField] private playerWeaponEvent currentRightHandModel;
     private static EWeaponType currentWeaponType = EWeaponType.AXE;
     private playerWeaponEvent bareHand;
 
@@ -102,6 +102,7 @@ public class WeaponManager : MonoBehaviour
 
         if (playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {
+            bareHand.gameObject.SetActive(false);
             currentRightHandModel?.gameObject.SetActive(false);
             currentRightHandModel = weaponModels[playerData.equipments[(int)EEquipmentType.Weapon].Data.displayName];
             currentWeaponType = playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType;
@@ -110,8 +111,9 @@ public class WeaponManager : MonoBehaviour
 
         else
         {
+            Debug.Log("무기 놓기 들어옴");
             currentWeaponType = EWeaponType.None;
-            currentLeftHandModel?.SetActive(false);
+            currentRightHandModel?.gameObject.SetActive(false);
             bareHand.gameObject.SetActive(true);
         }
     }
@@ -201,11 +203,6 @@ public class WeaponManager : MonoBehaviour
     {
         if (playerData.currentMana - playerData.equipments[(int)EWeaponType.SWORD].Data.skillCost <= 0) return;
         swordSkillEff.Play(true);
-
-        player.buffTimer.StartTimer(() =>
-        {
-            swordSkillEff.Stop(true);
-        });
     }
 
     private IEnumerator UseMagicSkill()

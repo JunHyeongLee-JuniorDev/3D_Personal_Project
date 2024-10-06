@@ -78,12 +78,13 @@ public class MonsterController : MonoBehaviour
         statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
         Managers.Instance.Game.playerController.OnPlayerDead -= OnPlayerDead;
         Managers.Instance.Game.playerController.OnPlayerDead += OnPlayerDead;
+        Managers.Instance.Game.monsters.Add(this);
 
         //Inits
         nodeStack = new Stack<Transform>();
         attackTimer = new Timer(0.0f, this);
         outMapTimer = new Timer(5.0f, this);
-        hurtTimer = new Timer(2.0f, this);
+        hurtTimer = new Timer(1.0f, this);
         deathTimer = new Timer(3.0f, this);
         hpSlider = Instantiate(hpPrefabs);
         SethpSliderPos();
@@ -98,11 +99,13 @@ public class MonsterController : MonoBehaviour
         var _chaseState = new MonsterChaseState(stateMachine);
         var _rotateState = new MonsterRotateState(stateMachine);
         var _attackState = new MonsterAttackState(stateMachine);
+        var _deathState = new MonsterDeathState(stateMachine);
 
-        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isFoundPlayer));
-        stateMachine.AddAnyTransition(_chaseState, new FuncPredicate(() => isFoundPlayer && !isInRotateRad && !isAttack));
-        stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack));
-        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin));
+        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isFoundPlayer && !isDead));
+        stateMachine.AddAnyTransition(_chaseState, new FuncPredicate(() => isFoundPlayer && !isInRotateRad && !isAttack && !isDead));
+        stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack && !isDead));
+        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin && !isDead));
+        stateMachine.AddAnyTransition(_deathState, new FuncPredicate(() => isDead));
         stateMachine.AddTransition(_attackState, _rotateState, new FuncPredicate(() => !isAttack));
 
         stateMachine.SetState(_locoState);
@@ -128,7 +131,7 @@ public class MonsterController : MonoBehaviour
 
     private void LateUpdate()
     {
-       stateMachine.LateUpdate();
+        stateMachine.LateUpdate();
     }
 
     /// <summary>
@@ -210,6 +213,7 @@ public class MonsterController : MonoBehaviour
 
     protected virtual void InitStatData()
     {
+        statData.defaultSpawnPos = transform.position;
         statData.currentHealth = monsterSO.MaxHealth;
         statData.maxHealth = monsterSO.MaxHealth;
         statData.isDead = false;
@@ -234,6 +238,8 @@ public class MonsterController : MonoBehaviour
 
     public void TurnOffNav()
     {
+        navAI.enabled = true;
+        navAI.ResetPath();
         navAI.isStopped = true;
         navAI.updatePosition = false;
         navAI.velocity = Vector3.zero;
@@ -243,6 +249,9 @@ public class MonsterController : MonoBehaviour
     {
         TurnOffNav();
         isFoundPlayer = false;
+        isInRotateRad = false;
+        isAttack = false;
+        player = null;
     }
 
     public void activefalseForDeath()
@@ -270,7 +279,7 @@ public class MonsterController : MonoBehaviour
         hpSlider.gameObject.SetActive(true);
     }
 
-    private void OnReset()
+    public void OnReset()
     {
         /*
          * 피를 채워야하고
@@ -280,6 +289,10 @@ public class MonsterController : MonoBehaviour
 
         RefillHealth();
         statData.isDead = false;
+        isAttack = false;
+        isFoundPlayer = false;
+        isInRotateRad = false;
+        player = null;
     }
 
     public void SprayBlood()
@@ -290,7 +303,6 @@ public class MonsterController : MonoBehaviour
         bloodEFF.transform.LookAt(targetPos);
         bloodEFF.Play();
     }
-
 
     protected virtual void OnDrawGizmos()
     {

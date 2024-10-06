@@ -22,7 +22,6 @@ public class MonsterLocoState : MonsterBaseState
     private Stack<Transform> nodeStack;
     private List<Transform> nodeList;
 
-
     public override void Enter()
     {
         base.Enter();

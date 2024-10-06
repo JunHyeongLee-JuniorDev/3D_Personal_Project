@@ -50,6 +50,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rightHandRoot: {fileID: 4691215158714195037}
   leftHandRoot: {fileID: 637682053968196266}
+  currentRightHandModel: {fileID: 0}
 --- !u!1 &3616685597719878824
 GameObject:
   m_ObjectHideFlags: 0
@@ -427,6 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24ccbbe285a3464dab927857ba578b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 50
 --- !u!4 &3515700159692835382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 490088, guid: a9892f6a83fd8d4468ce0c8a3d09d3cd,
@@ -5482,6 +5484,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24ccbbe285a3464dab927857ba578b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damage: 0
 --- !u!4 &7194893694760310148 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4584431484625042, guid: 007c57e2df8e9b144b99f471b84f3d56,
@@ -5721,22 +5724,6 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4443095217353288374}
         m_TargetAssemblyTypeName: PlayerinputSystem, Assembly-CSharp
-        m_MethodName: OnJump
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-    m_ActionId: f4ff84f6-ccc4-4f46-8536-c22d8080a8bb
-    m_ActionName: Player/Jump[/Keyboard/space]
-  - m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4443095217353288374}
-        m_TargetAssemblyTypeName: PlayerinputSystem, Assembly-CSharp
         m_MethodName: OnBattle
         m_Mode: 0
         m_Arguments:
@@ -5793,6 +5780,10 @@ MonoBehaviour:
       m_Calls: []
     m_ActionId: c2e516fa-1b39-49ad-9307-b7e53699ae59
     m_ActionName: Player/Skill[/Keyboard/ctrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d272fa6f-67e2-4c4b-853a-beb928ddcc8c
+    m_ActionName: Player/OnRoll[/Keyboard/space]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -5856,6 +5847,7 @@ MonoBehaviour:
   playerDataPath: ScriptableObj/Player/PlayerData
   m_Controller: {fileID: 0}
   cinemachineAnimator: {fileID: 0}
+  hitBox: {fileID: 539221291351508648}
   <isDebugMode>k__BackingField: 0
   isSprint: 0
   isBattle: 0

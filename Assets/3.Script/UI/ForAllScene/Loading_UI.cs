@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Unity.VisualScripting;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,27 +11,17 @@ public class Loading_UI : MonoBehaviour
 {
     private Slider m_slider;
 
-    private void Awake()
+    private void Start()
     {
         m_slider = GetComponent<Slider>();
         m_slider.value = 0.0f;
-    }
-
-    private void Start()
-    {
-        ChangeSceneWithAsync(EScene.GAME);
-    }
-
-    public void ChangeSceneWithAsync(EScene scene)
-    {
-        StartCoroutine(ChangeSceneWithAsync_co(scene));
+        StartCoroutine(ChangeSceneWithAsync_co(EScene.GAME));
     }
 
     private IEnumerator ChangeSceneWithAsync_co(EScene scene)
     {
         AsyncOperation sceneOP = SceneManager.LoadSceneAsync(GetSceneName(scene));
         sceneOP.allowSceneActivation = false;
-        float realTimer = 0.0f;
         float fakeTimer = 0.0f;
 
 
@@ -38,8 +29,7 @@ public class Loading_UI : MonoBehaviour
         {
             if (m_slider.value < 0.99f)
             {
-                realTimer += Time.unscaledDeltaTime * 0.1f;
-                m_slider.value = Mathf.Lerp(m_slider.value, sceneOP.progress, realTimer);
+                m_slider.value = Mathf.Lerp(m_slider.value, sceneOP.progress, Time.unscaledDeltaTime);
             }
 
             else

@@ -14,8 +14,6 @@ public class PlayerBattleState : PlayerBaseState
     private Vector3 dirToTarget;
     private Vector3 defualtCamPos = new Vector3(0.0f,1.5f,0.0f);
 
-    private bool isRolling;
-
     public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
     {
         player.lockOnUI.SetActive(false);
@@ -24,13 +22,14 @@ public class PlayerBattleState : PlayerBaseState
     public override void Enter()
     {
         nearlistEnemy = null;
-        Debug.Log($"{this}");
+        Debug.Log($"player : {this}");
         AssignTarget(true, true);
 
         if (player.m_targetEnemy != null)
         {
             dirToTarget = Vector2.zero;
             player.cinemachineAnimator.Play("TargetCamera");
+            if(!player.hurtTimer.isTickin)
             animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
             player.lockOnUI.SetActive(true);
             player.thirdPersonCam.enabled = false;
@@ -54,7 +53,11 @@ public class PlayerBattleState : PlayerBaseState
         base.Update();
         CancelConditions();
 
-        if (player.m_targetEnemy == null) return;
+        if (player.m_targetEnemy == null || player.hurtTimer.isTickin)
+        {
+            Debug.Log("아니 씨발 맞았을 거아냐");
+            return;
+        }
 
         dirToTarget = (player.m_targetEnemy.transform.position - player.m_mainCam.transform.position);
 
@@ -80,7 +83,7 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     public override void Move()
     {
-        if(isRolling || player.isSpellCast) return;
+        if(player.rollBtnTimer.isTickin || player.isSpellCast || player.hurtTimer.isTickin) return;
 
         if (player.m_input.move.Equals(Vector2.zero))
         {
@@ -143,6 +146,7 @@ public class PlayerBattleState : PlayerBaseState
 
         Vector3 movement3D = player.transform.forward * _input.y + player.transform.right * _input.x;
 
+        if(player.m_Controller.enabled)
         player.m_Controller.Move((movement3D * player.m_speed + new Vector3(0.0f, player.m_verticalVelocity, 0.0f)) * Time.deltaTime);
     }
     /// <summary>
@@ -163,8 +167,8 @@ public class PlayerBattleState : PlayerBaseState
 
         Quaternion targetAngle = Quaternion.LookRotation(targetVec);
 
-        if(!isRolling)
-        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 70.0f * Time.deltaTime);
+        if(!player.rollBtnTimer.isTickin)
+        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 10.0f * Time.deltaTime);
     }
     /// <summary>
     /// 일정 범위의 OverlapShpere와 카메라의 시야각 내의 객체를 타겟팅하여 PlayerController에 저장합니다.
@@ -309,10 +313,9 @@ public class PlayerBattleState : PlayerBaseState
         // atan2를 사용하면 방향 점 a에서 점 b에 대한 방향 벡터를 구할 수 있다(점 a 기준의) 따라서 이를 라디안에서 각도로 바꾸고 
         // 플레이어 캐릭터 혹은 카메라의 각도 기준의 방향 벡터로 구르기 시전
         // Atan, Atan2는 tan의 역함수로 밑변 대변을 알고 있다면 각 <L을 알 수 있다.
-
         float rollRotation = Mathf.Atan2(player.m_input.move.x, player.m_input.move.y) * Mathf.Rad2Deg + 
                                          player.m_mainCam.transform.eulerAngles.y;
-
+        player.m_Controller.Move(Vector3.zero);
         player.transform.rotation = Quaternion.Euler(0.0f, rollRotation, 0.0f);
         animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.2f);
     }
@@ -323,7 +326,7 @@ public class PlayerBattleState : PlayerBaseState
     /// <param name="originDir"> 캠에서 타겟 방향의 방향 벡터 </param>
     private void PlaceTheCam(Vector3 originDir)
     {
-        player.lockOnTargetRoot.transform.forward = Vector3.Lerp(player.lockOnTargetRoot.transform.forward,originDir.normalized, 0.05f);
+        player.lockOnTargetRoot.transform.forward = Vector3.Lerp(player.lockOnTargetRoot.transform.forward,originDir.normalized, 10.0f * Time.deltaTime);
         player.thirdPersonCam.m_cinemachineCamTarget.transform.forward = originDir.normalized;
     }
     /// <summary>
@@ -343,7 +346,6 @@ public class PlayerBattleState : PlayerBaseState
         }
 
         inputActions["Look"].started -= OnLook;
-        isRolling = false;
     }
     /// <summary>
     /// 타겟팅 callback 메소드(마우스 "좌, 우"로 발동)
@@ -363,15 +365,46 @@ public class PlayerBattleState : PlayerBaseState
     {
         if (!player.rollBtnTimer.isTickin)
         {
-            isRolling = true;
+            PerformRoll();
+            inputActions["Move"].Disable();
             inputActions["Fire"].Disable();
+            player.OffPlayerHitBox();
+
             player.rollBtnTimer.StartTimer(() =>
             {
-                isRolling = false;
+                player.OnPlayerHitBox();
+                inputActions["Move"].Enable();
                 inputActions["Fire"].Enable();
                 animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.3f);
             });
-            PerformRoll();
+        }
+    }
+
+    public override void OnHurt()
+    {
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+        inputActions["Move"].Disable();
+        inputActions["Fire"].Disable();
+
+        if (_playerData.currentHealth > 0)
+        {
+            animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
+
+            player.hurtTimer.StartTimer(() =>
+            {
+                inputActions["Move"].Enable();
+                inputActions["Fire"].Enable();
+                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+            });
+        }
+
+        else if (!player.isDead)
+        {
+            Debug.Log("죽음은 들어오나?");
+            player.isDead = true;
+            player.m_playerInput.enabled = false;
+            player.OnPlayerDead?.Invoke();
+            Managers.Instance.Game.ResetGame();
         }
     }
 

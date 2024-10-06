@@ -35,6 +35,6 @@ MonoBehaviour:
     attackAniTime: 1.5
   patrolSpeed: 1.5
   runSpeed: 5
-  rotateAroundSpeed: 15
+  rotateAroundSpeed: 7
   rotateDistance: 5
-  maxHealth: 0
+  maxHealth: 100

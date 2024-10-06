@@ -24,6 +24,8 @@ public class MonsterChaseState : MonsterBaseState
 
     public override void Update()
     {
+        if (player == null) { monster.isFoundPlayer = false; return; }
+
         base.Update();
         navAI.SetDestination(player.position);
         CheckPlayerDistance();

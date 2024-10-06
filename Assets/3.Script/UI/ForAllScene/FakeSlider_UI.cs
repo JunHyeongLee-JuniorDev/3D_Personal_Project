@@ -14,7 +14,7 @@ public class FakeSlider_UI : MonoBehaviour
     private Coroutine coroutineCash;
     public Canvas canvas { get; private set; }
 
-    private float duration = 1.0f;
+    private float duration = 0.5f;
 
     //슬라이더의 max value를 초기화 할 시 유용할 방법
     //private void Start()

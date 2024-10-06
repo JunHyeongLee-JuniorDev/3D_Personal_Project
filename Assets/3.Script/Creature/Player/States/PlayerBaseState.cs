@@ -39,17 +39,18 @@ public class PlayerBaseState : IState
 
     public virtual void Exit()
     {
-        
+
     }
 
 
     public virtual void PhysicsUpdate()
     {
-        
+
     }
 
     public virtual void Update()
     {
+        if (player.isDead) return;
         SetAniBool();
     }
 
@@ -61,45 +62,45 @@ public class PlayerBaseState : IState
 
     public virtual void Move()
     {
-        if (player.hurtTimer.isTickin) return;
+        if (player.hurtTimer.isTickin || !player.m_Controller.enabled) return;
         /*
          * Vector3.magnitude
          * 벡터의 길이(float)를 반환한다. 
          * 이는 두 점사이의 거리를 구하거나 속력을 구할 때 사용할 수 있다.
          */
-    
+
         Vector2 _input = player.m_input.move;
-    
+
         float _speedOffset = 0.1f;
-    
+
         //목표 속도까지 조정
         if (player.m_speed < player.m_targetSpeed - _speedOffset ||
             player.m_speed > player.m_targetSpeed + _speedOffset)
         {
             player.m_speed = Mathf.Lerp(player.m_speed, player.m_targetSpeed, Time.deltaTime * groundData.speedChangeRate);
-    
+
             // 소수점 3째 자리까지만 계산하기
             // 불필요한 연산 줄이기가 가능
             player.m_speed = Mathf.Round(player.m_speed * 1000f) * 0.001f;
         }
-    
+
         else
         {
             player.m_speed = player.m_targetSpeed;
         }
-    
+
         player.m_animationBlend = Mathf.Lerp(player.m_animationBlend, player.m_targetSpeed, Time.deltaTime * groundData.speedChangeRate);
         if (player.m_animationBlend < 0.01f) player.m_animationBlend = 0f;
-    
+
         Vector3 _inputDirection = new Vector3(_input.x, 0f,
                                               _input.y);
-    
+
         if (!_input.Equals(Vector3.zero))
         {
             // Atan, Atan2는 tan의 역함수로 밑변 대변을 알고 있다면 각 <L을 알 수 있다.
             player.m_targetRotation = Mathf.Atan2(_inputDirection.x, _inputDirection.z) * Mathf.Rad2Deg +
                                             player.m_mainCam.transform.eulerAngles.y;
-    
+
             /*
              * SmoothDampAngle은 시작 float 에서 target float까지 지정된 smoothTime 만큼 변한 값을 반환
              */
@@ -167,24 +168,35 @@ public class PlayerBaseState : IState
 
     protected virtual void Gravity()
     {
-            player.m_verticalVelocity += airData.Gravity * Time.deltaTime;
+        player.m_verticalVelocity += airData.Gravity * Time.deltaTime;
     }
 
     public virtual void OnHurt()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-
+        inputActions["Move"].Disable();
+        inputActions["Fire"].Disable();
+        
         if (_playerData.currentHealth > 0)
         {
             animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
+            player.m_input.enabled = false;
+            player.hurtTimer.StartTimer(() =>
+            {
+                inputActions["Move"].Enable();
+                inputActions["Fire"].Enable();
+                player.m_input.enabled = true;
+            });
         }
-
-        else
+        
+        else if (!player.isDead)
         {
+            Debug.Log("죽음은 들어오나?");
             player.isDead = true;
             player.m_playerInput.enabled = false;
             player.OnPlayerDead?.Invoke();
             animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
+            Managers.Instance.Game.ResetGame();
         }
     }
 
@@ -227,6 +239,7 @@ public class PlayerBaseState : IState
                     break;
 
                 case EWeaponType.AXE:
+                    Managers.Instance.Game.CamShakeOn();
                     player.skillTimer.UpdateMaxTime(3.0f);
                     animator.CrossFade(DTAniClipID[EPlayerAni.AxeSkill], 0.2f);
                     break;
@@ -234,6 +247,22 @@ public class PlayerBaseState : IState
 
             player.skillTimer.StartTimer(() =>
             {
+                if(_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType == EWeaponType.SWORD)
+                {
+                    float originDamage = _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat;
+                    _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat += _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat * 1.2f;
+                    player.buffTimer.StartTimer(() =>
+                    {
+                        _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat = originDamage;
+                        player.isSpellCast = false;
+                        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+                        player.weaponManager.endSkill();
+                    });
+
+                    return;
+                }
+                
+                Managers.Instance.Game.CamShakeOff();
                 player.isSpellCast = false;
                 animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
                 player.weaponManager.endSkill();
@@ -246,5 +275,17 @@ public class PlayerBaseState : IState
             player.isSpellCast = false;
             return;
         }
+    }
+}
+
+public class PlayerDeadState : PlayerBaseState
+{
+    public PlayerDeadState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) { }
+
+    public override void Enter()
+    {
+        base.Enter();
+        player.m_playerInput.actions.Disable();
+        animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
     }
 }

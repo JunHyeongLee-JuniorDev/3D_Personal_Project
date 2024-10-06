@@ -130,6 +130,6 @@ public class BossRotateState : BossBaseState
     private bool CanelCondition()
     {
         distanceWithPlayer = Vector3.Distance(monster.transform.position, player.position);
-        return distanceWithPlayer < monster.ChaseStopDistance + 1f;
+        return distanceWithPlayer < monster.ChaseStopDistance + 1f && player != null;
     }
 }

@@ -19,23 +19,21 @@ public class MonsterWeaponTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Player") || Managers.Instance == null) return;
 
-        if (Managers.Instance != null)
-        {
-            PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
 
-            _playerData.currentHealth -= damage;
-            if (_playerData.currentHealth < 0) other.enabled = false;
-            _playerData.OnReduceStatus?.Invoke();
-            Managers.Instance.Game.playerController.m_StateMachine.OnHurt();
-            ParticleSystem _blood = other.GetComponentInChildren<ParticleSystem>();
+        _playerData.currentHealth -= damage;
+        if (_playerData.currentHealth <= 0) other.enabled = false;
 
-            Vector3 bloodTarget = transform.position;
-            bloodTarget.y = _blood.transform.position.y;
+        _playerData.OnReduceStatus?.Invoke();
+        Managers.Instance.Game.playerController.m_StateMachine.OnHurt();
+        ParticleSystem _blood = other.GetComponentInChildren<ParticleSystem>();
 
-            _blood.transform.LookAt(bloodTarget);
-            _blood.Play();
-        }
+        Vector3 bloodTarget = transform.position;
+        bloodTarget.y = _blood.transform.position.y;
+
+        _blood.transform.LookAt(bloodTarget);
+        _blood.Play();
     }
 }

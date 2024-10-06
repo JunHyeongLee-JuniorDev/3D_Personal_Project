@@ -36,6 +36,7 @@ public class GameScene : BaseScene
         }
 
         Managers.Instance.Game.playerInput = Managers.Instance.Game.playerController.GetComponent<PlayerInput>();
+        Managers.Instance.Game.monsters.Clear();
         Managers.Instance.Game.PlayerHud_UI = FindObjectOfType<PlayerHud_UI>();
         Managers.Instance.Game.CursorLock(true);
         Managers.Instance.Game.CreateDiedPopUp();
@@ -46,6 +47,7 @@ public class GameScene : BaseScene
 
     public override void Clear()
     {
+        Managers.Instance.Game.monsters.Clear();
         Managers.Instance.Inventory.OnDynamicInventoryChanged?.RemoveAllListeners();
     }
 }

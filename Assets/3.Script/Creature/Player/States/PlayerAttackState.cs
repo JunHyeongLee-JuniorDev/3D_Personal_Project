@@ -19,7 +19,12 @@ public class PlayerAttackState : PlayerBaseState
     public override void Enter()
     {
         base.Enter();
-        Debug.Log($"{this}");
+        if (player.hurtTimer.isTickin || player.rollBtnTimer.isTickin)
+        {
+            player.isAttack = false;
+            return;
+        }
+            Debug.Log($"player : {this}");
         if (equipments[(int)EEquipmentType.Weapon].StackSize < 0)
         {
             attackAniClips = player.m_aniData.meleeAttackClips;
@@ -127,8 +132,35 @@ public class PlayerAttackState : PlayerBaseState
 
     public override void OnHurt()
     {
-        base.OnHurt();
-        player.attackBtnTimer.StopTimer();
-        player.isAttack = false;
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+        inputActions["Move"].Disable();
+        inputActions["Fire"].Disable();
+
+        if (_playerData.currentHealth > 0)
+        {
+            animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
+            player.m_input.enabled = false;
+            player.hurtTimer.StartTimer(() =>
+            {
+                inputActions["Move"].Enable();
+                inputActions["Fire"].Enable();
+                if (player.isBattle)
+                    animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+                else
+                    animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+
+                player.m_input.enabled = true;
+            });
+        }
+
+        else if (!player.isDead)
+        {
+            Debug.Log("죽음은 들어오나?");
+            player.isDead = true;
+            player.m_playerInput.enabled = false;
+            player.OnPlayerDead?.Invoke();
+            animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
+            Managers.Instance.Game.ResetGame();
+        }
     }
 }

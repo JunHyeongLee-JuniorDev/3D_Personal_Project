@@ -37,7 +37,6 @@ public class BornFire : MonoBehaviour
         if (Managers.Instance != null)
         {
             popUp = Managers.Instance.Game.itemCanvas;
-            Debug.Log("ÆË¾÷ ¸Þ´º null check : " + popUp.name);
             data = Managers.Instance.Data.AssignBornFireData(fireName);
         }
 
@@ -105,14 +104,29 @@ public class BornFire : MonoBehaviour
 
     private void RestAction(InputAction.CallbackContext context)
     {
-        Managers.Instance.Game.ResetGame();
+        if (Managers.Instance.Game.restTimer.isTickin) return;
+
+        Managers.Instance.Data.SavePlayerPosition();
+        Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
+        Managers.Instance.Scene.fadeBG.Play("CrossFade End");
+        Managers.Instance.Game.OnRestGame?.Invoke();
+
+        Managers.Instance.Game.restTimer.StartTimer(() =>
+        {
+            PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+            _playerData.refillPotion();
+            _playerData.currentHealth = _playerData.maxHealth;
+        });
     }
 
     private void SetOnFireAction(InputAction.CallbackContext context)
     {
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
+        popUp.gameObject.SetActive(false);
         data.isOn = true;
         LightFire();
         Managers.Instance.Game.OnFirePopUp();
         Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
+        Managers.Instance.Data.SavePlayerPosition();
     }
 }

@@ -39,4 +39,9 @@ public class FadeInOut_UI : MonoBehaviour
         tween?.Kill();
         group.alpha = 0.0f;
     }
+
+    private void OnDestroy()
+    {
+        tween?.Kill();
+    }
 }

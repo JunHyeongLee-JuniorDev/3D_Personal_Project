@@ -198,8 +198,11 @@ public class MonsterSkillControl : MonoBehaviour
 
     private void OnDestroy()
     {
-        monster.OnSkill -= AssignBalls;
-        monster.OnSkill -= StartScream;
-        monster.OnPlayerFound -= SetTarget;
+        if (monster != null)
+        {
+            monster.OnSkill -= AssignBalls;
+            monster.OnSkill -= StartScream;
+            monster.OnPlayerFound -= SetTarget;
+        }
     }
 }
