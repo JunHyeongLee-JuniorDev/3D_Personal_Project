@@ -42,14 +42,32 @@ public class MonsterAniDataBase
         monsterAniClips = new Dictionary<EMonsterAni, int>();
         monsterParams = new Dictionary<EMonsterAni, int>();
 
-        //mino
-        minoAttackClips = new int[5];
-        //head book
+        //Init Attack Clips
         headAttackClips = new int[2];
         headSkillClips = new int[1];
-        //crab
+
+        headAttackClips[0] = Animator.StringToHash("Base Layer.Attack1");
+        headAttackClips[1] = Animator.StringToHash("Base Layer.Attack2");
+
+        headSkillClips[0] = Animator.StringToHash("Base Layer.Scream");
+
         crabAttackClips = new int[5];
         crabSkillClips = new int[1];
+
+        crabAttackClips[0] = Animator.StringToHash("Base Layer.Attack1");
+        crabAttackClips[1] = Animator.StringToHash("Base Layer.Attack2");
+        crabAttackClips[2] = Animator.StringToHash("Base Layer.Attack3");
+        crabAttackClips[3] = Animator.StringToHash("Base Layer.Attack4");
+        crabAttackClips[4] = Animator.StringToHash("Base Layer.Attack5");
+
+        crabSkillClips[0] = Animator.StringToHash("Base Layer.Magic Balls");
+
+        minoAttackClips[0] = Animator.StringToHash("Base Layer.attack1");
+        minoAttackClips[1] = Animator.StringToHash("Base Layer.attack2");
+        minoAttackClips[2] = Animator.StringToHash("Base Layer.attack3");
+        minoAttackClips[3] = Animator.StringToHash("Base Layer.attack4_kick");
+        minoAttackClips[4] = Animator.StringToHash("Base Layer.attack5_kick");
+    
 
         //Clips---------------------------------------------------------------------------------------
         monsterAniClips.Add(EMonsterAni.Idle, Animator.StringToHash("Base Layer.idle"));
@@ -68,32 +86,5 @@ public class MonsterAniDataBase
         monsterParams.Add(EMonsterAni.BlendX, Animator.StringToHash("BlendX"));
         monsterParams.Add(EMonsterAni.BlendY, Animator.StringToHash("BlendY"));
         //Params----------------------------------------------------------------------------
-
-        //AttackDB--------------------------------------------------------------------------
-        //Mino
-        minoAttackClips[0] = Animator.StringToHash("Base Layer.attack1");
-        minoAttackClips[1] = Animator.StringToHash("Base Layer.attack2");
-        minoAttackClips[2] = Animator.StringToHash("Base Layer.attack3");
-        minoAttackClips[3] = Animator.StringToHash("Base Layer.attack4_kick");
-        minoAttackClips[4] = Animator.StringToHash("Base Layer.attack5_kick");
-        //Head
-        headAttackClips[0] = Animator.StringToHash("Base Layer.Attack1");
-        headAttackClips[1] = Animator.StringToHash("Base Layer.Attack2");
-        //Crab
-        crabAttackClips[0] = Animator.StringToHash("Base Layer.Attack1");
-        crabAttackClips[1] = Animator.StringToHash("Base Layer.Attack2");
-        crabAttackClips[2] = Animator.StringToHash("Base Layer.Attack3");
-        crabAttackClips[3] = Animator.StringToHash("Base Layer.Attack4");
-        crabAttackClips[4] = Animator.StringToHash("Base Layer.Attack5");
-        //What else?...
-
-        //AttackDB--------------------------------------------------------------------------
-
-        //SkillDB===========================================================================
-        //Head
-        headSkillClips[0] = Animator.StringToHash("Base Layer.Scream");
-        //Crab
-        crabSkillClips[0] = Animator.StringToHash("Base Layer.Magic Balls");
-        //SkillDB===========================================================================
     }
 }

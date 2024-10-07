@@ -71,14 +71,13 @@ public class MonsterController : MonoBehaviour
         animator = GetComponent<Animator>();
         weaponTrigger = GetComponentInChildren<MonsterWeaponTrigger>();
         bloodEFF = GetComponentInChildren<ParticleSystem>();
-        aniDataBase = new MonsterAniDataBase();
-        aniDataBase.init();
 
         InitStatData();
         statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
         Managers.Instance.Game.playerController.OnPlayerDead -= OnPlayerDead;
         Managers.Instance.Game.playerController.OnPlayerDead += OnPlayerDead;
         Managers.Instance.Game.monsters.Add(this);
+        aniDataBase = Managers.Instance.Data.monsterAniDB;
 
         //Inits
         nodeStack = new Stack<Transform>();

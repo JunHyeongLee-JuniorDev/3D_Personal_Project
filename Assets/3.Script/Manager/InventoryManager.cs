@@ -40,6 +40,11 @@ public class InventoryManager : MonoBehaviour, IInitManager
 
     }
 
+    public void Clear()
+    {
+
+    }
+
     public void LoadInventory()
     {
         GameSaveData _currentSaveData = Managers.Instance.Data.currentSaveData[Managers.Instance.Data.currentSaveIndex];

@@ -48,6 +48,11 @@ public class GameManager : MonoBehaviour, IInitManager
         OnRestGame.AddListener(ReviveAllMonsters);
     }
 
+    public void Clear()
+    {
+        UIGroupStack.Clear();
+    }
+
     public void OnClickExit_UIGroup(InputAction.CallbackContext context)
     {
         if (UIGroupStack.Count > 0)

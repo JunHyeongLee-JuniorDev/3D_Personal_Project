@@ -39,6 +39,8 @@ public class PlayerinputSystem : MonoBehaviour
 
     public void OnSprint(InputAction.CallbackContext context)
     {
+        if (player.m_PlayerData.currentStamina <= 0.0f) return;
+
         if (context.started)
         {
             player.isSprint = true;
@@ -49,8 +51,6 @@ public class PlayerinputSystem : MonoBehaviour
         else if (context.canceled)
         {
             if (staminaCash != null) StopCoroutine(staminaCash);
-
-            player.staminaFillTimer.StartTimer(() => { });
             player.isSprint = false;
         }
     }
@@ -62,7 +62,12 @@ public class PlayerinputSystem : MonoBehaviour
             player.m_PlayerData.currentStamina -= player.staminaCost * Time.deltaTime;
             Debug.Log("플레이어 스테미나 : " + player.m_PlayerData.currentStamina);
             if (player.m_PlayerData.currentStamina <= 0.0f)
+            {
                 player.m_PlayerData.currentStamina = 0.0f;
+                player.isSprint = false;
+                yield break;
+            }
+            player.staminaFillTimer.StartTimer(() => { });
             Managers.Instance.Game.OnStaminaChange?.Invoke();
             yield return null;
         }

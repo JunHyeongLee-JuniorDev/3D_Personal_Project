@@ -167,5 +167,6 @@ public class MonsterDeathState : MonsterBaseState
         animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Death], 0.1f);
         monster.TurnOffNav();
         monster.activefalseForDeath();
+        Managers.Instance.Sound.Play3DSound("", monster.transform.position);
     }
 }

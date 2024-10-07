@@ -116,7 +116,6 @@ public class PlayerLocoState : PlayerBaseState
     private void OnRoll(InputAction.CallbackContext context)
     {
         if (!player.rollBtnTimer.isTickin && 
-            player.m_PlayerData.currentStamina <= 0.0f &&
             player.m_PlayerData.currentStamina - player.staminaCost >= 0.0f)
         {
             player.m_PlayerData.currentStamina -= player.staminaCost;
@@ -128,7 +127,7 @@ public class PlayerLocoState : PlayerBaseState
             inputActions["Move"].Disable();
             inputActions["Fire"].Disable();
             player.OffPlayerHitBox();
-
+            player.m_PlayerData.OnReduceStatus?.Invoke();
             player.staminaFillTimer.StartTimer(() => { });
             player.rollBtnTimer.StartTimer(() =>
             {

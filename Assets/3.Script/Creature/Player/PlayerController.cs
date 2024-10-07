@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     //For Debug
     [field : SerializeField] public float lookTargetRotLerp { get; private set; }
+    [field: SerializeField] public float staminaFillLerp { get; private set; }
 
 
     //Events
@@ -159,7 +160,7 @@ public class PlayerController : MonoBehaviour
         skillTimer = new Timer(1.0f, this);
         buffTimer = new Timer(10.0f, this);
         hurtTimer = new Timer(0.7f, this);
-        staminaFillTimer = new Timer(2.0f, this);
+        staminaFillTimer = new Timer(1.5f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
         m_Controller.isTrigger = false;
@@ -295,11 +296,15 @@ public class PlayerController : MonoBehaviour
 
     private void StaminaControl()
     {
-        if (staminaFillTimer.isTickin ||
-            m_PlayerData.currentStamina >= m_PlayerData.maxStamina - 0.1f ||
-            isSprint) return;
+        if (staminaFillTimer.isTickin || isSprint ||
+            m_PlayerData.currentStamina == m_PlayerData.maxStamina) return;
 
-        m_PlayerData.currentStamina = Mathf.Lerp(m_PlayerData.currentStamina, m_PlayerData.maxStamina, Time.deltaTime);
+        else if (m_PlayerData.currentStamina >= m_PlayerData.maxStamina - 0.5f)
+            m_PlayerData.currentStamina = m_PlayerData.maxStamina;
+
+        else
+            m_PlayerData.currentStamina = Mathf.Lerp(m_PlayerData.currentStamina, m_PlayerData.maxStamina, staminaFillLerp * Time.deltaTime);
+
         Managers.Instance.Game.OnStaminaChange?.Invoke();
     }
 

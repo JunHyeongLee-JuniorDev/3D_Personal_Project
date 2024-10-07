@@ -19,6 +19,8 @@ public class DataManager : MonoBehaviour, IInitManager
 
     // 디볼트 세이브 데이터 
     private SettingSaveData defaultSetting = new SettingSaveData();
+
+    public MonsterAniDataBase monsterAniDB { get; private set; }
     public SettingSaveData DefaultSetting => defaultSetting;
 
     //file name hardcoding
@@ -57,6 +59,13 @@ public class DataManager : MonoBehaviour, IInitManager
                              settingSaveData.isFullScreen);
 
         audioMixer = audioMixer = Resources.Load<AudioMixer>("Mixer/AudioMixer");
+        monsterAniDB = new MonsterAniDataBase();
+        monsterAniDB.init();
+    }
+
+    public void Clear()
+    {
+
     }
 
     private void Start()

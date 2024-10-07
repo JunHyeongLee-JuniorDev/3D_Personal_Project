@@ -27,8 +27,7 @@ public class SceneManagerEX : MonoBehaviour, IInitManager
     private IEnumerator ChangeScene_co(EScene scene)
     {
         fadeBG.Play("CrossFade End");
-        Managers.Instance.Game.UIGroupStack.Clear();
-        Clear();
+        Managers.Instance.Clear();
         yield return new WaitForSeconds(1.0f);
         SceneManager.LoadScene(GetSceneName(scene));
     }

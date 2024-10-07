@@ -7,8 +7,8 @@ public class Managers : MonoBehaviour
     public GameManager Game { get; private set; }
     public DataManager Data { get; private set; }
     public SceneManagerEX Scene { get; private set; }
-    public SpawnManager SpawnManager { get; private set; }
     public InventoryManager Inventory { get; private set; }
+    public SoundManager Sound { get; private set; }
 
     private void Awake()
     {
@@ -26,6 +26,7 @@ public class Managers : MonoBehaviour
             Scene = InitManager<SceneManagerEX>(Scene);
             Game = InitManager<GameManager>(Game);
             Inventory = InitManager<InventoryManager>(Inventory);
+            Sound = InitManager<SoundManager>(Sound);
         }
 
         else
@@ -62,9 +63,19 @@ public class Managers : MonoBehaviour
         newObj.name = objName;
         return newObj;
     }
+
+    public void Clear()
+    {
+        Game.Clear();
+        Data.Clear();
+        Scene.Clear();
+        Inventory.Clear();
+        Sound.Clear();
+    }
 }
 
 public interface IInitManager
 {
     public void Init();
+    public void Clear();
 }

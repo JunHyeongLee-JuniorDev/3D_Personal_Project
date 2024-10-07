@@ -5846,6 +5846,7 @@ MonoBehaviour:
     type: 2}
   playerDataPath: ScriptableObj/Player/PlayerData
   <lookTargetRotLerp>k__BackingField: 5
+  <staminaFillLerp>k__BackingField: 3
   m_Controller: {fileID: 0}
   cinemachineAnimator: {fileID: 0}
   hitBox: {fileID: 539221291351508648}
