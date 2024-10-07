@@ -10,17 +10,19 @@ public class PlayerController : MonoBehaviour
     [field: Header("캐릭터 물리 데이터")]
     [field: SerializeField]
     public PlayerSO m_PhysicsData { get; private set; }
+    public PlayerData m_PlayerData { get; private set; }
 
     [Header("Player Physics Data Path")]
     [SerializeField]
     private string playerDataPath = "ScriptableObj/PlayerData";
     public PlayerAnimationDataBase m_aniData { get; private set; }
 
-    private readonly float attackCost = 20.0f;
+    public readonly float staminaCost = 20.0f;
     public readonly float skillCost = 20.0f;
 
     //For Debug
     [field : SerializeField] public float lookTargetRotLerp { get; private set; }
+
 
     //Events
     public UnityAction OnPlayerDead;
@@ -61,6 +63,7 @@ public class PlayerController : MonoBehaviour
     public Timer skillTimer { get; private set; }
     public Timer buffTimer { get; private set; }
     public Timer hurtTimer { get; private set; }
+    public Timer staminaFillTimer { get; private set; }
 
     //Player--------------------------------------------------------------------------------
     //Hide
@@ -156,14 +159,16 @@ public class PlayerController : MonoBehaviour
         skillTimer = new Timer(1.0f, this);
         buffTimer = new Timer(10.0f, this);
         hurtTimer = new Timer(0.7f, this);
+        staminaFillTimer = new Timer(2.0f, this);
         m_aniData = new PlayerAnimationDataBase();
         m_aniData.Initialize();// 데이터 초기화
         m_Controller.isTrigger = false;
         hitBox.enabled = true;
 
         m_Controller.enabled = false;
-        gameObject.transform.position = Managers.Instance.Inventory.PlayerData.playerPosition;
-        gameObject.transform.rotation = Managers.Instance.Inventory.PlayerData.playerRotation;
+        m_PlayerData = Managers.Instance.Inventory.PlayerData;
+        gameObject.transform.position = m_PlayerData.playerPosition;
+        gameObject.transform.rotation = m_PlayerData.playerRotation;
         m_Controller.enabled = true;
 
         //프리펩 생성
@@ -220,6 +225,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         m_StateMachine.Update();
+        StaminaControl();
     }
 
     private void FixedUpdate()
@@ -285,6 +291,16 @@ public class PlayerController : MonoBehaviour
         m_playerInput.enabled = false;
         hitBox.enabled = false;
         Destroy(gameObject, 3.0f);
+    }
+
+    private void StaminaControl()
+    {
+        if (staminaFillTimer.isTickin ||
+            m_PlayerData.currentStamina >= m_PlayerData.maxStamina - 0.1f ||
+            isSprint) return;
+
+        m_PlayerData.currentStamina = Mathf.Lerp(m_PlayerData.currentStamina, m_PlayerData.maxStamina, Time.deltaTime);
+        Managers.Instance.Game.OnStaminaChange?.Invoke();
     }
 
     public void CancelAllConditions()

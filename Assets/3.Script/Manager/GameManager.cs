@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour, IInitManager
 
     //Action
     public UnityEvent OnRestGame;
+    public UnityEvent OnStaminaChange;
     public UnityAction OnSectionOneEntered;
     public UnityAction OnBossRoomEntered;
 

@@ -65,9 +65,7 @@ public class PlayerLocoState : PlayerBaseState
 
     public override void OnHurt()
     {
-        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-
-        if (_playerData.currentHealth > 0)
+        if (player.m_PlayerData.currentHealth > 0)
         {
             animator.SetLayerWeight(3, 1.0f);
             animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
@@ -117,13 +115,21 @@ public class PlayerLocoState : PlayerBaseState
 
     private void OnRoll(InputAction.CallbackContext context)
     {
-        if (!player.rollBtnTimer.isTickin)
+        if (!player.rollBtnTimer.isTickin && 
+            player.m_PlayerData.currentStamina <= 0.0f &&
+            player.m_PlayerData.currentStamina - player.staminaCost >= 0.0f)
         {
+            player.m_PlayerData.currentStamina -= player.staminaCost;
+
+            if (player.m_PlayerData.currentStamina < 0.0f)
+                player.m_PlayerData.currentStamina = 0.0f;
+
             PerformRoll();
             inputActions["Move"].Disable();
             inputActions["Fire"].Disable();
             player.OffPlayerHitBox();
 
+            player.staminaFillTimer.StartTimer(() => { });
             player.rollBtnTimer.StartTimer(() =>
             {
                 player.OnPlayerHitBox();

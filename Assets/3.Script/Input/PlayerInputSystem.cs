@@ -12,6 +12,7 @@ public class PlayerinputSystem : MonoBehaviour
     [field: SerializeField]
     public Vector2 look { get; private set; }
     public PlayerController player;
+    private Coroutine staminaCash;
 
     private void Start()
     { 
@@ -41,15 +42,33 @@ public class PlayerinputSystem : MonoBehaviour
         if (context.started)
         {
             player.isSprint = true;
+            if(staminaCash != null) StopCoroutine(staminaCash);
+            staminaCash = StartCoroutine(ReduceStamina_co());
         }
 
         else if (context.canceled)
         {
+            if (staminaCash != null) StopCoroutine(staminaCash);
+
+            player.staminaFillTimer.StartTimer(() => { });
             player.isSprint = false;
         }
     }
 
-    public void OnBattle(InputAction.CallbackContext context)
+    private IEnumerator ReduceStamina_co()
+    {
+        while (true)
+        {
+            player.m_PlayerData.currentStamina -= player.staminaCost * Time.deltaTime;
+            Debug.Log("플레이어 스테미나 : " + player.m_PlayerData.currentStamina);
+            if (player.m_PlayerData.currentStamina <= 0.0f)
+                player.m_PlayerData.currentStamina = 0.0f;
+            Managers.Instance.Game.OnStaminaChange?.Invoke();
+            yield return null;
+        }
+    }
+
+        public void OnBattle(InputAction.CallbackContext context)
     {
         if (context.started)
         {

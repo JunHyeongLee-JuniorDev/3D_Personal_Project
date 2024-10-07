@@ -361,13 +361,21 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     private void OnRoll(InputAction.CallbackContext context)
     {
-        if (!player.rollBtnTimer.isTickin)
+        if (!player.rollBtnTimer.isTickin && 
+            Managers.Instance.Inventory.PlayerData.currentStamina <= 0.0f &&
+            Managers.Instance.Inventory.PlayerData.currentStamina - player.staminaCost >= 0.0f)
         {
+            Managers.Instance.Inventory.PlayerData.currentStamina -= player.staminaCost;
+
+            if (Managers.Instance.Inventory.PlayerData.currentStamina < 0.0f)
+                Managers.Instance.Inventory.PlayerData.currentStamina = 0.0f;
+
             PerformRoll();
             inputActions["Move"].Disable();
             inputActions["Fire"].Disable();
             player.OffPlayerHitBox();
 
+            player.staminaFillTimer.StartTimer(() => { });
             player.rollBtnTimer.StartTimer(() =>
             {
                 player.OnPlayerHitBox();

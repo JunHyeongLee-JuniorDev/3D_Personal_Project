@@ -52,7 +52,10 @@ public class PlayerHud_UI : MonoBehaviour
 
         Managers.Instance.Game.UIInputActions["Cancel"].started -= OnClickESC;
         Managers.Instance.Game.UIInputActions["Cancel"].started += OnClickESC;
-        Managers.Instance.Game.OnRestGame.AddListener(InitSlider);
+        Managers.Instance.Game.OnRestGame.AddListener(ChangeSliderWithOutTween);
+        Managers.Instance.Game.OnStaminaChange.AddListener(() =>
+            playerAp.ChangeWithoutTween(_playerData.currentStamina, _playerData.maxStamina, isHaveFake: false)
+            );
 
         _playerData.OnRefillStatus.AddListener(OnStatChange);
         _playerData.OnRefillStatus.AddListener(RefillSliders);
@@ -60,16 +63,16 @@ public class PlayerHud_UI : MonoBehaviour
         _playerData.OnReduceStatus.AddListener(ReduceSliders);
 
         OnStatChange();
-        InitSlider();
+        ChangeSliderWithOutTween();
     }
 
-    private void InitSlider()
+    private void ChangeSliderWithOutTween()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
 
-        playerHp.ChangeWithoutTween(_playerData.currentHealth, _playerData.maxHealth);
-        playerSp.ChangeSlider(_playerData.currentMana, _playerData.maxMana);
-        playerAp.ChangeSlider(_playerData.currentStamina, _playerData.maxStamina);
+        playerHp.ChangeWithoutTween(_playerData.currentHealth, _playerData.maxHealth, isHaveFake : true);
+        playerSp.ChangeWithoutTween(_playerData.currentMana, _playerData.maxMana, isHaveFake: false);
+        playerAp.ChangeWithoutTween(_playerData.currentStamina, _playerData.maxStamina, isHaveFake: false);
     }
 
     public void OnClickESC(InputAction.CallbackContext context)

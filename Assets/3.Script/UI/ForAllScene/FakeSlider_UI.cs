@@ -31,10 +31,12 @@ public class FakeSlider_UI : MonoBehaviour
         this.canvas = canvas;
     }
 
-    public void ChangeWithoutTween(float endValue, float maxValue)
+    public void ChangeWithoutTween(float endValue, float maxValue, bool isHaveFake)
     {
         float currentValue = endValue / maxValue;
         m_slider.value = currentValue;
+
+        if(isHaveFake)
         m_fakeImage.fillAmount = currentValue;
     }
 
