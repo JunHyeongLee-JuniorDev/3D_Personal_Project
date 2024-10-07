@@ -48,11 +48,13 @@ public class GateControl : MonoBehaviour
 
         if (isGateOpen)
         {
+            col.enabled = false;
             animator.Play("Open State");
         }
 
         else
         {
+            col.enabled = true;
             animator.Play("Close State");
         }
     }
@@ -79,14 +81,27 @@ public class GateControl : MonoBehaviour
     private void OpenGate(InputAction.CallbackContext context)
     {
         animator.Play("Main Gate Open");
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= OpenGate;
         popUp.gameObject.SetActive(false);
         m_cam.gameObject.SetActive(true);
         Managers.Instance.Game.playerInput.enabled = false;
         m_cam.m_Priority = 11;
+        Managers.Instance.Game.playerController.OffPlayerHitBox();
+        Managers.Instance.Game.playerController.CancelAllConditions();
+        Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
+
+        foreach (MonsterController monster in Managers.Instance.Game.monsters)
+        {
+            monster.OnPlayerDead();
+        }
+
+
         openTimer.StartTimer(() =>
         {
             m_cam.m_Priority = -1;
             m_cam.gameObject.SetActive(false);
+            col.enabled = false;
+            Managers.Instance.Game.playerController.OnPlayerHitBox();
             Managers.Instance.Game.playerInput.enabled = true;
         });
 

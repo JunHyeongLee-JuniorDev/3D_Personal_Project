@@ -47,6 +47,7 @@ public class BossRotateState : BossBaseState
 
     public override void Update()
     {
+        if (monster.player == null) { monster.CancelAllConditions(); return; }
         base.Update();
         monster.isInRotateRad = CanelCondition();
         MoveAroundPlayer();

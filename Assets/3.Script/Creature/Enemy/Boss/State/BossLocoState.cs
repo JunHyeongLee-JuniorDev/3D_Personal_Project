@@ -13,6 +13,7 @@ public class BossLocoState : BossBaseState
     public override void Enter()
     {
         Debug.Log($"Boss Loco State");
+
         base.Enter();
         locoAniBlend = 0.0f;
         monster.TurnOnNav();
@@ -33,6 +34,7 @@ public class BossLocoState : BossBaseState
 
     public override void Update()
     {
+        if (monster.player == null) { monster.CancelAllConditions(); return; }
         base.Update();
         navAI.SetDestination(monster.player.position);
         if(!monster.isChargeState) monster.isInRotateRad = monster.CheckPlayerDistance();
@@ -58,11 +60,30 @@ public class BossRestState : BossBaseState
 
     public override void Enter()
     {
+        Debug.Log("Boss Rest State");
         base.Enter();
+        navAI.updatePosition = false;
+        navAI.updateRotation = false;
+        monster.hpSlider.gameObject.SetActive(false);
+    }
+
+    public override void Update()
+    {
+        if (monster.player == null) { monster.CancelAllConditions(); return; }
+
+        base.Update();
+        navAI.SetDestination(monster.player.position);
+
+        if (!navAI.pathPending && !(navAI.pathStatus == UnityEngine.AI.NavMeshPathStatus.PathPartial))
+        {
+            monster.TurnOnNav();
+            monster.isPlayerEnter = true;
+        }
     }
 
     public override void Exit()
     {
+        monster.hpSlider.gameObject.SetActive(true);
         base.Exit();
     }
 }

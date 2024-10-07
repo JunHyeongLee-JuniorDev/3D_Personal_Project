@@ -52,6 +52,7 @@ public class PlayerHud_UI : MonoBehaviour
 
         Managers.Instance.Game.UIInputActions["Cancel"].started -= OnClickESC;
         Managers.Instance.Game.UIInputActions["Cancel"].started += OnClickESC;
+        Managers.Instance.Game.OnRestGame.AddListener(InitSlider);
 
         _playerData.OnRefillStatus.AddListener(OnStatChange);
         _playerData.OnRefillStatus.AddListener(RefillSliders);
@@ -59,6 +60,13 @@ public class PlayerHud_UI : MonoBehaviour
         _playerData.OnReduceStatus.AddListener(ReduceSliders);
 
         OnStatChange();
+        InitSlider();
+    }
+
+    private void InitSlider()
+    {
+        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+
         playerHp.ChangeWithoutTween(_playerData.currentHealth, _playerData.maxHealth);
         playerSp.ChangeSlider(_playerData.currentMana, _playerData.maxMana);
         playerAp.ChangeSlider(_playerData.currentStamina, _playerData.maxStamina);

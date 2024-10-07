@@ -180,6 +180,9 @@ public class PlayerData
             else
                 healMana(currentPotion.Data.stat);
         }
+
+        OnChangeHealPotion?.Invoke();
+        OnRefillStatus?.Invoke();
     }
     /// <summary>
     /// max를 넘는 값이 들어오면 나머지 값은 버림

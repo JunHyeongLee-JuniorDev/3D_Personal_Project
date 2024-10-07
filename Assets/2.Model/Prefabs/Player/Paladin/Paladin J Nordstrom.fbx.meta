@@ -82,39 +82,7 @@ ModelImporter:
     legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
     blendShapeNormalImportMode: 1
     normalSmoothingSource: 0
-  referencedClips:
-  - cc3232c76f260514f9e0c38eef8b9b8f
-  - a93a19426af2971438abc6061bc8b005
-  - 16877ebb74061444c858655a74874f2c
-  - fa1caeda149889747b7f0260a65918e4
-  - b03a7b9ff1d79524a86ef0d3e8c41904
-  - 7ad8a2a093d7e84448ac0c7750eab384
-  - 6f9454e242ad1e44db4f986eef9bbaad
-  - 1c92e0fe8be969147b71157111630b0a
-  - 2a7186a12b97fd74688a4e8175c2e065
-  - 7404a827e6d534f4585339ee6e916e86
-  - 10850f94b3b8f5c46b00c678ff62b729
-  - 1d1589bbb5d805746be981b10d4aa62b
-  - ee0127938b8510c48abb23c6acb2c888
-  - d3e339d3908f4074f8b4ea13d66dcbaa
-  - 06463e3d13f4258489376b979fd790a3
-  - d4c85a9c11410f543974cb606dbe7932
-  - 900142997f7d003439a08efd80cdfca3
-  - 26cfd31417883904292dfa818c882fc9
-  - 88f791e08c51d1649becd6cf1ba7b7e9
-  - e04a5a16f2830ae4b9500de9b5e46cdf
-  - 809a7fb04f7c1fe4f9aa2acb2af6609a
-  - 85a74f924e36f704898d463f1f57db17
-  - fe597531c909fb949a00e87e61b75a2c
-  - 8b4474569a838ad45ae4de75475b491b
-  - 2a0b34daf94616040ac138a82cad7cc5
-  - f889cb3e9600ac04f884a277cf3927bd
-  - 81f2dab91d2dd09488de6b1b25903032
-  - 6cd0ea9756128f842ac6f35cee84ccc7
-  - 6f4cf093f573ad04eaf33eaf02ce8b84
-  - 4db93f17c4119d840bb8a82e6634fd9d
-  - 58e7e2f115c378d4184f33c4767af8eb
-  - 0e99efbfb46c2044bac0dddacd86fffe
+  referencedClips: []
   importAnimation: 1
   humanDescription:
     serializedVersion: 3

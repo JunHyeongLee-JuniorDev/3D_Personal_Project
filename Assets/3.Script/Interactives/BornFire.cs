@@ -107,15 +107,17 @@ public class BornFire : MonoBehaviour
         if (Managers.Instance.Game.restTimer.isTickin) return;
 
         Managers.Instance.Data.SavePlayerPosition();
-        Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
         Managers.Instance.Scene.fadeBG.Play("CrossFade End");
-        Managers.Instance.Game.OnRestGame?.Invoke();
 
         Managers.Instance.Game.restTimer.StartTimer(() =>
         {
             PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
             _playerData.refillPotion();
             _playerData.currentHealth = _playerData.maxHealth;
+            _playerData.currentMana = _playerData.maxMana;
+            _playerData.currentStamina = _playerData.maxStamina;
+            Managers.Instance.Game.RestGame();
+            Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
         });
     }
 

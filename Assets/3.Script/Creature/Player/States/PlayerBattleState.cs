@@ -17,6 +17,8 @@ public class PlayerBattleState : PlayerBaseState
     public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
     {
         player.lockOnUI.SetActive(false);
+        inputActions["OnRoll"].started -= OnRoll;
+        inputActions["OnRoll"].started += OnRoll;
     }
 
     public override void Enter()
@@ -40,8 +42,7 @@ public class PlayerBattleState : PlayerBaseState
             player.m_Controller.Move(Vector3.zero);
             inputActions["Look"].started -= OnLook;
             inputActions["Look"].started += OnLook;
-            inputActions["OnRoll"].started -= OnRoll;
-            inputActions["OnRoll"].started += OnRoll;
+            inputActions["OnRoll"].Enable();
             inputActions["Skill"].started -= OnSkill;
             inputActions["Skill"].started += OnSkill;
             inputActions["Sprint"].Disable();
@@ -53,11 +54,7 @@ public class PlayerBattleState : PlayerBaseState
         base.Update();
         CancelConditions();
 
-        if (player.m_targetEnemy == null || player.hurtTimer.isTickin)
-        {
-            Debug.Log("아니 씨발 맞았을 거아냐");
-            return;
-        }
+        if (player.m_targetEnemy == null) return;
 
         dirToTarget = (player.m_targetEnemy.transform.position - player.m_mainCam.transform.position);
 
@@ -83,7 +80,7 @@ public class PlayerBattleState : PlayerBaseState
     /// </summary>
     public override void Move()
     {
-        if(player.rollBtnTimer.isTickin || player.isSpellCast || player.hurtTimer.isTickin) return;
+        if(player.rollBtnTimer.isTickin || player.isSpellCast) return;
 
         if (player.m_input.move.Equals(Vector2.zero))
         {
@@ -168,7 +165,7 @@ public class PlayerBattleState : PlayerBaseState
         Quaternion targetAngle = Quaternion.LookRotation(targetVec);
 
         if(!player.rollBtnTimer.isTickin)
-        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, 10.0f * Time.deltaTime);
+        player.transform.rotation = Quaternion.Lerp(player.transform.rotation, targetAngle, player.lookTargetRotLerp * Time.deltaTime);
     }
     /// <summary>
     /// 일정 범위의 OverlapShpere와 카메라의 시야각 내의 객체를 타겟팅하여 PlayerController에 저장합니다.
@@ -317,7 +314,7 @@ public class PlayerBattleState : PlayerBaseState
                                          player.m_mainCam.transform.eulerAngles.y;
         player.m_Controller.Move(Vector3.zero);
         player.transform.rotation = Quaternion.Euler(0.0f, rollRotation, 0.0f);
-        animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.2f);
+        animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.25f);
     }
     
     /// <summary>
@@ -326,9 +323,10 @@ public class PlayerBattleState : PlayerBaseState
     /// <param name="originDir"> 캠에서 타겟 방향의 방향 벡터 </param>
     private void PlaceTheCam(Vector3 originDir)
     {
-        player.lockOnTargetRoot.transform.forward = Vector3.Lerp(player.lockOnTargetRoot.transform.forward,originDir.normalized, 10.0f * Time.deltaTime);
+        player.lockOnTargetRoot.transform.forward = Vector3.Lerp(player.lockOnTargetRoot.transform.forward,originDir.normalized, player.lookTargetRotLerp * Time.deltaTime);
         player.thirdPersonCam.m_cinemachineCamTarget.transform.forward = originDir.normalized;
     }
+
     /// <summary>
     /// 다른 스테이트에서 필요한 기능들 활성화, target 다시 null 화
     /// </summary>
@@ -344,7 +342,7 @@ public class PlayerBattleState : PlayerBaseState
             player.thirdPersonCam.enabled = true;
             inputActions["Skill"].started -= OnSkill;
         }
-
+        inputActions["OnRoll"].Disable();
         inputActions["Look"].started -= OnLook;
     }
     /// <summary>
@@ -375,7 +373,12 @@ public class PlayerBattleState : PlayerBaseState
                 player.OnPlayerHitBox();
                 inputActions["Move"].Enable();
                 inputActions["Fire"].Enable();
-                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.3f);
+
+                if (player.isBattle)
+                    animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.3f);
+
+                else
+                    animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.3f);
             });
         }
     }
@@ -383,18 +386,16 @@ public class PlayerBattleState : PlayerBaseState
     public override void OnHurt()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-        inputActions["Move"].Disable();
-        inputActions["Fire"].Disable();
 
         if (_playerData.currentHealth > 0)
         {
+            animator.SetLayerWeight(3, 1.0f);
             animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
 
             player.hurtTimer.StartTimer(() =>
             {
-                inputActions["Move"].Enable();
-                inputActions["Fire"].Enable();
-                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);
+                animator.SetLayerWeight(3, 0.0f);
             });
         }
 
@@ -405,51 +406,6 @@ public class PlayerBattleState : PlayerBaseState
             player.m_playerInput.enabled = false;
             player.OnPlayerDead?.Invoke();
             Managers.Instance.Game.ResetGame();
-        }
-    }
-
-    protected override void UseSkill()
-    {
-        PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-
-        if (_playerData.currentMana - player.skillCost <= 0.0f) return;
-
-        _playerData.currentMana -= player.skillCost;
-        _playerData.OnReduceStatus?.Invoke();
-
-        if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
-        {
-            switch (_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)
-            {
-                case EWeaponType.SWORD:
-                    player.skillTimer.UpdateMaxTime(1.5f);
-                    animator.CrossFade(DTAniClipID[EPlayerAni.SwordSkill], 0.2f);
-                    break;
-
-                case EWeaponType.MAGIC:
-                    player.skillTimer.UpdateMaxTime(3.5f);
-                    animator.CrossFade(DTAniClipID[EPlayerAni.MagicSkill], 0.2f);
-                    break;
-
-                case EWeaponType.AXE:
-                    player.skillTimer.UpdateMaxTime(3.0f);
-                    animator.CrossFade(DTAniClipID[EPlayerAni.AxeSkill], 0.2f);
-                    break;
-            }
-
-            player.skillTimer.StartTimer(() =>
-            {
-                player.isSpellCast = false;
-                animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
-                player.weaponManager.endSkill();
-            });
-            player.weaponManager.actiaveSkill();
-        }
-
-        else
-        {
-            player.isSpellCast = false;
-            return;
         }
     }
 }

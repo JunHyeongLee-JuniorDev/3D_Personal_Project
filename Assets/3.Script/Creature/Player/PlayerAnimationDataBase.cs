@@ -87,7 +87,7 @@ public class PlayerAnimationDataBase
         _DTaniClipID.Add(EPlayerAni.BLOCK, Animator.StringToHash("LeftHand.Sword And Shield Block"));
         _DTaniClipID.Add(EPlayerAni.BLOCKIMAPCT, Animator.StringToHash("LeftHand.Shield Impact"));
         _DTaniClipID.Add(EPlayerAni.ROLL, Animator.StringToHash("Base Layer.Battle.Stand To Roll"));
-        _DTaniClipID.Add(EPlayerAni.Hit, Animator.StringToHash("Base Layer.Hit"));
+        _DTaniClipID.Add(EPlayerAni.Hit, Animator.StringToHash("UpperBody.Hit"));
         _DTaniClipID.Add(EPlayerAni.Death, Animator.StringToHash("Base Layer.Death"));
 
         //스킬들 필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!

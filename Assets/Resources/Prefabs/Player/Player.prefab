@@ -414,7 +414,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 20, z: 1}
+  m_Size: {x: 1.5, y: 20, z: 1.5}
   m_Center: {x: 0, y: 5, z: 0}
 --- !u!114 &8342422769016498209
 MonoBehaviour:
@@ -428,7 +428,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e24ccbbe285a3464dab927857ba578b9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 50
+  damage: 30
 --- !u!4 &3515700159692835382 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 490088, guid: a9892f6a83fd8d4468ce0c8a3d09d3cd,
@@ -5845,6 +5845,7 @@ MonoBehaviour:
   <m_PhysicsData>k__BackingField: {fileID: 11400000, guid: 887e4080d60e95b4582d38d51dcf13df,
     type: 2}
   playerDataPath: ScriptableObj/Player/PlayerData
+  <lookTargetRotLerp>k__BackingField: 5
   m_Controller: {fileID: 0}
   cinemachineAnimator: {fileID: 0}
   hitBox: {fileID: 539221291351508648}
@@ -5871,7 +5872,7 @@ MonoBehaviour:
   targetDir: {x: 0, y: 0, z: 0}
   targetRot: {x: 0, y: 0, z: 0, w: 0}
   m_blockAniBlend: 10
-  <radiusOfView>k__BackingField: 20
+  <radiusOfView>k__BackingField: 50
   <enemyLayer>k__BackingField:
     serializedVersion: 2
     m_Bits: 256

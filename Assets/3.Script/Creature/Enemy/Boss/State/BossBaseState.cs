@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,18 +34,38 @@ public class BossBaseState : IState
 
     public virtual void OnHurt()
     {
-        if (monster.statData.currentHealth > 0)
+        monster.UpdateGroggy(10.0f);
+        if (monster.currentGroggy >= monster.maxGroggy && !monster.hurtTimer.isTickin)
         {
             animator.CrossFade(aniDB.aniHashs[EPriestAni.Groggy], 0.1f);
-            monster.hurtTimer.StartTimer(() => { });
+            monster.currentGroggy = 0.0f;
+
+            monster.TurnOffNav();
+            monster.TurnOffAllBossAttackCol();
+            monster.TurnOffBossAttackCol();
+
+            monster.hurtTimer.StartTimer(() => 
+            {
+                if(monster.isInRotateRad)
+                animator.CrossFade(aniDB.aniHashs[EPriestAni.RotateBlend], 0.1f);
+                else 
+                animator.CrossFade(aniDB.aniHashs[EPriestAni.WalkBlend], 0.1f);
+
+                monster.TurnOnNav();
+            });
         }
 
-        else
+        else if(monster.statData.currentHealth <= 0.0f)
         {
             animator.CrossFade(aniDB.aniHashs[EPriestAni.Death], 0.1f);
             monster.TurnOffNav();
             monster.isDead = true;
+            monster.statData.isDead = true;
             monster.activefalseForDeath();
+            Managers.Instance.Game.OnKillBoss();
+            Managers.Instance.Data.SavePlayerPosition();
+            Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
+            monster.enabled = false;
         }
     }
 

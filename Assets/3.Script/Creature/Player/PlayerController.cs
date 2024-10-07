@@ -19,6 +19,9 @@ public class PlayerController : MonoBehaviour
     private readonly float attackCost = 20.0f;
     public readonly float skillCost = 20.0f;
 
+    //For Debug
+    [field : SerializeField] public float lookTargetRotLerp { get; private set; }
+
     //Events
     public UnityAction OnPlayerDead;
 
@@ -38,16 +41,16 @@ public class PlayerController : MonoBehaviour
 
     //State Bool
     [field: SerializeField] public bool isDebugMode { get; private set; }
-    public bool isSprint;
-    public bool isBattle;
-    public bool isAttack;
-    public bool isGrouded;
-    public bool isFall;
-    public bool isJump;
-    public bool isRightClicked;
-    public bool isDrinkPotion;
-    public bool isSpellCast;
-    public bool isDead;
+    [HideInInspector]public bool isSprint;
+    [HideInInspector]public bool isBattle;
+    [HideInInspector]public bool isAttack;
+    [HideInInspector]public bool isGrouded;
+    [HideInInspector]public bool isFall;
+    [HideInInspector]public bool isJump;
+    [HideInInspector]public bool isRightClicked;
+    [HideInInspector]public bool isDrinkPotion;
+    [HideInInspector]public bool isSpellCast;
+    [HideInInspector]public bool isDead;
 
     //Timer
     public Timer targetBtnTimer { get; private set; }
@@ -146,7 +149,7 @@ public class PlayerController : MonoBehaviour
         m_input.player = this; // input에서 player의 상태 bool값 변경
         m_StateMachine = new PlayerStateMachine(this);
         targetBtnTimer = new Timer(0.5f, this);
-        rollBtnTimer = new Timer(1.3f, this);
+        rollBtnTimer = new Timer(0.8f, this);
         attackBtnTimer = new Timer(0.5f, this);
         itemGrabAniTimer = new Timer(0.8f, this);
         potionTimer = new Timer(1.0f, this);
@@ -277,12 +280,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnDeathState()
     {
-        isAttack = false;
-        isSprint = false;
-        isBattle = false;
+        CancelAllConditions();
         m_input.enabled = false;
         m_playerInput.enabled = false;
         hitBox.enabled = false;
         Destroy(gameObject, 3.0f);
+    }
+
+    public void CancelAllConditions()
+    {
+        isAttack = false;
+        isSprint = false;
+        isBattle = false;
     }
 }

@@ -45,8 +45,6 @@ public class Managers : MonoBehaviour
                     _manager = new GameObject(typeof(T).Name).AddComponent<T>();
                     _manager.transform.parent = transform;
                     _manager.Init();
-
-                    Debug.Log(_manager.name + " : 생성 완료");   
             }
         }
 

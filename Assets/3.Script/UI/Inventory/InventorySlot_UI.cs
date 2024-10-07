@@ -38,7 +38,7 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     public void UpdateUISlot(InventorySlot slot)
     {// Ui slot을 실제 inventory itemData로부터 갱신
 
-        if (slot.StackSize > 1)
+        if (slot.StackSize > 1 || slot.Data?.itemType == EItemType.CONSUME)
         { 
             itemCount.text = slot.StackSize.ToString();
             itemSprite.sprite = Managers.Instance.Data.itemDataBase.GetSprite(slot.Data.displayName);

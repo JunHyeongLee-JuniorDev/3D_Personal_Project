@@ -24,7 +24,9 @@ public class PlayerSetDisplayer : MonoBehaviour
         OnWheelChaged();
 
         Managers.Instance.Inventory.PlayerData.OnWeaponChanged.AddListener(UpdateSlots);
+        Managers.Instance.Inventory.PlayerData.OnChangeHealPotion.AddListener(UpdateSlots);
         Managers.Instance.Inventory.PlayerData.OnChangeHealPotion.AddListener(OnWheelChaged);
+        Managers.Instance.Game.OnRestGame.AddListener(UpdateSlots);
     }
 
     /// <summary>
@@ -35,10 +37,6 @@ public class PlayerSetDisplayer : MonoBehaviour
     {
         equipments = new Dictionary<InventorySlot, InventorySlot_UI>();
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-
-        Debug.Log("메니저의 플레이어 데이터 : " +  _playerData);
-        Debug.Log("메니저의 플레이어 데이터의 장비 : " +  _playerData.equipments);
-        Debug.Log("UI 슬롯 : " + slots_UI);
 
         slots_UI[0].Init(_playerData.equipments[(int)EEquipmentType.Weapon]);
         equipments.Add(_playerData.equipments[(int)EEquipmentType.Weapon], slots_UI[0]);
@@ -51,24 +49,22 @@ public class PlayerSetDisplayer : MonoBehaviour
 
         slots_UI[3].Init(_playerData.equipments[(int)EEquipmentType.Shield]);
         equipments.Add(_playerData.equipments[(int)EEquipmentType.Shield], slots_UI[3]);
-
-        _playerData.OnWeaponChanged.AddListener(UpdateSlots);
     }
 
     public void UpdateSlots()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-
+        Debug.Log("포션 UI 업데이트 들어갔니?");
         for (int i = 0; i < equipments.Count; i++)
         {
             equipments[_playerData.equipments[i]].Init(_playerData.equipments[i]);
+            equipments[_playerData.equipments[i]].UpdateUISlot(_playerData.equipments[i]);
         }
 
     }
 
     public void OnLeftClicked(InventorySlot_UI slot_UI)
     {
-        Debug.Log("여긴 눌리니?");
         if (slot_UI.AssignedInventorySlot.StackSize < 0) return;
         PlayerHud_UI.gearInv.InventorySystem.AddToInventory(slot_UI.AssignedInventorySlot.Data, slot_UI.AssignedInventorySlot.StackSize);
 
@@ -91,14 +87,12 @@ public class PlayerSetDisplayer : MonoBehaviour
 
         if (_playerData.currentPotion.Data.displayName == "체력 포션")
         {
-            Debug.Log("체력 물약");
             currentPotionFrame.rectTransform.anchoredPosition =
                 equipments[_playerData.equipments[(int)EEquipmentType.Heal]].GetComponent<RectTransform>().anchoredPosition;
         }
 
         else
         {
-            Debug.Log("마나 물약");
             currentPotionFrame.rectTransform.anchoredPosition =
                 equipments[_playerData.equipments[(int)EEquipmentType.Mana]].GetComponent<RectTransform>().anchoredPosition;
         }

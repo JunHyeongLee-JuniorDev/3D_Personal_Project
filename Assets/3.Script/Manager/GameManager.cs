@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour, IInitManager
     /// </summary>
     private TimeOutPopUp_UI diePopUp;
     private TimeOutPopUp_UI bornFirePopUp;
+    private TimeOutPopUp_UI killBossPopUp;
 
     private Timer resetTimer;
     public Timer restTimer { get; private set; }
@@ -79,15 +80,17 @@ public class GameManager : MonoBehaviour, IInitManager
 
     public void CamShakeOn()
     {
+        Debug.Log("지금 흔들림 켜지고");
         for (int i = 0; i < camNoise.Length; i++)
         {
-            camNoise[i].m_AmplitudeGain = 7.0f;
+            camNoise[i].m_AmplitudeGain = 3.0f;
             camNoise[i].m_FrequencyGain = 1.0f;
         }
     }
 
     public void CamShakeOff()
     {
+        Debug.Log("지금 흔들림 꺼지고");
         for (int i = 0; i < camNoise.Length; i++)
         {
             camNoise[i].m_AmplitudeGain = 0.0f;
@@ -112,11 +115,19 @@ public class GameManager : MonoBehaviour, IInitManager
             {
                 _playerData.refillPotion();
                 _playerData.currentHealth = _playerData.maxHealth;
+                _playerData.currentMana = _playerData.maxMana;
+                _playerData.currentStamina = _playerData.maxStamina;
+
                 Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);
                 Debug.Log("리셋 타이머 시간 :" + resetTimer.maxTime);
                 Debug.Log("타이머 종료");
                 Managers.Instance.Scene.ChangeScene(EScene.LOADING);
             });
+    }
+
+    public void RestGame()
+    {
+        OnRestGame?.Invoke();
     }
 
     /// <summary>
@@ -161,16 +172,19 @@ public class GameManager : MonoBehaviour, IInitManager
                    InstantiateResouce("Prefabs/UI/DiedPopUp", "DiedPopUp").
                    GetComponent<TimeOutPopUp_UI>();
 
-        Debug.Log("죽음 팝업 :" + diePopUp);
-
         diePopUp.gameObject.SetActive(false);
 
         bornFirePopUp = Managers.Instance.
                    InstantiateResouce("Prefabs/UI/FirePopUp", "FirePopUp").
                    GetComponent<TimeOutPopUp_UI>();
-        Debug.Log("화톳불 팝업 :" + bornFirePopUp);
 
         bornFirePopUp.gameObject.SetActive(false);
+
+        killBossPopUp = Managers.Instance.
+                   InstantiateResouce("Prefabs/UI/BossDiePopUp", "BossDiePopUp").
+                   GetComponent<TimeOutPopUp_UI>();
+
+        killBossPopUp.gameObject.SetActive(false);  
     }
 
     public void OnFirePopUp()
@@ -181,5 +195,10 @@ public class GameManager : MonoBehaviour, IInitManager
     public void OnDiedPopUp()
     {
         diePopUp.gameObject.SetActive(true);
+    }
+
+    public void OnKillBoss()
+    {
+        killBossPopUp.gameObject.SetActive(true);
     }
 }

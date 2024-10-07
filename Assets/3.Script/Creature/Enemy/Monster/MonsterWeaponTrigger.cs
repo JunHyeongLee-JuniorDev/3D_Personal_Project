@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MonsterWeaponTrigger : MonoBehaviour
 {
-    private float damage;
+    [SerializeField] private float damage;
     public Rigidbody rb { get; private set; }
 
     private void Awake()

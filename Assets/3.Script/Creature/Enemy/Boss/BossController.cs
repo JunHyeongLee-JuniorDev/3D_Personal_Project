@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class BossController : MonsterController
@@ -12,8 +14,9 @@ public class BossController : MonsterController
 
     //Data
     public PriestAniDB aniDB { get; private set; }
-    public float currentGroggy { get; private set; }
+    public float currentGroggy;
     public readonly float maxGroggy = 100.0f;
+    private TextMeshProUGUI groggyText; //For Debug
 
     [field: SerializeField] public float walkSpeed { get; private set; } = 5.0f;
     [field: SerializeField] public float chargeSpeed { get; private set; } = 30.0f;
@@ -26,33 +29,51 @@ public class BossController : MonsterController
 
     [SerializeField] private Vector3 wallCheckOffset;
 
-
     //EFF
     [field : SerializeField] public ParticleSystem wallCrashEFF { get; private set; }
+
+
+    //Attack collider
+    [field: SerializeField] public BoxCollider[] attackCols { get; private set; }
+    private int attackColIndex;
+    private ParticleSystem jumpDust;
+    /// <summary>
+    /// 보스 공격 메소드에서 갱신
+    /// </summary>
+    /// <param name="newIndex">새로운 공격 인덱스</param>
+    public void AssignAttackColIndex(int newIndex) { attackColIndex = newIndex; }
 
     protected override void Start()
     {
         navAI = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         weaponTrigger = GetComponentInChildren<MonsterWeaponTrigger>();
+        jumpDust = attackCols[1].GetComponentInChildren<ParticleSystem>();
         bloodEFF = transform.GetChild(5).GetComponent<ParticleSystem>();
         hitBox = GetComponent<Collider>();
 
         //Inits
         aniDB = new PriestAniDB();
         attackTimer = new Timer(0.0f, this);
-        hurtTimer = new Timer(3.0f, this);
-        deathTimer = new Timer(3.0f, this);
+        hurtTimer = new Timer(5.0f, this);
+        deathTimer = new Timer(5.0f, this);
         isPlayerEnter = false;
+
         player = Managers.Instance.Game.playerController.transform; //메니저에서 할당하는 것으로 바꾸자
 
-        //hpSlider = Instantiate(hpPrefabs;
+        hpSlider = Instantiate(hpPrefabs);
+        hpSlider.gameObject.SetActive(false);
+        groggyText = hpSlider.transform.GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>();
         InitStatData();
         statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
+        if (statData.isDead) gameObject.SetActive(false);
+
         Managers.Instance.Game.playerController.OnPlayerDead -= OnPlayerDead;
         Managers.Instance.Game.playerController.OnPlayerDead += OnPlayerDead;
+        TurnOffAllBossAttackCol();
 
-        currentGroggy = maxGroggy;
+
+        currentGroggy = 0.0f;
         navAI.updateRotation = false;
 
         //Init States
@@ -62,12 +83,14 @@ public class BossController : MonsterController
         var _chargeState = new BossChargeState(stateMachine);
         var _rotateState = new BossRotateState(stateMachine);
         var _attackState = new BossAttackState(stateMachine);
+        var _deadState = new MonsterDeathState(stateMachine);
 
-        stateMachine.AddAnyTransition(_restState, new FuncPredicate(() => !isPlayerEnter));
-        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isInRotateRad && !isChargeState && isPlayerEnter));
-        stateMachine.AddAnyTransition(_chargeState, new FuncPredicate(() => isChargeState));
-        stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack && !isChargeState));
-        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin));
+        stateMachine.AddAnyTransition(_restState, new FuncPredicate(() => !isPlayerEnter && !isDead));
+        stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isInRotateRad && !isChargeState && isPlayerEnter && !isDead));
+        stateMachine.AddAnyTransition(_chargeState, new FuncPredicate(() => isChargeState && !isDead));
+        stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack && !isChargeState && !isDead));
+        stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin && !isDead));
+        stateMachine.AddAnyTransition(_deadState, new FuncPredicate(() => isDead));
 
         stateMachine.SetState(_restState);
     }
@@ -75,6 +98,7 @@ public class BossController : MonsterController
     protected override void Update()
     {
         stateMachine.Update();
+        ReduceGroggy();
         transform.rotation = Quaternion.LookRotation(Vector3.Lerp(transform.forward, navAI.desiredVelocity, _rotLerp));
     }
 
@@ -93,10 +117,63 @@ public class BossController : MonsterController
 
     protected override void InitStatData()
     {
-        statData.currentHealth = 2000.0f;
-        statData.maxHealth = 2000.0f;
+        statData.currentHealth = 1000.0f;
+        statData.maxHealth = 1000.0f;
         statData.isDead = false;
         statData.isBoss = true;
+    }
+
+    public void CancelAllConditions()
+    {
+        isPlayerEnter = false;
+        isInRotateRad = false;
+        isChargeState = false;
+        isAttack = false;
+    }
+
+    public void TurnOnBossAttackCol()
+    {
+        switch(attackColIndex)
+        {
+            case 1:
+                jumpDust.Play();
+                break;
+        }
+
+        attackCols[attackColIndex].enabled = true;
+    }
+    public void TurnOffBossAttackCol()
+    {
+        attackCols[attackColIndex].enabled = false;
+    }
+
+    public void TurnOffAllBossAttackCol()
+    {
+        foreach (var col in attackCols)
+        {
+            col.enabled = false;
+        }
+    }
+
+    public void UpdateGroggy(float addValue)
+    {
+        if (hurtTimer.isTickin) return;
+        if(currentGroggy +  addValue >= maxGroggy) currentGroggy = maxGroggy;
+        currentGroggy += addValue;
+    }
+
+    private void ReduceGroggy()
+    {
+        if (currentGroggy <= 0.0f) currentGroggy = 0.0f;
+        else currentGroggy -= Time.deltaTime;
+
+        groggyText.text = ((int)currentGroggy).ToString(); // For Debug
+    }
+
+    private void OnDisable()
+    {
+        if(isDead)
+        Destroy(hpSlider.gameObject);
     }
 }
 

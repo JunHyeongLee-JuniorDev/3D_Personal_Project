@@ -81,7 +81,6 @@ public class PlayerinputSystem : MonoBehaviour
         {
             player.isDrinkPotion = true;
             Managers.Instance.Inventory.PlayerData.DrinkPotion();
-            Managers.Instance.Inventory.PlayerData.OnRefillStatus?.Invoke(); 
         }
     }
 

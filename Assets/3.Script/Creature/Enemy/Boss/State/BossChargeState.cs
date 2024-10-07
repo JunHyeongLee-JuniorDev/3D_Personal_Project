@@ -45,6 +45,7 @@ public class BossChargeState : BossBaseState
 
             while (true)
             {
+                if (monster.player == null) { monster.CancelAllConditions(); yield break; }
                 if (turnOnWallCheckerTime < 0.0f && monster.IsHitWall()) break;
                 turnOnWallCheckerTime -= Time.deltaTime;
                 navAI.SetDestination(hitInfo.point);
@@ -54,10 +55,17 @@ public class BossChargeState : BossBaseState
         }
         animator.SetLayerWeight(1, 0.0f);
         animator.CrossFade(aniDB.aniHashs[EPriestAni.Groggy], 0.2f);
+        monster.TurnOffAllBossAttackCol();
 
         monster.hurtTimer.StartTimer(() =>
         {
             monster.isChargeState = false;
         });
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        monster.TurnOffAllBossAttackCol();
     }
 }

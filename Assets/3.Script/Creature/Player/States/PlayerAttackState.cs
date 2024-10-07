@@ -138,18 +138,16 @@ public class PlayerAttackState : PlayerBaseState
 
         if (_playerData.currentHealth > 0)
         {
+            animator.SetLayerWeight(3, 1.0f);
             animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
-            player.m_input.enabled = false;
+
             player.hurtTimer.StartTimer(() =>
             {
-                inputActions["Move"].Enable();
-                inputActions["Fire"].Enable();
+                animator.SetLayerWeight(3, 0.0f);
                 if (player.isBattle)
-                    animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+                    animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);
                 else
-                    animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
-
-                player.m_input.enabled = true;
+                    animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.25f);
             });
         }
 

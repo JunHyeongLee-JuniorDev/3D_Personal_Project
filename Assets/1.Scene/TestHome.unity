@@ -13520,6 +13520,7 @@ MonoBehaviour:
   playerDataPath: ScriptableObj/Player/PlayerData
   m_Controller: {fileID: 0}
   cinemachineAnimator: {fileID: 0}
+  hitBox: {fileID: 0}
   <isDebugMode>k__BackingField: 0
   isSprint: 0
   isBattle: 0

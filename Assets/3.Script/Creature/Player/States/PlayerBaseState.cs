@@ -62,7 +62,7 @@ public class PlayerBaseState : IState
 
     public virtual void Move()
     {
-        if (player.hurtTimer.isTickin || !player.m_Controller.enabled) return;
+        if (!player.m_Controller.enabled) return;
         /*
          * Vector3.magnitude
          * 벡터의 길이(float)를 반환한다. 
@@ -118,8 +118,6 @@ public class PlayerBaseState : IState
 
     public virtual void Jump()
     {
-        if (player.hurtTimer.isTickin) return;
-
         if (player.isGrouded)
         {
             player.m_fallTimeOutDelta = airData.FallTimeout;
@@ -127,7 +125,7 @@ public class PlayerBaseState : IState
 
             if (player.m_verticalVelocity < 0.0f)
             {
-                player.m_verticalVelocity = 0.0f;
+                player.m_verticalVelocity = -9.8f;
             }
 
             if (player.isJump && player.m_jumpTimeOutDelta >= 0.0f)
@@ -174,18 +172,15 @@ public class PlayerBaseState : IState
     public virtual void OnHurt()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-        inputActions["Move"].Disable();
-        inputActions["Fire"].Disable();
         
         if (_playerData.currentHealth > 0)
         {
+            animator.SetLayerWeight(3, 1.0f);
             animator.CrossFade(DTAniClipID[EPlayerAni.Hit], 0.1f);
-            player.m_input.enabled = false;
+
             player.hurtTimer.StartTimer(() =>
             {
-                inputActions["Move"].Enable();
-                inputActions["Fire"].Enable();
-                player.m_input.enabled = true;
+                animator.SetLayerWeight(3, 0.0f);
             });
         }
         
@@ -208,7 +203,8 @@ public class PlayerBaseState : IState
     public void OnSkill(InputAction.CallbackContext context)
     {
         if (context.started &&
-         !player.isSpellCast)
+         !player.isSpellCast &&
+         !(Managers.Instance.Inventory.PlayerData.currentMana - player.skillCost <= 0.0f))
         {
             player.isSpellCast = true;
             UseSkill();
@@ -219,13 +215,11 @@ public class PlayerBaseState : IState
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
 
-        if (_playerData.currentMana - player.skillCost <= 0.0f) return;
-
-        _playerData.currentMana -= player.skillCost;
         _playerData.OnReduceStatus?.Invoke();
 
         if (_playerData.equipments[(int)EEquipmentType.Weapon].StackSize > 0)
         {
+            _playerData.currentMana -= player.skillCost;
             switch (_playerData.equipments[(int)EEquipmentType.Weapon].Data.weaponType)
             {
                 case EWeaponType.SWORD:
@@ -251,12 +245,18 @@ public class PlayerBaseState : IState
                 {
                     float originDamage = _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat;
                     _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat += _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat * 1.2f;
+                    player.isSpellCast = false;
+
                     player.buffTimer.StartTimer(() =>
                     {
                         _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat = originDamage;
-                        player.isSpellCast = false;
-                        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
                         player.weaponManager.endSkill();
+
+                        if(player.isBattle)
+                        animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+
+                        else
+                        animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
                     });
 
                     return;
@@ -264,7 +264,13 @@ public class PlayerBaseState : IState
                 
                 Managers.Instance.Game.CamShakeOff();
                 player.isSpellCast = false;
-                animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+
+                if (player.isBattle)
+                    animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
+
+                else
+                    animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
+
                 player.weaponManager.endSkill();
             });
             player.weaponManager.actiaveSkill();

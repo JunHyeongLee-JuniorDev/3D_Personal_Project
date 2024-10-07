@@ -22,7 +22,7 @@ public class playerWeaponEvent : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log("에너미 피다는 로직 실행");
+            Debug.Log(other.name + "에게 데미지 : " + damage);
             MonsterController thisMonster = other.GetComponentInParent<MonsterController>();
             thisMonster.ReduceHealth(damage);
             if (thisMonster.statData.currentHealth <= 0.0f) other.enabled = false;

@@ -191,23 +191,17 @@ public class MonsterController : MonoBehaviour
         if (!navAI.pathPending && navAI.pathStatus == NavMeshPathStatus.PathPartial &&
             !outMapTimer.isTickin)
         {
+            Debug.Log("일단 여기 들어오는지 확인");
             TurnOffNav();
             isFoundPlayer = false;
+            isInRotateRad = false;
+            isAttack = false;
             animator.CrossFade(aniDataBase.monsterAniClips[EMonsterAni.Idle], 0.2f);
-
+            animator.SetFloat(aniDataBase.monsterParams[EMonsterAni.LocoBlend], 0.0f);
             outMapTimer.StartTimer(() =>
             {
                 TurnOnNav();
             });
-        }
-
-        else if(outMapTimer.isTickin && 
-            navAI.pathStatus == NavMeshPathStatus.PathComplete &&
-            !navAI.pathPending &&
-            isFoundPlayer)
-        {
-            navAI.isStopped = false;
-            outMapTimer.StopTimer();
         }
     }
 
@@ -231,21 +225,26 @@ public class MonsterController : MonoBehaviour
 
     public void TurnOnNav()
     {
-        navAI.ResetPath();
-        navAI.isStopped = false;
-        navAI.updatePosition = true;
+        if (navAI.isActiveAndEnabled && gameObject.activeSelf)
+        {
+            navAI.enabled = true;
+            navAI.ResetPath();
+            navAI.isStopped = false;
+            navAI.updatePosition = true;
+        }
     }
 
     public void TurnOffNav()
     {
-        navAI.enabled = true;
-        navAI.ResetPath();
-        navAI.isStopped = true;
-        navAI.updatePosition = false;
-        navAI.velocity = Vector3.zero;
+        if (navAI.isActiveAndEnabled && gameObject.activeSelf)
+        {
+            navAI.isStopped = true;
+            navAI.updatePosition = false;
+            navAI.velocity = Vector3.zero;
+        }
     }
 
-    protected void OnPlayerDead()
+    public void OnPlayerDead()
     {
         TurnOffNav();
         isFoundPlayer = false;
