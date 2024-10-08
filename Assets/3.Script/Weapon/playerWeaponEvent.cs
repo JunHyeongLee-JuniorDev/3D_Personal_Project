@@ -6,6 +6,7 @@ public class playerWeaponEvent : MonoBehaviour
 {
     public Collider Col { get; private set; }
     [SerializeField] private float damage;
+    [SerializeField] private EWeaponType type;
 
     private void Start()
     {
@@ -14,7 +15,6 @@ public class playerWeaponEvent : MonoBehaviour
 
     public void UpdateDamage(float damage)
     {
-        Debug.Log("플레이어 데미지 : " + damage);
         this.damage = damage;
     }
 
@@ -22,7 +22,7 @@ public class playerWeaponEvent : MonoBehaviour
     {
         if (other.CompareTag("Enemy"))
         {
-            Debug.Log(other.name + "에게 데미지 : " + damage);
+            Managers.Instance.Sound.Play3DSound("HitSound", transform.position);
             MonsterController thisMonster = other.GetComponentInParent<MonsterController>();
             thisMonster.ReduceHealth(damage);
             if (thisMonster.statData.currentHealth <= 0.0f) other.enabled = false;
@@ -30,6 +30,9 @@ public class playerWeaponEvent : MonoBehaviour
             thisMonster.player = Managers.Instance.Game.playerController.transform;
             thisMonster.stateMachine.OnHurt();
             thisMonster.SprayBlood();
+
+            if (type == EWeaponType.AXE)
+                Col.enabled = false;
         }
     }
 }

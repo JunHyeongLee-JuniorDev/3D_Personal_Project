@@ -34,6 +34,7 @@ public class PopUpButtonManager : MonoBehaviour
 
     public void OnClickMenu_Btn(int index)
     {
+        PlayClickSound();
         popupMenus[menuIndex].SetActive(false);
         menuIndex = index;
         popupMenus[index].SetActive(true);
@@ -54,6 +55,11 @@ public class PopUpButtonManager : MonoBehaviour
                     break;
             }
         }
+    }
+
+    public void PlayClickSound()
+    {
+        Managers.Instance.Sound.Play("UI/MenuClick");
     }
 
     public void SetSelectedDefaultBtn()

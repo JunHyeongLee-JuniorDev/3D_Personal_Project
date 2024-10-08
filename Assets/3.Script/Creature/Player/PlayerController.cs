@@ -3,7 +3,6 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
-using UnityEngine.InputSystem.XR;
 
 public class PlayerController : MonoBehaviour
 {
@@ -43,7 +42,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider hitBox;
 
     //State Bool
-    [field: SerializeField] public bool isDebugMode { get; private set; }
     [HideInInspector]public bool isSprint;
     [HideInInspector]public bool isBattle;
     [HideInInspector]public bool isAttack;
@@ -306,6 +304,29 @@ public class PlayerController : MonoBehaviour
             m_PlayerData.currentStamina = Mathf.Lerp(m_PlayerData.currentStamina, m_PlayerData.maxStamina, staminaFillLerp * Time.deltaTime);
 
         Managers.Instance.Game.OnStaminaChange?.Invoke();
+    }
+
+    public void PlayerFootSound(AnimationEvent animationEvent)
+    {
+
+        if(animationEvent.animatorClipInfo.weight >= 0.5f)
+        {
+            switch (UnityEngine.Random.Range(1,5))
+            {
+                case 1:
+                    Managers.Instance.Sound.Play3DSound("Player/FootStep1", transform.position);
+                    break;
+                case 2:
+                    Managers.Instance.Sound.Play3DSound("Player/FootStep2", transform.position);
+                    break;
+                case 3:
+                    Managers.Instance.Sound.Play3DSound("Player/FootStep3", transform.position);
+                    break;
+                case 4:
+                    Managers.Instance.Sound.Play3DSound("Player/FootStep4", transform.position);
+                    break;
+            }
+        }
     }
 
     public void CancelAllConditions()

@@ -43,13 +43,15 @@ public class Title_UIManager : MonoBehaviour
         popupNo_Btn = popUpPanel.transform.GetChild(2).GetComponent<Button>();
 
         popupNo_Btn.onClick.AddListener(() => 
-        { 
+        {
+            PlayClickSound();
             Managers.Instance.Game.UIGroupStack.Pop().OnClickFade_Btn(); 
         });
     }
 
     public void OnClickPlay()
     {
+        PlayClickSound();
         Managers.Instance.Game.UIGroupStack?.Push(loadGame_UI);
 
         RefreshPlayPanel();
@@ -79,9 +81,7 @@ public class Title_UIManager : MonoBehaviour
                 existGameSlots[i].SetActive(true);
 
                 existGameSlots[i].GetComponentInChildren<TextMeshProUGUI>().text =
-                    $"이름 : {_saveDatas[i].savePlayerData.name}\n" +
-                    $"레벨 : {_saveDatas[i].savePlayerData.level}\n" +
-                    $"돈 : {_saveDatas[i].savePlayerData.wallet}";
+                    $"이름 : {_saveDatas[i].savePlayerData.name}\n";
             }
         }
     }
@@ -92,6 +92,7 @@ public class Title_UIManager : MonoBehaviour
     /// <param name="fileIndex"></param>
     public void OnClickDelete(int fileIndex)
     {
+        PlayClickSound();
         selectedFileIndex = fileIndex;
         popUpPanel.gameObject.SetActive(true);
         Managers.Instance.Game.UIGroupStack?.Push(popUpPanel);
@@ -104,12 +105,14 @@ public class Title_UIManager : MonoBehaviour
         popupYes_Btn.onClick.AddListener(DeleteSaveFile);
         popupYes_Btn.onClick.AddListener(() =>
         {
+            PlayClickSound();
             Managers.Instance.Game.UIGroupStack.Pop().OnClickFade_Btn();
         });
     }
 
     public void OnClickCreate(int fileIndex)
     {
+        PlayClickSound();
         selectedFileIndex = fileIndex;
         popUpPanel.gameObject.SetActive(true);
         Managers.Instance.Game.UIGroupStack?.Push(popUpPanel);
@@ -129,8 +132,15 @@ public class Title_UIManager : MonoBehaviour
     /// <param name="fileIndex"> 파일의 인덱스를 메개변수로 받아 데이터 메니저에 전달 </param>
     public void OnClickNextScene(int fileIndex)
     {
+        PlayClickSound();
         Managers.Instance.Data.currentSaveIndex = fileIndex;
         Managers.Instance.Scene.ChangeScene(EScene.LOADING);// for debug
+    }
+
+    public void PlayClickSound()
+    {
+        Debug.Log("사운드 재생");
+        Managers.Instance.Sound.Play("UI/MenuClick");
     }
 
     public void OnEnterUserName()
@@ -140,6 +150,7 @@ public class Title_UIManager : MonoBehaviour
 
     public void DeleteSaveFile()
     {
+        PlayClickSound();
         Managers.Instance.Data.DeleteGameSave(selectedFileIndex);
         newGameSlots[selectedFileIndex].SetActive(true);
         existGameSlots[selectedFileIndex].SetActive(false);
@@ -148,6 +159,7 @@ public class Title_UIManager : MonoBehaviour
 
     public void CreateNewGame()
     {
+        PlayClickSound();
         if (createdUserName.Equals(string.Empty))
         {
             popupWarnning_Text.text = "이름을 입력해주세요.";
@@ -162,6 +174,7 @@ public class Title_UIManager : MonoBehaviour
 
     public void OnClickSettings()
     {
+        PlayClickSound();
         Managers.Instance.Game.UIGroupStack?.Push(settings_UI);
         settings_UI.gameObject.SetActive(true);
         settingFirst_Btn.Select();
@@ -169,6 +182,7 @@ public class Title_UIManager : MonoBehaviour
 
     public void OnClickMore()
     {
+        PlayClickSound();
         Managers.Instance.Game.UIGroupStack?.Push(more_UI);
         more_UI.gameObject.SetActive(true);
         moreFirst_Btn.Select();
@@ -176,17 +190,20 @@ public class Title_UIManager : MonoBehaviour
 
     public void ClosePopUp()
     {
+        PlayClickSound();
         if (Managers.Instance.Game.UIGroupStack.Count > 0)
             Managers.Instance.Game.UIGroupStack?.Pop().OnClickFade_Btn();
     }
 
     public void OnClickQuit()
     {
+        PlayClickSound();
         Application.Quit();
     }
 
     public void OnClickGitURL()
     {
+        PlayClickSound();
         Application.OpenURL("https://github.com/JunHyeongLee-JuniorDev/3D_Personal_Project");
     }
 }

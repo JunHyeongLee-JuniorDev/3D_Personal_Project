@@ -45,14 +45,15 @@ public class MonsterAniDataBase
         //Init Attack Clips
         headAttackClips = new int[2];
         headSkillClips = new int[1];
+        crabAttackClips = new int[5];
+        crabSkillClips = new int[1];
+        minoAttackClips = new int[5];
 
         headAttackClips[0] = Animator.StringToHash("Base Layer.Attack1");
         headAttackClips[1] = Animator.StringToHash("Base Layer.Attack2");
 
         headSkillClips[0] = Animator.StringToHash("Base Layer.Scream");
 
-        crabAttackClips = new int[5];
-        crabSkillClips = new int[1];
 
         crabAttackClips[0] = Animator.StringToHash("Base Layer.Attack1");
         crabAttackClips[1] = Animator.StringToHash("Base Layer.Attack2");

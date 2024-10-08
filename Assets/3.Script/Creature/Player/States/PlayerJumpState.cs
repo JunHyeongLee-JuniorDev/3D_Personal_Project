@@ -9,7 +9,6 @@ public class PlayerJumpState : PlayerBaseState
 
     public override void Enter()
     {
-        Debug.Log($"{this}");
         base.Enter();
 
         if (player.isSprint)

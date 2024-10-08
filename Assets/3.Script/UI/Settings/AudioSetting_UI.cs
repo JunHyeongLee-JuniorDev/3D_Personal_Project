@@ -19,6 +19,11 @@ public class AudioSetting_UI : MonoBehaviour
         musicSlider.value = saveData.musicVolume;
     }
 
+    public void PlayClickSound()
+    {
+        Managers.Instance.Sound.Play("UI/MenuClick");
+    }
+
     public void OnMasterChange()
     {
         masterSlider.value = (int)masterSlider.value;
@@ -51,6 +56,7 @@ public class AudioSetting_UI : MonoBehaviour
 
     public void OnClickApply_Btn()
     {
+        PlayClickSound();
         float _Volume;
 
         Managers.Instance.Data.audioMixer.GetFloat("Master", out _Volume);

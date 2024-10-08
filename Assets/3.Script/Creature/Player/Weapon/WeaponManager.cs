@@ -111,7 +111,6 @@ public class WeaponManager : MonoBehaviour
 
         else
         {
-            Debug.Log("무기 놓기 들어옴");
             currentWeaponType = EWeaponType.None;
             currentRightHandModel?.gameObject.SetActive(false);
             bareHand.gameObject.SetActive(true);
@@ -161,7 +160,6 @@ public class WeaponManager : MonoBehaviour
 
                 case EWeaponType.AXE:
                     skillcorountineCash = StartCoroutine(UseAxeSkill());
-                    UseAxeSkill();
                     break;
                 case EWeaponType.SWORD:
                     UseSwordSkill();

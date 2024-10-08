@@ -8,7 +8,6 @@ public class PlayerLocoState : PlayerBaseState
 {
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
-        if(!player.isDebugMode)
         Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
         inputActions["OnRoll"].started -= OnRoll;
         inputActions["OnRoll"].started += OnRoll;
@@ -16,7 +15,6 @@ public class PlayerLocoState : PlayerBaseState
 
     public override void Enter()
     {
-        Debug.Log($"player : {this}");
         base.Enter();
         inputActions["Skill"].started -= OnSkill;
         inputActions["Skill"].started += OnSkill;

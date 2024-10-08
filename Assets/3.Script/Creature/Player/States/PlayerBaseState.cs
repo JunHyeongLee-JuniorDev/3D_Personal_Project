@@ -186,7 +186,6 @@ public class PlayerBaseState : IState
         
         else if (!player.isDead)
         {
-            Debug.Log("죽음은 들어오나?");
             player.isDead = true;
             player.m_playerInput.enabled = false;
             player.OnPlayerDead?.Invoke();
@@ -224,6 +223,7 @@ public class PlayerBaseState : IState
             {
                 case EWeaponType.SWORD:
                     player.skillTimer.UpdateMaxTime(1.5f);
+                    Managers.Instance.Sound.Play("Player/PowerUp");
                     animator.CrossFade(DTAniClipID[EPlayerAni.SwordSkill], 0.2f);
                     break;
 
@@ -235,6 +235,7 @@ public class PlayerBaseState : IState
                 case EWeaponType.AXE:
                     Managers.Instance.Game.CamShakeOn();
                     player.skillTimer.UpdateMaxTime(3.0f);
+                    Managers.Instance.Sound.Play("Player/Thunder");
                     animator.CrossFade(DTAniClipID[EPlayerAni.AxeSkill], 0.2f);
                     break;
             }
@@ -251,13 +252,13 @@ public class PlayerBaseState : IState
                     {
                         _playerData.equipments[(int)EEquipmentType.Weapon].Data.stat = originDamage;
                         player.weaponManager.endSkill();
+                    });
 
-                        if(player.isBattle)
+                    if (player.isBattle)
                         animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.2f);
 
-                        else
+                    else
                         animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
-                    });
 
                     return;
                 }
@@ -291,6 +292,9 @@ public class PlayerDeadState : PlayerBaseState
     public override void Enter()
     {
         base.Enter();
+        Managers.Instance.Sound.Play("Player/PlayerDead");
+        Managers.Instance.Sound.Play("Bgm/YouDied");
+
         player.m_playerInput.actions.Disable();
         animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
     }

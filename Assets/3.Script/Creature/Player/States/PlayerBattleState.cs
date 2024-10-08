@@ -24,7 +24,6 @@ public class PlayerBattleState : PlayerBaseState
     public override void Enter()
     {
         nearlistEnemy = null;
-        Debug.Log($"player : {this}");
         AssignTarget(true, true);
 
         if (player.m_targetEnemy != null)
@@ -408,7 +407,6 @@ public class PlayerBattleState : PlayerBaseState
 
         else if (!player.isDead)
         {
-            Debug.Log("죽음은 들어오나?");
             player.isDead = true;
             player.m_playerInput.enabled = false;
             player.OnPlayerDead?.Invoke();

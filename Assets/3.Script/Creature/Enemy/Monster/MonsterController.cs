@@ -190,7 +190,6 @@ public class MonsterController : MonoBehaviour
         if (!navAI.pathPending && navAI.pathStatus == NavMeshPathStatus.PathPartial &&
             !outMapTimer.isTickin)
         {
-            Debug.Log("일단 여기 들어오는지 확인");
             TurnOffNav();
             isFoundPlayer = false;
             isInRotateRad = false;
@@ -300,6 +299,20 @@ public class MonsterController : MonoBehaviour
 
         bloodEFF.transform.LookAt(targetPos);
         bloodEFF.Play();
+    }
+
+    public void MonsterFootStepSound(AnimationEvent animationEvent)
+    {
+        if(animationEvent.animatorClipInfo.weight >= 0.5f)
+        switch (monsterSO.MonsterType)
+        {
+            case EMonsterType.Crab:
+                break;
+            case EMonsterType.Head:
+                break;
+            case EMonsterType.Minotaur:
+                break;
+        }
     }
 
     protected virtual void OnDrawGizmos()

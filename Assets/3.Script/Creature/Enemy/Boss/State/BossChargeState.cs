@@ -13,9 +13,7 @@ public class BossChargeState : BossBaseState
 
     public override void Enter()
     {
-        Debug.Log($"Boss Charge State");
         base.Enter();
-        Debug.Log("µ¹Áø");
         monster.TurnOnNav();
         navAI.speed = monster.chargeSpeed;
         navAI.stoppingDistance = monster.PatrolStopDistance;
@@ -46,7 +44,11 @@ public class BossChargeState : BossBaseState
             while (true)
             {
                 if (monster.player == null) { monster.CancelAllConditions(); yield break; }
-                if (turnOnWallCheckerTime < 0.0f && monster.IsHitWall()) break;
+                if (turnOnWallCheckerTime < 0.0f && monster.IsHitWall())
+                {
+                    Managers.Instance.Sound.Play3DSound("Monster/BossRunCrash", monster.transform.position);
+                    break;
+                }
                 turnOnWallCheckerTime -= Time.deltaTime;
                 navAI.SetDestination(hitInfo.point);
                 yield return null;

@@ -22,6 +22,7 @@ public class MonsterWeaponTrigger : MonoBehaviour
         if (!other.CompareTag("Player") || Managers.Instance == null) return;
 
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
+        Managers.Instance.Sound.Play3DSound("HitSound", transform.position);
 
         _playerData.currentHealth -= damage;
         if (_playerData.currentHealth <= 0) other.enabled = false;

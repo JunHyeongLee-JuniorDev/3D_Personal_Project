@@ -124,7 +124,9 @@ public class BornFire : MonoBehaviour
     private void SetOnFireAction(InputAction.CallbackContext context)
     {
         Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
-        popUp.gameObject.SetActive(false);
+        Managers.Instance.Game.playerInput.actions["Interaction"].started += RestAction;
+        popUp.ChangeText("화톳불에서 쉬기");
+
         data.isOn = true;
         LightFire();
         Managers.Instance.Game.OnFirePopUp();

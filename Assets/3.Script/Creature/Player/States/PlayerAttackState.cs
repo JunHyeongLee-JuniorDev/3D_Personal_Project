@@ -24,7 +24,6 @@ public class PlayerAttackState : PlayerBaseState
             player.isAttack = false;
             return;
         }
-            Debug.Log($"player : {this}");
         if (equipments[(int)EEquipmentType.Weapon].StackSize < 0)
         {
             attackAniClips = player.m_aniData.meleeAttackClips;
@@ -66,6 +65,7 @@ public class PlayerAttackState : PlayerBaseState
         
         attackIndex = 0;
         player.attackBtnTimer.StartTimer(() => {});
+        PlaySlashSound();
         animator.CrossFade(attackAniClips[attackIndex++], 0.2f);
         inputActions["Fire"].started += OnFire;
         inputActions["Move"].Disable();
@@ -123,6 +123,7 @@ public class PlayerAttackState : PlayerBaseState
     {
         if (!player.attackBtnTimer.isTickin)
         {
+            PlaySlashSound();
             if (attackIndex >= attackAniClips.Length)
                 attackIndex = 0;
             animator.CrossFade(attackAniClips[attackIndex++], attackFadeDuration);
@@ -153,12 +154,16 @@ public class PlayerAttackState : PlayerBaseState
 
         else if (!player.isDead)
         {
-            Debug.Log("죽음은 들어오나?");
             player.isDead = true;
             player.m_playerInput.enabled = false;
             player.OnPlayerDead?.Invoke();
             animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
             Managers.Instance.Game.ResetGame();
         }
+    }
+
+    private void PlaySlashSound()
+    {
+        Managers.Instance.Sound.Play3DSound("Player/SwordSlash", player.transform.position);
     }
 }

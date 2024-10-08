@@ -86,6 +86,7 @@ public class GateControl : MonoBehaviour
         m_cam.gameObject.SetActive(true);
         Managers.Instance.Game.playerInput.enabled = false;
         m_cam.m_Priority = 11;
+        Managers.Instance.Sound.Play("Environment/Door");
         Managers.Instance.Game.playerController.OffPlayerHitBox();
         Managers.Instance.Game.playerController.CancelAllConditions();
         Managers.Instance.Data.SaveGame(Managers.Instance.Data.currentSaveIndex);

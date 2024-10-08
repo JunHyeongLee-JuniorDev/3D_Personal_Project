@@ -12,7 +12,6 @@ public class PlayerFallState : PlayerBaseState
 
     public override void Enter()
     {
-        Debug.Log($"player : {this}");
         base.Enter();
         lastMoveDirection = player.m_input.move;
         lastCamYAngle = player.m_mainCam.transform.eulerAngles.y;

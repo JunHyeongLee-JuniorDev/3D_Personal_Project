@@ -25,6 +25,7 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
         firstBtn_Text.text = string.Empty;
         secondBtn_Text.text = string.Empty;
         close_Btn.onClick.AddListener(() => {
+            PlayClickSound();
             Managers.Instance.Game.UIGroupStack.Pop();
             gameObject.SetActive(false);
             });
@@ -53,6 +54,7 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
 
                 first_Btn.onClick.AddListener(() => 
                 {
+                    PlayClickSound();
                     assignedItem.RemoveFromStack(1);
                     Managers.Instance.Inventory.InvSys_Consume.OnInventorySlotChanged?.Invoke(assignedItem);
                     OnClickClose();
@@ -63,6 +65,7 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 
                 second_Btn.onClick.AddListener(() => 
                 {
+                    PlayClickSound();
                     assignedItem.RemoveFromStack(1);
                     Managers.Instance.Inventory.InvSys_Consume.OnInventorySlotChanged?.Invoke(assignedItem);
                     Managers.Instance.Inventory.OnDynamicInventoryChanged?.Invoke();
@@ -81,6 +84,7 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 firstBtn_Text.text = "ÀåÂø";
                 first_Btn.onClick.AddListener(() => 
                 {
+                    PlayClickSound();
                     Managers.Instance.Inventory.PlayerData.UpdateWeaponAndShield(slot_UI, 1);
                     Managers.Instance.Inventory.PlayerData.OnWeaponChanged?.Invoke();
                     Managers.Instance.Inventory.OnDynamicWeaponChanged?.Invoke();
@@ -93,6 +97,7 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
                 secondBtn_Text.text = "¹ö¸®±â";
                 second_Btn.onClick.AddListener(() => 
                 {
+                    PlayClickSound();
                     GameObject trash = Instantiate(Resources.Load<GameObject>(Managers.Instance.Data.itemModelPath));
                     trash.GetComponent<ItemPickUp>().itemSlot = new InventorySlot(assignedItem.Data, assignedItem.StackSize);
                     trash.transform.position = Managers.Instance.Game.playerController.transform.position;
@@ -113,6 +118,7 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
 
                 first_Btn.onClick.AddListener(() => 
                 {
+                    PlayClickSound();
                     playerHUD_UI.missionDisplay.UpdateUI(assignedItem.Data);
                     OnClickClose();
                 });
@@ -125,6 +131,11 @@ public class MouseItemControl : MonoBehaviour, IPointerExitHandler
         }
 
         transform.position = Mouse.current.position.ReadValue();
+    }
+
+    private void PlayClickSound()
+    {
+        Managers.Instance.Sound.Play("UI/MenuClick");
     }
 
     private void OnDisable()

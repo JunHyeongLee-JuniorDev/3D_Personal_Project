@@ -17,7 +17,6 @@ public class BossAttackState : BossBaseState
 
     public override void Enter()
     {
-        Debug.Log("Boss Attack State");
         base.Enter();
         ActivateSkill();
     }

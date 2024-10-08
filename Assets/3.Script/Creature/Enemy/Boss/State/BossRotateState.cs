@@ -32,7 +32,6 @@ public class BossRotateState : BossBaseState
 
     public override void Enter()
     {
-        Debug.Log($"Boss Rotate State");
         base.Enter();
         player = monster.player;
 

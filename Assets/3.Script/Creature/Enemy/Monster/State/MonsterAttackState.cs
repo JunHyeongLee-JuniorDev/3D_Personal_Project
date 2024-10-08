@@ -125,6 +125,9 @@ public class MonsterAttackState : MonsterBaseState
         animator.CrossFade(skillClips[attackIndex], 0.2f);
         monster.OnSkill?.Invoke();
         monster.attackTimer.UpdateMaxTime(monsterSO.MonsterSkill.AttackAniTime);
+        if (monsterSO.MonsterType == EMonsterType.Head)
+            Managers.Instance.Sound.Play3DSound("Monster/BookHeadSkill", monster.transform.position);
+
         Attack();
     }
 

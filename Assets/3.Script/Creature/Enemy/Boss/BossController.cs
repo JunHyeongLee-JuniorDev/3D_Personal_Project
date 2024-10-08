@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Audio;
 using UnityEngine.PlayerLoop;
 
 [RequireComponent(typeof(NavMeshAgent))]
@@ -16,7 +17,7 @@ public class BossController : MonsterController
     public PriestAniDB aniDB { get; private set; }
     public float currentGroggy;
     public readonly float maxGroggy = 100.0f;
-    private TextMeshProUGUI groggyText; //For Debug
+    private AudioSource audioSource;
 
     [field: SerializeField] public float walkSpeed { get; private set; } = 5.0f;
     [field: SerializeField] public float chargeSpeed { get; private set; } = 30.0f;
@@ -51,6 +52,7 @@ public class BossController : MonsterController
         jumpDust = attackCols[1].GetComponentInChildren<ParticleSystem>();
         bloodEFF = transform.GetChild(5).GetComponent<ParticleSystem>();
         hitBox = GetComponent<Collider>();
+        audioSource = GetComponent<AudioSource>();
 
         //Inits
         aniDB = new PriestAniDB();
@@ -63,7 +65,6 @@ public class BossController : MonsterController
 
         hpSlider = Instantiate(hpPrefabs);
         hpSlider.gameObject.SetActive(false);
-        groggyText = hpSlider.transform.GetChild(0).GetChild(5).GetComponent<TextMeshProUGUI>();
         InitStatData();
         statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
         if (statData.isDead) gameObject.SetActive(false);
@@ -117,8 +118,8 @@ public class BossController : MonsterController
 
     protected override void InitStatData()
     {
-        statData.currentHealth = 1000.0f;
-        statData.maxHealth = 1000.0f;
+        statData.currentHealth = 300.0f;
+        statData.maxHealth = 300.0f;
         statData.isDead = false;
         statData.isBoss = true;
     }
@@ -166,14 +167,29 @@ public class BossController : MonsterController
     {
         if (currentGroggy <= 0.0f) currentGroggy = 0.0f;
         else currentGroggy -= Time.deltaTime;
+    }
 
-        groggyText.text = ((int)currentGroggy).ToString(); // For Debug
+    public void PlayBossFootStep(AnimationEvent animationEvent)
+    {
+        if (animationEvent.animatorClipInfo.weight >= 0.5f)
+        {
+            audioSource.Stop();
+            audioSource.PlayOneShot(Managers.Instance.Sound.GetOrAddAudioClip("Monster/BossStep"));
+        }
+    }
+
+    public void PlayCrashSound()
+    {
+        audioSource.PlayOneShot(Managers.Instance.Sound.GetOrAddAudioClip("Monster/BossRunCrash"));
     }
 
     private void OnDisable()
     {
-        if(isDead)
-        Destroy(hpSlider.gameObject);
+        if (isDead)
+        {
+            Managers.Instance.Sound.Play("Bgm/Game");
+            Destroy(hpSlider.gameObject);
+        }
     }
 }
 

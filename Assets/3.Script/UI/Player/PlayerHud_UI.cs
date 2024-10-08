@@ -79,15 +79,20 @@ public class PlayerHud_UI : MonoBehaviour
     {
         if (Managers.Instance.Game.UIGroupStack.Count == 0 &&
             !ESCMenu.gameObject.activeSelf &&
-            Managers.Instance.Game.playerController.isGrouded &&
             !Managers.Instance.Game.playerController.isBattle)
         {
+            PlayOpenMenuSound();
             Managers.Instance.Game.playerInput.enabled = false;
             Debug.Log("ESC UI 켜지는 중");
             Managers.Instance.Game.CursorLock(false);
             ESCMenu.gameObject.SetActive(true);
             Managers.Instance.Game.UIGroupStack.Push(ESCMenu);
         }
+    }
+
+    private void PlayOpenMenuSound()
+    {
+        Managers.Instance.Sound.Play("UI/MenuOpen");
     }
 
     public void OpenInv()

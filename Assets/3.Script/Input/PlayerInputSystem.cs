@@ -60,7 +60,6 @@ public class PlayerinputSystem : MonoBehaviour
         while (true)
         {
             player.m_PlayerData.currentStamina -= player.staminaCost * Time.deltaTime;
-            Debug.Log("플레이어 스테미나 : " + player.m_PlayerData.currentStamina);
             if (player.m_PlayerData.currentStamina <= 0.0f)
             {
                 player.m_PlayerData.currentStamina = 0.0f;

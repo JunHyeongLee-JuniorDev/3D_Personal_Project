@@ -41,9 +41,12 @@ public class VideoSetting_UI : MonoBehaviour
         resolutionDropdown.value = saveData.resolutionIndex;
         resolutionDropdown.RefreshShownValue();
         fullScreenBtn.isOn = saveData.isFullScreen;
-
-        Debug.Log("화면 해상도 인덱스 : " + saveData.resolutionIndex);
         AssignShownQuality();
+    }
+
+    private void PlayClickSound()
+    {
+        Managers.Instance.Sound.Play("UI/MenuClick");
     }
 
     private void AssignShownQuality()
@@ -69,7 +72,6 @@ public class VideoSetting_UI : MonoBehaviour
 
             default:
                 toggleName = string.Empty;
-                Debug.LogWarning("할당되지 않은 그래픽 퀄리티 index");
                 break;
         }
 
@@ -86,23 +88,26 @@ public class VideoSetting_UI : MonoBehaviour
 
     public void OnClickFullScreen()
     {
+        PlayClickSound();
         saveData.isFullScreen = fullScreenBtn.isOn;
     }
 
     public void OnClickResolution()
     {
-
+        PlayClickSound();
         saveData.resolutionIndex = resolutionDropdown.value;
     }
 
     public void OnClickQuality_Btn(int qualityIndex)
     {
-        if(saveData != null)
+        PlayClickSound();
+        if (saveData != null)
         saveData.urpAssetsIndex = qualityIndex;
     }
 
     public void OnApply_Btn()
     {
+        PlayClickSound();
         Screen.SetResolution(Screen.resolutions[saveData.resolutionIndex].width,
                              Screen.resolutions[saveData.resolutionIndex].height,
                              saveData.isFullScreen);

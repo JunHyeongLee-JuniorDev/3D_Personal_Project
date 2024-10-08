@@ -8,7 +8,6 @@ public class TitleScene : BaseScene
     protected override void Init()
     {
         base.Init();
-
         sceneType = EScene.TITLE;
     }
 

@@ -12,8 +12,6 @@ public class BossLocoState : BossBaseState
 
     public override void Enter()
     {
-        Debug.Log($"Boss Loco State");
-
         base.Enter();
         locoAniBlend = 0.0f;
         monster.TurnOnNav();
@@ -60,7 +58,6 @@ public class BossRestState : BossBaseState
 
     public override void Enter()
     {
-        Debug.Log("Boss Rest State");
         base.Enter();
         navAI.updatePosition = false;
         navAI.updateRotation = false;
@@ -84,6 +81,7 @@ public class BossRestState : BossBaseState
     public override void Exit()
     {
         monster.hpSlider.gameObject.SetActive(true);
+        Managers.Instance.Sound.Play("Bgm/Boss", SoundManager.Sound.Bgm);
         base.Exit();
     }
 }

@@ -43,6 +43,8 @@ public class GameScene : BaseScene
 
         Managers.Instance.Game.playerController.OnPlayerDead -= Managers.Instance.Game.OnDiedPopUp;
         Managers.Instance.Game.playerController.OnPlayerDead += Managers.Instance.Game.OnDiedPopUp;
+
+        Managers.Instance.Sound.Play("Bgm/Game", SoundManager.Sound.Bgm);
     }
 
     public override void Clear()

@@ -77,24 +77,27 @@ public class InventorySlot_UI : MonoBehaviour, IPointerClickHandler
     /// </summary>
     public void OnUISlotLeftClick()
     {
-        //Access display class
-        Debug.Log($"{gameObject} 좌클릭 눌림");
+        PlayClickSound();
         parentDisplay?.SlotLeftClicked(this);
         anotherSetDisplay?.OnLeftClicked(this);
     }
 
     public void OnUISlotRightClick()
     {
-        //Access display class
-        Debug.Log($"{gameObject} 우클릭 눌림");
+        PlayClickSound();
         parentDisplay?.SlotRightClicked(this);
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
         // 우클릭 구현
-        if(eventData.button.Equals(PointerEventData.InputButton.Right))
-        OnUISlotRightClick();
+        if (eventData.button.Equals(PointerEventData.InputButton.Right))
+            OnUISlotRightClick();
+    }
+
+    private void PlayClickSound()
+    {
+        Managers.Instance.Sound.Play("UI/MenuClick");
     }
 }
 

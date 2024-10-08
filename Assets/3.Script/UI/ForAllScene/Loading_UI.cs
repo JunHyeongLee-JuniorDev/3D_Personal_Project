@@ -27,7 +27,7 @@ public class Loading_UI : MonoBehaviour
 
         while (!sceneOP.isDone)
         {
-            if (m_slider.value < 0.99f)
+            if (m_slider.value < 0.90f)
             {
                 m_slider.value = Mathf.Lerp(m_slider.value, sceneOP.progress, Time.unscaledDeltaTime);
             }
@@ -38,12 +38,11 @@ public class Loading_UI : MonoBehaviour
                 m_slider.value = Mathf.Lerp(m_slider.value, 1.0f, fakeTimer);
             }
 
-            if (m_slider.value < 1.0f)
+            if (m_slider.value >= 1.0f)
             {
                 sceneOP.allowSceneActivation = true;
                 yield break;
             }
-
 
             yield return null;
         }

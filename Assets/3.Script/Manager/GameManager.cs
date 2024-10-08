@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour, IInitManager
                 UIGroupStack.Count == 0)
             {
                 Managers.Instance.Game.playerInput.enabled = true;
+                Managers.Instance.Sound.Play("UI/MenuClose");
                 Debug.Log("커서 종료");
                 CursorLock(true);
             }

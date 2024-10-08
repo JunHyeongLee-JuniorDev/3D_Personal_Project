@@ -167,6 +167,15 @@ public class MonsterDeathState : MonsterBaseState
         animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Death], 0.1f);
         monster.TurnOffNav();
         monster.activefalseForDeath();
-        Managers.Instance.Sound.Play3DSound("", monster.transform.position);
+
+        switch (monsterSO.MonsterType)
+        {
+            case EMonsterType.Minotaur:
+        Managers.Instance.Sound.Play3DSound("Monster/MinoDead", monster.transform.position);
+                break;
+            case EMonsterType.Head:
+        Managers.Instance.Sound.Play3DSound("Monster/BookHeadSkill", monster.transform.position);
+                break;
+        }
     }
 }
