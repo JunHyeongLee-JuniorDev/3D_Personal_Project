@@ -22,11 +22,13 @@ public class VideoSetting_UI : MonoBehaviour
     private void Awake()
     {
         Resolution[] _resolutionArr = Screen.resolutions;
+        Resolution[] _trueR = _resolutionArr.Where(r => r.refreshRateRatio.numerator == 60).ToArray();
         List<string> _resolutionList = new List<string>();
 
-        for (int i = 0; i < _resolutionArr.Length; i++)
+        for (int i = 0; i < _trueR.Length; i++)
         {
-            _resolutionList.Add(_resolutionArr[i].width + "X" + _resolutionArr[i].height.ToString());
+            _resolutionList.Add(_trueR[i].width + "X" +
+                                _trueR[i].height.ToString());
         }
         fullScreenBtn.onToggle_Event.AddListener(OnClickFullScreen);
 

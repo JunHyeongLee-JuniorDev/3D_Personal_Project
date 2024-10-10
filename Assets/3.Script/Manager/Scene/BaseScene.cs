@@ -14,7 +14,6 @@ public abstract class BaseScene : MonoBehaviour
     {
         Init();
     }
-
     protected virtual void Init()
     {
         EventSystem eventSystem = FindObjectOfType<EventSystem>();
@@ -30,5 +29,4 @@ public abstract class BaseScene : MonoBehaviour
     }
 
     public abstract void Clear();
-
 }

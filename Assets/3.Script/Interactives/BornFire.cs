@@ -95,10 +95,7 @@ public class BornFire : MonoBehaviour
 
         popUp.gameObject.SetActive(false);
 
-        if (data.isOn)
             Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
-
-        else
             Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
     }
 

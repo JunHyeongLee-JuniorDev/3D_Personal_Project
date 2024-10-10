@@ -188,6 +188,7 @@ public class PlayerBaseState : IState
         {
             player.isDead = true;
             player.m_playerInput.enabled = false;
+            player.m_playerInput.actions.Disable();
             player.OnPlayerDead?.Invoke();
             animator.CrossFade(DTAniClipID[EPlayerAni.Death], 0.1f);
             Managers.Instance.Game.ResetGame();

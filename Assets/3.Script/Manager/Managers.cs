@@ -14,11 +14,6 @@ public class Managers : MonoBehaviour
     {
         if (Instance == null)
         {
-            //InitManager<SoundManager>(Sound);
-            //InitManager<SpawnManager>(SpawnManager);
-            // 게임 씬으로 들어갈 때 맞는 데이터를 들고 온다.
-            //SceneManager.activeSceneChanged += DynamicInitManager;
-
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
