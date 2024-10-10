@@ -12,6 +12,7 @@ public class MonsterController : MonoBehaviour
     public NavMeshAgent navAI {  get; protected set; }
     public Animator animator {  get; protected set; }
     public MonsterWeaponTrigger weaponTrigger { get; protected set; }
+    public MonsterWeaponControl weaponControl { get; protected set; }
     protected ParticleSystem bloodEFF;
     [SerializeField] protected Collider hitBox;
 
@@ -71,7 +72,7 @@ public class MonsterController : MonoBehaviour
         animator = GetComponent<Animator>();
         weaponTrigger = GetComponentInChildren<MonsterWeaponTrigger>();
         bloodEFF = GetComponentInChildren<ParticleSystem>();
-
+        weaponControl = GetComponent<MonsterWeaponControl>();
         InitStatData();
         statData = Managers.Instance.Data.LoadMonsterData(statData.monsterID, statData);
         Managers.Instance.Game.playerController.OnPlayerDead -= OnPlayerDead;
@@ -100,12 +101,11 @@ public class MonsterController : MonoBehaviour
         var _attackState = new MonsterAttackState(stateMachine);
         var _deathState = new MonsterDeathState(stateMachine);
 
+        stateMachine.AddAnyTransition(_deathState, new FuncPredicate(() => isDead));
         stateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isFoundPlayer && !isDead));
         stateMachine.AddAnyTransition(_chaseState, new FuncPredicate(() => isFoundPlayer && !isInRotateRad && !isAttack && !isDead));
         stateMachine.AddAnyTransition(_rotateState, new FuncPredicate(() => isInRotateRad && !isAttack && !isDead));
         stateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isAttack && !hurtTimer.isTickin && !isDead));
-        stateMachine.AddAnyTransition(_deathState, new FuncPredicate(() => isDead));
-        stateMachine.AddTransition(_attackState, _rotateState, new FuncPredicate(() => !isAttack));
 
         stateMachine.SetState(_locoState);
     }
@@ -131,6 +131,11 @@ public class MonsterController : MonoBehaviour
     private void LateUpdate()
     {
         stateMachine.LateUpdate();
+    }
+
+    private void OnDestroy()
+    {
+
     }
 
     /// <summary>
@@ -253,6 +258,9 @@ public class MonsterController : MonoBehaviour
 
     public void activefalseForDeath()
     {
+        OnPlayerDead();
+
+
         deathTimer.StartTimer(() =>
         {
             gameObject.SetActive(false);

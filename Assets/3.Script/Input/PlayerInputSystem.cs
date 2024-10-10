@@ -12,12 +12,14 @@ public class PlayerinputSystem : MonoBehaviour
     [field: SerializeField]
     public Vector2 look { get; private set; }
     public PlayerController player;
+    private PlayerInput newInput;
     private Coroutine staminaCash;
 
     private void Start()
     { 
-        GetComponent<PlayerInput>().actions["T"].started -= OnPressT;// for debug
-        GetComponent<PlayerInput>().actions["T"].started += OnPressT;// for debug
+        newInput = GetComponent<PlayerInput>();
+        newInput.actions["T"].started -= OnPressT;// for debug
+        newInput.actions["T"].started += OnPressT;// for debug
     }
 
     public void OnMove(InputAction.CallbackContext context)
@@ -72,7 +74,7 @@ public class PlayerinputSystem : MonoBehaviour
         }
     }
 
-        public void OnBattle(InputAction.CallbackContext context)
+    public void OnBattle(InputAction.CallbackContext context)
     {
         if (context.started)
         {
@@ -114,5 +116,10 @@ public class PlayerinputSystem : MonoBehaviour
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
+    }
+
+    public void OnDestroy()
+    { 
+        newInput.actions["T"].started -= OnPressT; 
     }
 }

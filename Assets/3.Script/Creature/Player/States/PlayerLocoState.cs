@@ -9,17 +9,22 @@ public class PlayerLocoState : PlayerBaseState
     public PlayerLocoState(PlayerStateMachine stateMachine) : base(stateMachine)
     {
         Managers.Instance.Inventory.OnDynamicInventoryChanged.AddListener(GrabItem);
+
+        inputActions["Move"].Enable();
+        inputActions["Fire"].Enable();
+        inputActions["Skill"].Enable();
+        inputActions["OnRoll"].Enable();
         inputActions["OnRoll"].started -= OnRoll;
+        inputActions["Skill"].started -= OnSkill;
         inputActions["OnRoll"].started += OnRoll;
+        inputActions["Skill"].started += OnSkill;
     }
 
     public override void Enter()
     {
         base.Enter();
-        inputActions["Skill"].started -= OnSkill;
-        inputActions["Skill"].started += OnSkill;
+        inputActions["Skill"].Enable();
         inputActions["OnRoll"].Enable();
-
         animator.CrossFade(DTAniClipID[EPlayerAni.LOCO], 0.2f);
     }
 
@@ -58,7 +63,13 @@ public class PlayerLocoState : PlayerBaseState
     {
         base.Exit();
         inputActions["OnRoll"].Disable();
-        inputActions["Skill"].started -= OnSkill;
+    }
+
+    public override void Clear()
+    {
+        base.Clear();
+        inputActions["OnRoll"].started -= OnRoll;
+        inputActions["OnRoll"].started -= OnSkill;
     }
 
     public override void OnHurt()
@@ -88,7 +99,7 @@ public class PlayerLocoState : PlayerBaseState
 
     private void ShieldAni()
     {
-        //if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data == null) return;
+        if (Managers.Instance.Inventory.PlayerData.equipments[(int)EEquipmentType.Shield].Data == null) return;
 
         if (player.isRightClicked)
         {
@@ -154,6 +165,6 @@ public class PlayerLocoState : PlayerBaseState
                                          player.m_mainCam.transform.eulerAngles.y;
         player.m_Controller.Move(Vector3.zero);
         player.transform.rotation = Quaternion.Euler(0.0f, rollRotation, 0.0f);
-        animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.25f);
+        animator.CrossFade(DTAniClipID[EPlayerAni.ROLL], 0.1f);
     }
 }

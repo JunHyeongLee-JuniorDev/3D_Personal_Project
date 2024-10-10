@@ -59,6 +59,11 @@ public class PlayerBaseState : IState
 
     }
 
+    public virtual void Clear()
+    {
+        inputActions["Skill"].started -= OnSkill;
+    }
+
 
     public virtual void Move()
     {
@@ -202,13 +207,13 @@ public class PlayerBaseState : IState
 
     public void OnSkill(InputAction.CallbackContext context)
     {
-        if (context.started &&
-         !player.isSpellCast &&
+        if (!player.isSpellCast &&
          !(Managers.Instance.Inventory.PlayerData.currentMana - player.skillCost <= 0.0f))
         {
             player.isSpellCast = true;
             UseSkill();
         }
+        Debug.Log("스킬 쓰는중");
     }
 
     protected virtual void UseSkill()

@@ -64,7 +64,7 @@ public class MonsterAttackState : MonsterBaseState
 
         navAI.SetDestination(player.position);
 
-        if (!monster.attackTimer.isTickin)
+        if (!monster.attackTimer.isTickin && !monster.hurtTimer.isTickin)
         {
             CheckAttackDistance();
             monster.CheckPlayerDistance();
@@ -157,6 +157,10 @@ public class MonsterAttackState : MonsterBaseState
 
     public override void OnHurt()
     {
+        monster.hurtTimer.StopTimer();
+        monster.attackTimer.StopTimer();
+        monster.weaponControl.TurnOffHitCol();
+
         if (monster.statData.currentHealth > 0)
         {
             animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.01f);
@@ -168,6 +172,7 @@ public class MonsterAttackState : MonsterBaseState
 
         else
         {
+
             monster.isDead = true;
         }
     }

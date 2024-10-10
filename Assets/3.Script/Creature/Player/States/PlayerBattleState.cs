@@ -17,8 +17,6 @@ public class PlayerBattleState : PlayerBaseState
     public PlayerBattleState(PlayerStateMachine playerStateMachine) : base(playerStateMachine) 
     {
         player.lockOnUI.SetActive(false);
-        inputActions["OnRoll"].started -= OnRoll;
-        inputActions["OnRoll"].started += OnRoll;
     }
 
     public override void Enter()
@@ -40,10 +38,10 @@ public class PlayerBattleState : PlayerBaseState
 
             player.m_Controller.Move(Vector3.zero);
             inputActions["Look"].started -= OnLook;
+            inputActions["OnRoll"].started -= OnRoll;
             inputActions["Look"].started += OnLook;
+            inputActions["OnRoll"].started += OnRoll;
             inputActions["OnRoll"].Enable();
-            inputActions["Skill"].started -= OnSkill;
-            inputActions["Skill"].started += OnSkill;
             inputActions["Sprint"].Disable();
         }
     }
@@ -53,7 +51,7 @@ public class PlayerBattleState : PlayerBaseState
         base.Update();
         CancelConditions();
 
-        if (player.m_targetEnemy == null) return;
+        if (player.m_targetEnemy == null || !player.m_targetEnemy.gameObject.activeSelf) return;
 
         dirToTarget = (player.m_targetEnemy.transform.position - player.m_mainCam.transform.position);
 
@@ -74,6 +72,15 @@ public class PlayerBattleState : PlayerBaseState
         orignPos.y = 0.0f;
         PlaceTheCam(orignPos);
     }
+
+    public override void Clear()
+    {
+        base.Clear();
+        inputActions["Look"].started -= OnLook;
+        inputActions["Skill"].started -= OnSkill;
+        inputActions["OnRoll"].started -= OnRoll;
+    }
+
     /// <summary>
     /// 플레이어는 타겟을 바라보기에 단순하게 8방향으로만 움직이는 로직, 애니메이션 블렌드 값 갱신
     /// </summary>
@@ -339,7 +346,6 @@ public class PlayerBattleState : PlayerBaseState
             player.lockOnUI.SetActive(false);
             player.m_targetEnemy = null;
             player.thirdPersonCam.enabled = true;
-            inputActions["Skill"].started -= OnSkill;
         }
         inputActions["OnRoll"].Disable();
         inputActions["Look"].started -= OnLook;

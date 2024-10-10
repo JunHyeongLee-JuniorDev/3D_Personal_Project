@@ -190,14 +190,10 @@ public class PlayerController : MonoBehaviour
         foreach (var camera in stateDrivenCamera.ChildCameras)
         {//카메라 할당
             if (camera.name.Equals("targetCamera"))
-            {
                 camera.Follow = lockOnTargetRoot;
-            }
 
             if (camera.name.Equals("PlayerFollowCamera"))
-            {
                 camera.Follow = transform.GetChild(0);
-            }
         }
         Managers.Instance.Game.AssignCamNoise();
         //프리펩 생성
@@ -213,9 +209,9 @@ public class PlayerController : MonoBehaviour
         //AnyTransition
         //m_StateMachine.AddAnyTransition(_jumpState, new FuncPredicate(() => isJump && !isBattle && !isFall));
         m_StateMachine.AddAnyTransition(_locoState, new FuncPredicate(() => !isBattle && isGrouded && !isAttack && !isDead));
-        m_StateMachine.AddAnyTransition(_fallState, new FuncPredicate(() => !isGrouded && isFall));
-        m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack));
-        m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack));
+        m_StateMachine.AddAnyTransition(_fallState, new FuncPredicate(() => !isGrouded && isFall && !isDead));
+        m_StateMachine.AddAnyTransition(_battleState, new FuncPredicate(() => isGrouded && isBattle && !isAttack && !isDead));
+        m_StateMachine.AddAnyTransition(_attackState, new FuncPredicate(() => isGrouded &&  isAttack && !isDead));
         m_StateMachine.AddAnyTransition(_deadState, new FuncPredicate(() => isDead));
         m_StateMachine.SetState(_locoState);
     }
@@ -235,6 +231,14 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         m_StateMachine.LateUpdate();
+    }
+
+    private void OnDestroy()
+    {
+        foreach (var transition in m_StateMachine.anyTransitions)
+        {
+            transition.To.Clear();
+        }
     }
 
     private void GroundedCheck()

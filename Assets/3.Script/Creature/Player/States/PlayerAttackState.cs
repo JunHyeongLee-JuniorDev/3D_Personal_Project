@@ -70,7 +70,6 @@ public class PlayerAttackState : PlayerBaseState
         inputActions["Fire"].started += OnFire;
         inputActions["Move"].Disable();
         inputActions["Sprint"].Disable();
-        
         inputActions["Battle"].Disable();
     }
 
@@ -108,6 +107,12 @@ public class PlayerAttackState : PlayerBaseState
         inputActions["Battle"].Enable();
     }
 
+    public override void Clear()
+    {
+        base.Clear();
+        inputActions["Fire"].started -= OnFire;
+    }
+
     private void ShowTargettingUI()
     {
         if (player.m_targetEnemy != null)
@@ -134,9 +139,7 @@ public class PlayerAttackState : PlayerBaseState
     public override void OnHurt()
     {
         PlayerData _playerData = Managers.Instance.Inventory.PlayerData;
-        inputActions["Move"].Disable();
-        inputActions["Fire"].Disable();
-
+        
         if (_playerData.currentHealth > 0)
         {
             animator.SetLayerWeight(3, 1.0f);
@@ -144,6 +147,8 @@ public class PlayerAttackState : PlayerBaseState
 
             player.hurtTimer.StartTimer(() =>
             {
+                player.isAttack = false;
+
                 animator.SetLayerWeight(3, 0.0f);
                 if (player.isBattle)
                     animator.CrossFade(DTAniClipID[EPlayerAni.BATTLE], 0.25f);

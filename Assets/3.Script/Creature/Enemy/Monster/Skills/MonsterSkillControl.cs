@@ -15,7 +15,6 @@ public class MonsterSkillControl : MonoBehaviour
     [SerializeField] private LayerMask enemyLayer;
     
     private readonly float ballChasedeFaultLerp = 0.1f;
-    private readonly float offsetY = 1.0f;
     private float ballChasingLerp;
     private float ballPopForce;
 
@@ -156,9 +155,8 @@ public class MonsterSkillControl : MonoBehaviour
         {
             StopCoroutine(ballFollowCash);
         }
-        Vector3 targetOffset = target.position;
-        targetOffset.y += offsetY;
-        ballFollowCash = StartCoroutine(ChasingTarget_co(targetOffset));
+
+        ballFollowCash = StartCoroutine(ChasingTarget_co(target.position));
     }
 
     /// <summary>

@@ -29,19 +29,36 @@ public class MonsterBaseState : IState
         
     }
 
+    public virtual void Update()
+    {
+
+    }
+
     public virtual void LateUpdate()
     {
         
     }
 
+    public virtual void PhysicsUpdate()
+    {
+
+    }
+
     public virtual void OnHurt()
     {
+        monster.hurtTimer.StopTimer();
+        monster.weaponControl.TurnOffHitCol();
+
         if (monster.statData.currentHealth > 0)
         {
             animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.01f);
             monster.hurtTimer.StartTimer(() => 
-            { 
+            {
+                if (monster.isInRotateRad)
+                    animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RotateBlend], 0.25f);
 
+                else
+                    animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.RunBlend], 0.25f);
             });
         }
 
@@ -51,12 +68,7 @@ public class MonsterBaseState : IState
         }
     }
 
-    public virtual void PhysicsUpdate()
-    {
-        
-    }
-
-    public virtual void Update()
+    public virtual void Clear()
     {
 
     }

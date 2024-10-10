@@ -25,11 +25,11 @@ public class playerWeaponEvent : MonoBehaviour
             Managers.Instance.Sound.Play3DSound("HitSound", transform.position);
             MonsterController thisMonster = other.GetComponentInParent<MonsterController>();
             thisMonster.ReduceHealth(damage);
+            thisMonster.stateMachine.OnHurt();
+            thisMonster.SprayBlood();
             if (thisMonster.statData.currentHealth <= 0.0f) other.enabled = false;
             thisMonster.isFoundPlayer = true;
             thisMonster.player = Managers.Instance.Game.playerController.transform;
-            thisMonster.stateMachine.OnHurt();
-            thisMonster.SprayBlood();
 
             if (type == EWeaponType.AXE)
                 Col.enabled = false;

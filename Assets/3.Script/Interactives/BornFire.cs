@@ -73,18 +73,19 @@ public class BornFire : MonoBehaviour
 
         popUp.gameObject.SetActive(true);
         popUp.TurnOffIcon();
+        
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
+        Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
 
         if (data.isOn)
         {
             popUp.ChangeText("화톳불에서 쉬기");
-            Managers.Instance.Game.playerInput.actions["Interaction"].started -= RestAction;
             Managers.Instance.Game.playerInput.actions["Interaction"].started += RestAction;
         }
 
         else
         {
             popUp.ChangeText("화톳불 활성화");
-            Managers.Instance.Game.playerInput.actions["Interaction"].started -= SetOnFireAction;
             Managers.Instance.Game.playerInput.actions["Interaction"].started += SetOnFireAction;
         }
     }

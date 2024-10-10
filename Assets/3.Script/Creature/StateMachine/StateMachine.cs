@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Unity.VisualScripting;
 
 /// <summary>
 /// StateMachine : state는 노드 형태로 보관, 각 노드는 딕셔너리에 key(IState), value(StateNode)로 보관
@@ -10,7 +11,7 @@ public abstract class StateMachine
 {
     protected StateNode current;
     protected Dictionary<Type, StateNode> nodes = new Dictionary<Type, StateNode>();
-    protected HashSet<ITransition> anyTransitions = new HashSet<ITransition>();
+    public HashSet<ITransition> anyTransitions { get; protected set; } = new HashSet<ITransition>(); 
 
     /// <summary>
     /// 각 노드 별로 각 상태 저장 HashSet으로 Transition 조건 저장
@@ -61,6 +62,11 @@ public abstract class StateMachine
     public void OnHurt()
     {
         current.state?.OnHurt();
+    }
+
+    public void Clear()
+    {
+        current.state?.Clear();
     }
 
     public void ChangeState(IState state)
@@ -118,4 +124,5 @@ public interface IState
     public void LateUpdate();
     public void PhysicsUpdate();
     public void OnHurt();
+    public void Clear();
 }

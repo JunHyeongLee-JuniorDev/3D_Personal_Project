@@ -38,6 +38,7 @@ public class MonsterRotateState : MonsterBaseState
 
     public override void Enter()
     {
+        Debug.Log("Monster Rotate State");
         base.Enter();
         player = monster.player;
 
@@ -141,6 +142,9 @@ public class MonsterRotateState : MonsterBaseState
 
     public override void OnHurt()
     {
+        monster.hurtTimer.StopTimer();
+        monster.weaponControl.TurnOffHitCol();
+
         if (monster.statData.currentHealth > 0)
         {
             animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Hit], 0.01f);
@@ -152,6 +156,7 @@ public class MonsterRotateState : MonsterBaseState
 
         else
         {
+            if (coroutineCash != null) monster.StopCoroutine(coroutineCash);
             monster.isDead = true;
         }
     }
@@ -159,11 +164,12 @@ public class MonsterRotateState : MonsterBaseState
 
 public class MonsterDeathState : MonsterBaseState
 {
-    public MonsterDeathState(MonsterStateMachine stateMachine) : base(stateMachine) {}
+    public MonsterDeathState(MonsterStateMachine stateMachine) : base(stateMachine) { }
 
     public override void Enter()
     {
         base.Enter();
+        Debug.Log("Monster Death State");
         animator.CrossFade(aniDB.monsterAniClips[EMonsterAni.Death], 0.1f);
         monster.TurnOffNav();
         monster.activefalseForDeath();
@@ -171,11 +177,17 @@ public class MonsterDeathState : MonsterBaseState
         switch (monsterSO.MonsterType)
         {
             case EMonsterType.Minotaur:
-        Managers.Instance.Sound.Play3DSound("Monster/MinoDead", monster.transform.position);
+                Managers.Instance.Sound.Play3DSound("Monster/MinoDead", monster.transform.position);
                 break;
             case EMonsterType.Head:
-        Managers.Instance.Sound.Play3DSound("Monster/BookHeadSkill", monster.transform.position);
+                Managers.Instance.Sound.Play3DSound("Monster/BookHeadSkill", monster.transform.position);
                 break;
+        }
+
+        if (monster.statData.isDead)
+        {
+            Managers.Instance.Sound.ClearSound();
+            Managers.Instance.Sound.Play("Bgm/Game");
         }
     }
 }
