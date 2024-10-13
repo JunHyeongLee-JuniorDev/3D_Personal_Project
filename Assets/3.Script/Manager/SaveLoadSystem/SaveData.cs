@@ -23,7 +23,7 @@ public class GameSaveData
         missionInvData = new InventorySystem(missionInvSize);
 
         monsterSaveDatas = new List<monsterSaveData>();
-        bornFireDatas = new List<BornFireData>();
+        bornFireDatas = new List<BornFireData>(2);
         
         bornFireDatas.Add(new BornFireData("BrigeFire"));
         bornFireDatas.Add(new BornFireData("HallWayFire"));

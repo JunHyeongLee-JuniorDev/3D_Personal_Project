@@ -31,7 +31,6 @@ public class InventoryManager : MonoBehaviour, IInitManager
 
     public int wallet; // Áö°©!
 
-
     public UnityEvent OnDynamicWeaponChanged;
     public UnityEvent OnDynamicInventoryChanged;
 

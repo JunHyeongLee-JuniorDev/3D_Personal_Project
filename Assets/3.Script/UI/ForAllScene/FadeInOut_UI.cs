@@ -31,7 +31,7 @@ public class FadeInOut_UI : MonoBehaviour
     {
         tween?.Kill();
 
-        tween = group.DOFade(0.0f, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => gameObject.SetActive(false));
+        tween = group.DOFade(0.0f, 0.5f).SetEase(Ease.OutQuad).OnComplete(() => gameObject?.SetActive(false));
     }
 
     private void OnDisable()

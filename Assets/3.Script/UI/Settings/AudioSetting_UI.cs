@@ -47,7 +47,6 @@ public class AudioSetting_UI : MonoBehaviour
     public void OnSFXChange()
     {
         sfxSlider.value = (int)sfxSlider.value;
-
         if (sfxSlider.value <= -40.0f)
             Managers.Instance.Data.audioMixer.SetFloat("SFX", -80.0f);
 
