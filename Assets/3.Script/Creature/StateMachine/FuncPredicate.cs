@@ -13,6 +13,9 @@ public class FuncPredicate : IPredicate
         this.func = func;
     }
 
+    private bool test;
+    public bool Test => test;
+
     public bool Evaluate() => func.Invoke();
 }
 

@@ -167,7 +167,7 @@ public class MonsterController : MonoBehaviour
             if (Vector3.Angle(transform.forward, dirTarget.normalized) < viewDegree * 0.5f)
             {
                 if (!Physics.Raycast(transform.position, dirTarget.normalized, 
-                    Vector3.Distance(transform.position, _target.transform.position),obstacles))
+                    dirTarget.sqrMagnitude,obstacles))
                 {
                     player = _target.transform;
                     OnPlayerFound?.Invoke(player);

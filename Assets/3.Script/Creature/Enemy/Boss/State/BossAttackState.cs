@@ -118,6 +118,12 @@ public class BossAttackState : BossBaseState
         animator.CrossFade(clipID, 0.2f);
     }
 
+    public override void Update()
+    {
+        base.Update();
+        if (monster.player == null) { monster.CancelAllConditions(); return; }
+    }
+
     private IEnumerator facingPlayer()
     {
         Vector3 _direction = monster.player.position - monster.transform.position;
