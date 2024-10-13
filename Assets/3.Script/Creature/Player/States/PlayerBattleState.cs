@@ -240,9 +240,7 @@ public class PlayerBattleState : PlayerBaseState
     /// <param name="x">마우스 x의 delta 값</param>
     private void FindAnotherTarget(float x)
     {
-        if (x.Equals(0.0f)) return; // 혹시 모를 예외 처리
-
-        else if (x > 1.0f)
+        if (x > 1.0f)
         {
             AssignTarget(false, true);
         }

@@ -1,84 +1,59 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using System;
-using Unity.VisualScripting;
 
 /// <summary>
 /// StateMachine : state는 노드 형태로 보관, 각 노드는 딕셔너리에 key(IState), value(StateNode)로 보관
 /// </summary>
 public abstract class StateMachine
 {
-    protected StateNode current;
-    protected Dictionary<Type, StateNode> nodes = new Dictionary<Type, StateNode>();
+    protected IState current;
     public HashSet<ITransition> anyTransitions { get; protected set; } = new HashSet<ITransition>(); 
-
-    /// <summary>
-    /// 각 노드 별로 각 상태 저장 HashSet으로 Transition 조건 저장
-    /// </summary>
-    protected class StateNode
-    {
-        public IState state;
-        public HashSet<ITransition> transitions;
-
-        public StateNode(IState state)
-        {
-            this.state = state;
-            transitions = new HashSet<ITransition>();
-        }
-
-        public void AddTransition(IState to, IPredicate condition)
-        {
-            transitions.Add(new Transition(to, condition));
-        }
-    }
 
     public void Update()
     {
         var transition = GetTransition();
 
-        if (transition != null)
+        if (transition != null && !current.Equals(transition.To))
             ChangeState(transition.To);
 
-        current.state?.Update();
+        current?.Update();
     }
 
     public void PhysicsUpdate()
     {
-        current.state?.PhysicsUpdate();
+        current?.PhysicsUpdate();
     }
 
     public void LateUpdate()
     {
-        current.state?.LateUpdate();
+        current?.LateUpdate();
     }
 
     public void SetState(IState state)
     {
-        current = nodes[state.GetType()];
-        current.state?.Enter();
+        current = state;
+        current?.Enter();
     }
 
     public void OnHurt()
     {
-        current.state?.OnHurt();
+        current?.OnHurt();
     }
 
     public void Clear()
     {
-        current.state?.Clear();
+        current?.Clear();
     }
 
     public void ChangeState(IState state)
     {
-        if (current.state.Equals(state)) return;
-        var previousState = current.state;
+        var previousState = current;
         var nextState = state;
 
         previousState?.Exit();
         nextState?.Enter();
 
-        current = nodes[state.GetType()];
+        current = nextState;
     }
 
     public ITransition GetTransition()
@@ -90,31 +65,15 @@ public abstract class StateMachine
         return null;
     }
 
-    public void AddTransition(IState from, IState to, IPredicate condition)
-    {
-        GetOrAddNode(from).AddTransition(GetOrAddNode(to).state, condition);
-    }
 
     /// <summary>
     /// State와 이에 따른 조건 등록
     /// </summary>
     public void AddAnyTransition(IState to, IPredicate condition)
     {
-        anyTransitions.Add(new Transition(GetOrAddNode(to).state, condition));
+        anyTransitions.Add(new Transition(to, condition));
     }
 
-    protected StateNode GetOrAddNode(IState state)
-    {
-        var node = nodes.GetValueOrDefault(state.GetType());
-
-        if (node == null)
-        {
-            node = new StateNode(state);
-            nodes.Add(state.GetType(), node);   
-        }
-
-        return node;
-    }
 }
 public interface IState
 {

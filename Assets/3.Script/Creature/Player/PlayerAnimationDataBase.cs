@@ -90,7 +90,7 @@ public class PlayerAnimationDataBase
         _DTaniClipID.Add(EPlayerAni.Hit, Animator.StringToHash("UpperBody.Hit"));
         _DTaniClipID.Add(EPlayerAni.Death, Animator.StringToHash("Base Layer.Death"));
 
-        //스킬들 필요!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        //Skills
         _DTaniClipID.Add(EPlayerAni.SwordSkill, Animator.StringToHash("Sword Skill"));
         _DTaniClipID.Add(EPlayerAni.AxeSkill, Animator.StringToHash("Axe Skill"));
         _DTaniClipID.Add(EPlayerAni.MagicSkill, Animator.StringToHash("Magic Skill"));

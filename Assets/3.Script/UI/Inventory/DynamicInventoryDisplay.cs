@@ -10,12 +10,12 @@ public class DynamicInventoryDisplay : MonoBehaviour
 {
     [SerializeField]protected PlayerHud_UI playerHud_UI;
     protected InventorySystem inventorySystem;
-    protected Dictionary<InventorySlot_UI, InventorySlot> slotDictionary;
+    protected Dictionary<InventorySlot, InventorySlot_UI> slotDictionary;
     [SerializeField]protected Transform viewerTransform;
     protected InventorySlot_UI slotPrefab;
 
     public InventorySystem InventorySystem => inventorySystem;
-    public Dictionary<InventorySlot_UI, InventorySlot> SlotDictionary => slotDictionary;
+    public Dictionary<InventorySlot, InventorySlot_UI> SlotDictionary => slotDictionary;
 
     [field : SerializeField]
     public InventoryType invType_UI { get; private set; }
@@ -52,12 +52,12 @@ public class DynamicInventoryDisplay : MonoBehaviour
 
     public virtual void AssignSlot(InventorySystem invToDisplay)
     {
-        slotDictionary = new Dictionary<InventorySlot_UI, InventorySlot>();
+        slotDictionary = new Dictionary<InventorySlot, InventorySlot_UI>();
 
         for (int i = 0; i < invToDisplay.InventorySize; i++)
         {
             var slot_UI = Instantiate(slotPrefab, viewerTransform);
-            slotDictionary.Add(slot_UI, invToDisplay.InventorySlots[i]);
+            slotDictionary.Add(invToDisplay.InventorySlots[i], slot_UI);
             slot_UI.Init(invToDisplay.InventorySlots[i]);
         }
     }
@@ -68,14 +68,8 @@ public class DynamicInventoryDisplay : MonoBehaviour
     /// <param name="updatedSlot"> 새로 받은 아이템 슬롯을 같은 아이템이 있다면 UI에 갱신</param>
     protected virtual void UpdateSlot(InventorySlot updatedSlot)
     {
-        foreach (var slot in slotDictionary)
-        {
-            if (slot.Value.Equals(updatedSlot)) // 만약 UI에 있는 아이템과 같은 아이템이라면 추가
-            {
-                slot.Key.Init(updatedSlot); 
-                slot.Key.UpdateUISlot(updatedSlot);
-            }
-        }
+        slotDictionary[updatedSlot].Init(updatedSlot);
+        slotDictionary[updatedSlot].UpdateUISlot(updatedSlot);
     }
 
     public void SlotLeftClicked(InventorySlot_UI clickedUISlot)
